@@ -10,7 +10,7 @@ export default function NotFound() {
         The link may be stale, or the thing it pointed at was removed from the workspace.
       </p>
       <Link
-        href="/home"
+        href="/app/home"
         className="focus-ring mt-2 rounded-lg border border-[var(--color-hairline)] px-4 py-2 text-[13px] text-[var(--color-ink-muted)] transition-colors hover:border-[#2b3d4a] hover:text-[var(--color-ink)]"
       >
         Back to the workspace

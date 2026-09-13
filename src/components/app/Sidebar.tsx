@@ -35,19 +35,19 @@ export function Sidebar(props: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
 
   const work: NavItem[] = [
-    { href: "/home", label: "Home", icon: "home" },
-    { href: "/wind", label: "Wind", icon: "wind" },
-    { href: "/tasks", label: "Tasks", icon: "tasks", badge: props.runningTasks || undefined },
-    { href: "/flows", label: "Flows", icon: "flows" },
-    { href: "/approvals", label: "Approvals", icon: "approvals", badge: props.pendingApprovals || undefined },
+    { href: "/app/home", label: "Home", icon: "home" },
+    { href: "/app/wind", label: "Wind", icon: "wind" },
+    { href: "/app/tasks", label: "Tasks", icon: "tasks", badge: props.runningTasks || undefined },
+    { href: "/app/flows", label: "Flows", icon: "flows" },
+    { href: "/app/approvals", label: "Approvals", icon: "approvals", badge: props.pendingApprovals || undefined },
   ];
 
   const workspace: NavItem[] = [
-    { href: "/agents", label: "Agents", icon: "agents" },
-    { href: "/knowledge", label: "Knowledge", icon: "knowledge" },
-    { href: "/integrations", label: "Integrations", icon: "integrations" },
-    { href: "/team", label: "Team", icon: "team" },
-    { href: "/analytics", label: "Analytics", icon: "analytics" },
+    { href: "/app/agents", label: "Agents", icon: "agents" },
+    { href: "/app/knowledge", label: "Knowledge", icon: "knowledge" },
+    { href: "/app/integrations", label: "Integrations", icon: "integrations" },
+    { href: "/app/team", label: "Team", icon: "team" },
+    { href: "/app/analytics", label: "Analytics", icon: "analytics" },
   ];
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
@@ -59,7 +59,7 @@ export function Sidebar(props: SidebarProps) {
     >
       {/* Brand + workspace */}
       <div className="flex h-[60px] items-center gap-2 border-b border-[var(--color-hairline)] px-3.5">
-        <Link href="/home" className="focus-ring flex items-center gap-2.5 rounded-lg">
+        <Link href="/app/home" className="focus-ring flex items-center gap-2.5 rounded-lg">
           <WindMark size={24} state="flow" priority />
           {!collapsed ? (
             <span className="text-[15px] font-semibold tracking-[-0.02em] text-[var(--color-ink)]">Cowind</span>
@@ -122,7 +122,7 @@ export function Sidebar(props: SidebarProps) {
             <div className="flex items-center justify-between px-2.5">
               <GroupLabel>Chats</GroupLabel>
               <Link
-                href="/wind"
+                href="/app/wind"
                 className="focus-ring rounded-md p-1 text-[var(--color-ink-faint)] transition-colors hover:bg-[var(--color-raised)] hover:text-[var(--color-ink)]"
                 aria-label="New chat"
               >
@@ -131,7 +131,7 @@ export function Sidebar(props: SidebarProps) {
             </div>
 
             <Link
-              href="/wind"
+              href="/app/wind"
               className="focus-ring mt-1.5 flex items-center gap-2 rounded-lg border border-dashed border-[#242a33] px-2.5 py-2 text-[13px] text-[var(--color-ink-muted)] transition-colors hover:border-[var(--color-stream-cyan)]/40 hover:text-[var(--color-ink)]"
             >
               <Icon name="plus" size={14} />
@@ -140,7 +140,7 @@ export function Sidebar(props: SidebarProps) {
 
             <ul className="mt-1.5 space-y-0.5">
               {props.conversations.slice(0, 12).map((conversation) => {
-                const href = `/wind/${conversation.id}`;
+                const href = `/app/wind/${conversation.id}`;
                 return (
                   <li key={conversation.id}>
                     <Link
@@ -165,7 +165,7 @@ export function Sidebar(props: SidebarProps) {
       <div className="border-t border-[var(--color-hairline)] p-3">
         <button
           type="button"
-          onClick={() => router.push("/settings")}
+          onClick={() => router.push("/app/settings")}
           className="focus-ring flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-left transition-colors hover:bg-[var(--color-panel)]"
         >
           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-hairline)] bg-[var(--color-raised)] text-[11px] font-semibold text-[var(--color-ink)]">

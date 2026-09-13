@@ -45,6 +45,10 @@ anything happens.
 - **No fake work.** An integration without credentials reads *Not connected* and
   stays that way. Approving an action whose system is not connected records the
   decision and says plainly that nothing was sent.
+- **A real catalogue.** 771 services, each with its own brand mark, generated
+  from Composio's public logo set rather than typed from memory. Marks measured
+  as dark ink at build time get a light plate so none of them vanish on a
+  near-black panel.
 - **Approval before consequence.** Anything that sends, publishes, changes or
   deletes outside Cowind is prepared in full, shown verbatim, editable by the
   approver, and executed only on a yes — with a receipt either way.
@@ -98,8 +102,8 @@ rename needs no code change and no deploy.
 ```
 src/
   app/
-    (marketing)/            public landing page
-    (workspace)/            the product: home, wind, tasks, flows, approvals,
+    (marketing)/            the public site: home, platform, integrations, about, FAQ
+    app/                    the product: /app/home, /app/wind, tasks, flows, approvals,
                             agents, knowledge, integrations, team, analytics, settings
     api/                    streaming chat + workspace routes
   components/               brand mark, icon system, shell, chat, trace, timeline
@@ -118,6 +122,10 @@ src/
       specialists/          per-domain briefs
       tools/                tool registry with permission + approval metadata
     workspace/              entities, RBAC, store, scoped knowledge, integrations
+      catalog.generated.ts  771 services — generated, never hand-edited
+scripts/
+  sync-integrations.mjs     regenerates the catalogue and its logo assets
+public/logos/               one real brand mark per service, 96px WebP
 ```
 
 Further reading: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) ·
@@ -130,9 +138,26 @@ with a populated workspace so the product is usable on first run. It is
 in-process: for a multi-instance deployment, implement the same interface
 against your database — nothing above it needs to change.
 
+## Integrations
+
+The catalogue in `src/lib/workspace/catalog.generated.ts` is produced by
+`scripts/sync-integrations.mjs` from [ComposioHQ/open-logos](https://github.com/ComposioHQ/open-logos) —
+one file per toolkit, which gives both the service list and its real logo. The
+script normalises names, writes a 96px WebP per service, and measures each mark's
+brightness. Re-sync with:
+
+```bash
+git clone --depth 1 https://github.com/ComposioHQ/open-logos /tmp/open-logos
+node scripts/sync-integrations.mjs /tmp/open-logos
+```
+
+Seven of them have an adapter in this build and declare the credentials they
+need; the rest are catalogued and honest about not being connected.
+
 ## Tests
 
-62 tests covering the parts where a mistake is expensive: routing decisions for
+71 tests covering the parts where a mistake is expensive: routing decisions for
 the documented cases (including Turkish), fallback chain integrity, guardrails,
-permission intersection, knowledge scoping, and — most of all — that nothing
-about the private engine layer can reach a user, whole or split across a stream.
+permission intersection, knowledge scoping, catalogue integrity (every service
+has a logo file on disk), and — most of all — that nothing about the private
+engine layer can reach a user, whole or split across a stream.

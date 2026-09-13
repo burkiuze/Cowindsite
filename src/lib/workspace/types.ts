@@ -189,14 +189,27 @@ export interface KnowledgeSource {
   departmentIds: string[];
 }
 
+/**
+ * Catalogue categories. The generated catalogue assigns one per service;
+ * anything genuinely ambiguous stays "other" rather than being guessed into the
+ * wrong shelf.
+ */
 export type IntegrationCategory =
   | "development"
   | "communication"
   | "productivity"
-  | "storage"
   | "crm"
+  | "marketing"
+  | "support"
+  | "finance"
   | "commerce"
-  | "data";
+  | "data"
+  | "ai"
+  | "search"
+  | "storage"
+  | "hr"
+  | "security"
+  | "other";
 
 export interface IntegrationDefinition {
   id: string;

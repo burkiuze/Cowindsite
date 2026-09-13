@@ -232,7 +232,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
               ]);
               setDraft("");
               if (isNew) {
-                window.history.replaceState(null, "", `/wind/${event.conversationId}`);
+                window.history.replaceState(null, "", `/app/wind/${event.conversationId}`);
                 router.refresh();
               }
               break;
@@ -282,7 +282,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
         <div className="ml-auto flex items-center gap-2">
           {!windReady ? <Pill tone="warning">Engines not connected</Pill> : null}
           <Link
-            href="/wind"
+            href="/app/wind"
             className="focus-ring flex items-center gap-1.5 rounded-lg border border-[var(--color-hairline)] px-2.5 py-1.5 text-[12.5px] text-[var(--color-ink-muted)] transition-colors hover:border-[#2b323c] hover:text-[var(--color-ink)]"
           >
             <Icon name="plus" size={14} />
@@ -479,7 +479,7 @@ function MessageRow({ message, userInitials }: { message: ChatMessage; userIniti
           <Markdown text={message.content} />
           {message.taskId ? (
             <Link
-              href={`/tasks/${message.taskId}`}
+              href={`/app/tasks/${message.taskId}`}
               className="focus-ring mt-3 inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-hairline)] px-2.5 py-1.5 text-[12px] text-[var(--color-ink-muted)] transition-colors hover:border-[#2b323c] hover:text-[var(--color-ink)]"
             >
               <Icon name="tasks" size={13} />
@@ -504,7 +504,7 @@ function ApprovalCard({ approval }: { approval: { id: string; title: string; sum
             Nothing has been sent. Wind is holding this until someone decides.
           </p>
           <Link
-            href="/approvals"
+            href="/app/approvals"
             className="focus-ring mt-2.5 inline-flex items-center gap-1.5 rounded-lg bg-[var(--color-stream-amber)]/15 px-2.5 py-1.5 text-[12.5px] font-medium text-[var(--color-stream-amber)] transition-colors hover:bg-[var(--color-stream-amber)]/25"
           >
             Review it

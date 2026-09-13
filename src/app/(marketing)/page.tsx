@@ -2,8 +2,9 @@ import Link from "next/link";
 import { WindMark } from "@/components/brand/WindMark";
 import { StreamField } from "@/components/app/StreamField";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { BrandIcon } from "@/components/app/BrandIcon";
-import { INTEGRATIONS } from "@/lib/workspace/integrations";
+import { ServiceLogo } from "@/components/app/ServiceLogo";
+import { CATALOG, featuredServices } from "@/lib/workspace/integrations";
+import { RunDemo } from "@/components/marketing/RunDemo";
 
 export const metadata = {
   title: "Cowind — the AI work operating system",
@@ -15,13 +16,13 @@ const LOOP: Array<{ step: string; title: string; body: string; icon: IconName }>
   {
     step: "01",
     title: "Ask",
-    body: "Describe the outcome in your own words — “prepare everything for tomorrow's product meeting”. No prompt craft, no tool picking.",
+    body: "Describe the outcome in your own words, in any language — “prepare everything for tomorrow's product meeting”. No prompt craft, no tool picking.",
     icon: "wind",
   },
   {
     step: "02",
     title: "Plan",
-    body: "Wind works out what it needs: which knowledge to read, which tools to touch, which work can run at the same time, and what needs a human.",
+    body: "Wind works out what it needs: which knowledge to read, which tools to touch, what can run at the same time, and what needs a person.",
     icon: "flows",
   },
   {
@@ -46,7 +47,7 @@ const PILLARS: Array<{ title: string; body: string; icon: IconName }> = [
   },
   {
     title: "Parallel by default",
-    body: "Work that does not depend on other work runs at the same time, with every stream visible while it runs. A four-way review takes one pass, not four.",
+    body: "Work that does not depend on other work runs at the same time, every stream visible while it runs. A four-way review takes one pass, not four.",
     icon: "flows",
   },
   {
@@ -72,46 +73,19 @@ const PILLARS: Array<{ title: string; body: string; icon: IconName }> = [
 ];
 
 export default function LandingPage() {
-  const featured = [
-    "github", "slack", "linear", "notion", "gmail", "google-calendar", "stripe", "figma", "supabase", "salesforce",
-  ]
-    .map((id) => INTEGRATIONS.find((integration) => integration.id === id))
-    .filter((integration): integration is (typeof INTEGRATIONS)[number] => Boolean(integration));
+  const featured = featuredServices();
 
   return (
-    <div className="relative min-h-dvh overflow-hidden bg-[var(--color-void)]">
+    <div className="relative overflow-hidden">
       <StreamField intensity={1} />
 
-      {/* Header */}
-      <header className="relative z-10 mx-auto flex h-[68px] w-full max-w-6xl items-center gap-3 px-6">
-        <Link href="/" className="focus-ring flex items-center gap-2.5 rounded-lg">
-          <WindMark size={26} state="flow" priority />
-          <span className="text-[15.5px] font-semibold tracking-[-0.02em]">Cowind</span>
-        </Link>
-        <nav className="ml-8 hidden items-center gap-6 text-[13.5px] text-[var(--color-ink-muted)] md:flex">
-          <a href="#loop" className="focus-ring rounded transition-colors hover:text-[var(--color-ink)]">
-            How it works
-          </a>
-          <a href="#system" className="focus-ring rounded transition-colors hover:text-[var(--color-ink)]">
-            The system
-          </a>
-          <a href="#integrations" className="focus-ring rounded transition-colors hover:text-[var(--color-ink)]">
-            Integrations
-          </a>
-        </nav>
-        <Link
-          href="/home"
-          className="focus-ring ml-auto inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] px-3.5 py-2 text-[13px] font-medium text-[#04121a] transition-opacity hover:opacity-90"
-        >
-          Open workspace
-          <Icon name="arrow-right" size={14} strokeWidth={2} />
-        </Link>
-      </header>
-
       {/* Hero */}
-      <section className="relative z-10 mx-auto w-full max-w-6xl px-6 pt-20 pb-24 text-center">
+      <section className="relative z-10 mx-auto w-full max-w-6xl px-6 pt-20 pb-20 text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-hairline)] bg-[var(--color-panel)] px-3 py-1.5 text-[12px] text-[var(--color-ink-muted)]">
-          <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-stream-cyan)]" style={{ animation: "pulse-dot 2s ease-in-out infinite" }} />
+          <span
+            className="h-1.5 w-1.5 rounded-full bg-[var(--color-stream-cyan)]"
+            style={{ animation: "pulse-dot 2s ease-in-out infinite" }}
+          />
           An AI work operating system, not another chat box
         </span>
 
@@ -122,73 +96,48 @@ export default function LandingPage() {
         </h1>
 
         <p className="mx-auto mt-6 max-w-xl text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
-          Cowind runs a company&apos;s work the way a good operator would: it plans, it delegates across specialists, it
-          runs what it can at once, it stops before anything consequential, and it shows its receipts.
+          Cowind runs a company&apos;s work the way a good operator would: it plans, it delegates across specialists,
+          it runs what it can at once, it stops before anything consequential, and it shows its receipts.
         </p>
 
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Link
-            href="/wind"
+            href="/app/wind"
             className="focus-ring inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] px-5 py-2.5 text-[14px] font-medium text-[#04121a] transition-opacity hover:opacity-90"
           >
             Start with Wind
             <Icon name="arrow-right" size={15} strokeWidth={2} />
           </Link>
           <Link
-            href="/home"
+            href="/app/home"
             className="focus-ring inline-flex items-center gap-2 rounded-lg border border-[var(--color-hairline)] px-5 py-2.5 text-[14px] text-[var(--color-ink-muted)] transition-colors hover:border-[#2b3d4a] hover:text-[var(--color-ink)]"
           >
             See a live workspace
           </Link>
         </div>
 
-        {/* A run, as the product actually shows it. */}
-        <div className="panel mx-auto mt-16 max-w-3xl overflow-hidden text-left">
-          <div className="flex items-center gap-2.5 border-b border-[var(--color-hairline)] px-4 py-3">
-            <WindMark size={18} state="thinking" />
-            <span className="text-[12.5px] text-[var(--color-ink-muted)]">Wind is working across 4 streams</span>
-            <span className="ml-auto font-mono text-[11.5px] text-[var(--color-ink-faint)]">2/4</span>
-          </div>
-          <ul className="divide-y divide-[var(--color-hairline)]">
-            {[
-              { label: "Financial analysis", actor: "Wind Finance", state: "Completed", tone: "done" },
-              { label: "Code architecture", actor: "Wind Code", state: "Running", tone: "run" },
-              { label: "Market research", actor: "Wind Research", state: "Running", tone: "run" },
-              { label: "Risk assessment", actor: "Wind Reasoning", state: "Waiting", tone: "wait" },
-            ].map((lane) => (
-              <li
-                key={lane.label}
-                className={`relative flex items-center gap-3 overflow-hidden px-4 py-2.5 ${
-                  lane.tone === "run" ? "lane-running" : ""
-                }`}
-              >
-                <span
-                  className={`h-2 w-2 shrink-0 rounded-full ${
-                    lane.tone === "done"
-                      ? "bg-[#6fdc8c]"
-                      : lane.tone === "run"
-                        ? "bg-[var(--color-stream-cyan)]"
-                        : "border border-[#2b323c]"
-                  }`}
-                  style={lane.tone === "run" ? { animation: "pulse-dot 1.3s ease-in-out infinite" } : undefined}
-                />
-                <span className="text-[13px] text-[var(--color-ink)]">{lane.label}</span>
-                <span className="text-[11.5px] text-[var(--color-ink-faint)]">{lane.actor}</span>
-                <span className="ml-auto text-[11.5px] text-[var(--color-ink-muted)]">{lane.state}</span>
+        <div className="mt-16">
+          <RunDemo />
+        </div>
+
+        {/* Real marks, quietly: proof the catalogue is real. */}
+        <div className="mt-14">
+          <p className="text-[11.5px] font-medium tracking-[0.14em] text-[var(--color-ink-faint)] uppercase">
+            Works with {CATALOG.length}+ services
+          </p>
+          <ul className="mt-5 flex flex-wrap items-center justify-center gap-x-7 gap-y-4 opacity-80">
+            {featured.slice(0, 14).map((service) => (
+              <li key={service.slug} className="flex items-center gap-2">
+                <ServiceLogo slug={service.slug} name={service.name} logo={service.logo} dark={service.dark} size={19} />
+                <span className="text-[12.5px] text-[var(--color-ink-faint)]">{service.name}</span>
               </li>
             ))}
           </ul>
-          <div className="flex items-center gap-2 border-t border-[var(--color-hairline)] bg-[#1a1408] px-4 py-2.5">
-            <Icon name="shield" size={14} className="text-[var(--color-stream-amber)]" />
-            <span className="text-[12.5px] text-[var(--color-stream-amber)]">
-              1 action prepared and held for approval — nothing was sent
-            </span>
-          </div>
         </div>
       </section>
 
       {/* The loop */}
-      <section id="loop" className="relative z-10 border-t border-[var(--color-hairline)] bg-[var(--color-surface)]/60">
+      <section className="relative z-10 border-t border-[var(--color-hairline)] bg-[var(--color-surface)]/60">
         <div className="mx-auto w-full max-w-6xl px-6 py-20">
           <h2 className="text-[13px] font-semibold tracking-[0.14em] text-[var(--color-ink-faint)] uppercase">
             The loop
@@ -213,7 +162,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pillars */}
-      <section id="system" className="relative z-10 border-t border-[var(--color-hairline)]">
+      <section className="relative z-10 border-t border-[var(--color-hairline)]">
         <div className="mx-auto w-full max-w-6xl px-6 py-20">
           <h2 className="text-[13px] font-semibold tracking-[0.14em] text-[var(--color-ink-faint)] uppercase">
             The system
@@ -231,11 +180,19 @@ export default function LandingPage() {
               </article>
             ))}
           </div>
+
+          <Link
+            href="/platform"
+            className="focus-ring mt-8 inline-flex items-center gap-1.5 text-[13.5px] text-[var(--color-stream-cyan)]"
+          >
+            How the runtime works
+            <Icon name="arrow-right" size={14} />
+          </Link>
         </div>
       </section>
 
       {/* Integrations */}
-      <section id="integrations" className="relative z-10 border-t border-[var(--color-hairline)] bg-[var(--color-surface)]/60">
+      <section className="relative z-10 border-t border-[var(--color-hairline)] bg-[var(--color-surface)]/60">
         <div className="mx-auto w-full max-w-6xl px-6 py-20">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -246,27 +203,27 @@ export default function LandingPage() {
                 Wind works where the work already is.
               </p>
               <p className="mt-3 max-w-xl text-[13.5px] leading-relaxed text-[var(--color-ink-muted)]">
-                Every connection reports its true state. If credentials are missing, it says so and Wind refuses to
-                pretend the action happened.
+                {CATALOG.length} services in the catalogue. Every connection reports its true state — if credentials
+                are missing, it says so, and Wind refuses to pretend the action happened.
               </p>
             </div>
             <Link
               href="/integrations"
               className="focus-ring inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-hairline)] px-3.5 py-2 text-[13px] text-[var(--color-ink-muted)] transition-colors hover:border-[#2b3d4a] hover:text-[var(--color-ink)]"
             >
-              All {INTEGRATIONS.length}
+              Browse all {CATALOG.length}
               <Icon name="arrow-right" size={14} />
             </Link>
           </div>
 
-          <ul className="mt-9 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5">
-            {featured.map((integration) => (
+          <ul className="mt-9 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
+            {featured.slice(0, 16).map((service) => (
               <li
-                key={integration.id}
-                className="panel group flex items-center gap-2.5 px-3.5 py-3 transition-colors hover:border-[#2b3d4a]"
+                key={service.slug}
+                className="panel flex items-center gap-2.5 px-3.5 py-3 transition-colors hover:border-[#2b3d4a]"
               >
-                <BrandIcon id={integration.id} name={integration.name} size={17} />
-                <span className="truncate text-[12.5px] text-[var(--color-ink-muted)]">{integration.name}</span>
+                <ServiceLogo slug={service.slug} name={service.name} logo={service.logo} dark={service.dark} size={20} />
+                <span className="truncate text-[12.5px] text-[var(--color-ink-muted)]">{service.name}</span>
               </li>
             ))}
           </ul>
@@ -281,11 +238,11 @@ export default function LandingPage() {
             Put your work on Cowind
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-[14px] leading-relaxed text-[var(--color-ink-muted)]">
-            Bring the workspace&rsquo;s knowledge, connect the tools you already use, and let Wind carry the parts that never
-            needed a person.
+            Bring the workspace&rsquo;s knowledge, connect the tools you already use, and let Wind carry the parts that
+            never needed a person.
           </p>
           <Link
-            href="/home"
+            href="/app/home"
             className="focus-ring mt-8 inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] px-5 py-2.5 text-[14px] font-medium text-[#04121a] transition-opacity hover:opacity-90"
           >
             Open the workspace
@@ -293,14 +250,6 @@ export default function LandingPage() {
           </Link>
         </div>
       </section>
-
-      <footer className="relative z-10 border-t border-[var(--color-hairline)]">
-        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-4 px-6 py-7 text-[12.5px] text-[var(--color-ink-faint)]">
-          <WindMark size={18} />
-          <span>Cowind — an AI work operating system.</span>
-          <span className="ml-auto">Wind holds anything consequential for a human decision.</span>
-        </div>
-      </footer>
     </div>
   );
 }

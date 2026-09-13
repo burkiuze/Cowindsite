@@ -97,8 +97,9 @@ embeddings changes nothing above it.
 **A specialist:** add the engine to `models.ts` (with a fallback chain), add a
 brief in `specialists/`, map a role, and teach `planLanes` when to open the lane.
 
-**An integration:** add the definition to `workspace/integrations.ts` and its
-tools to `wind/tools/registry.ts`, marking each tool's effect and required
-permission. A `write` tool is held for approval by default. Implement the
+**An integration:** the catalogue itself is generated — add the definition to
+`FIRST_CLASS` in `workspace/integrations.ts` (its `id` must match a catalogue
+slug) and its tools to `wind/tools/registry.ts`, marking each tool's effect and
+required permission. A `write` tool is held for approval by default. Implement the
 adapter, and set the credentials the definition declares — the UI reports the
 true state from the environment, so nothing else needs updating.
