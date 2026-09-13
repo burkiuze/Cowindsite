@@ -14,6 +14,7 @@
  * Nothing here runs at build or request time — the generated file is committed.
  */
 import { readdirSync, statSync, mkdirSync, writeFileSync, rmSync, existsSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { join, extname, basename } from "node:path";
 import sharp from "sharp";
 
@@ -28,6 +29,14 @@ const SOURCE = process.argv[2] ?? "/home/user/composiohq/open-logos";
  * the same slug.
  */
 const OVERRIDE_DIR = "assets/logo-overrides";
+/**
+ * Marks chosen by the site's owner, which win over everything else.
+ *
+ * Kept separate from the vetted set so a re-fetch of that set can never clobber
+ * a deliberate choice, and so it is obvious which marks are the owner's call
+ * rather than the vendor's own artwork.
+ */
+const SUPPLIED_DIR = "assets/logo-supplied";
 const OUT_DIR = "public/logos";
 const OUT_FILE = "src/lib/workspace/catalog.generated.ts";
 const SIZE = 96;
@@ -66,6 +75,18 @@ const EXCLUDED = new Set([
  * fall back to a lettered tile. Each was confirmed by eye; remove an entry here
  * the moment a correct mark exists for it.
  */
+/**
+ * Services whose file is a generic wordmark rather than the product's own mark.
+ *
+ * Google ships several of its smaller APIs with the parent wordmark. The mark
+ * named here is used instead: the right company, current, and legible at 24px,
+ * which a clipped wordmark is not.
+ */
+const MARK_FROM = {
+  "google-address-validation": "google",
+  "google-cloud-vision": "google",
+};
+
 const MISLABELLED = new Set([
   "2chat",          // Slack
   "ai-ml-api",      // GitHub
@@ -90,7 +111,7 @@ const NAME_OVERRIDES = {
   salesforce: "Salesforce", servicenow: "ServiceNow", workday: "Workday", netsuite: "NetSuite",
   openai: "OpenAI", elevenlabs: "ElevenLabs", huggingface: "Hugging Face", deepl: "DeepL",
   tinyurl: "TinyURL", ipstack: "ipstack", ahrefs: "Ahrefs", semrush: "Semrush",
-  twitter: "X",
+  twitter: "X", "googl-bigquery": "Google BigQuery",
   "google-drive": "Google Drive", "google-docs": "Google Docs", "google-sheets": "Google Sheets",
   "google-calendar": "Google Calendar", "google-maps": "Google Maps", "google-meet": "Google Meet",
   "google-photos": "Google Photos", "google-analytics": "Google Analytics",
@@ -194,15 +215,28 @@ for (const file of files) {
   if (!current || size < current.size) bySlug.set(slug, { file, size });
 }
 
+// A service that carries only a generic wordmark borrows the mark named for it.
+for (const [slug, from] of Object.entries(MARK_FROM)) {
+  const donor = bySlug.get(from);
+  if (bySlug.has(slug) && donor) bySlug.set(slug, { ...donor });
+}
+
 // A vetted mark replaces the bulk one for the same service, and never adds a
-// service the catalogue does not already carry.
+// service the catalogue does not already carry. A supplied mark then beats the
+// vetted one.
 let overridden = 0;
-if (existsSync(OVERRIDE_DIR)) {
-  for (const file of readdirSync(OVERRIDE_DIR)) {
+let supplied = 0;
+for (const [dir, count] of [
+  [OVERRIDE_DIR, () => (overridden += 1)],
+  [SUPPLIED_DIR, () => (supplied += 1)],
+]) {
+  if (!existsSync(dir)) continue;
+  for (const file of readdirSync(dir)) {
+    if (!RASTER.has(extname(file).toLowerCase())) continue;
     const slug = basename(file, extname(file));
     if (!bySlug.has(slug)) continue;
-    bySlug.set(slug, { file, size: 0, dir: OVERRIDE_DIR });
-    overridden += 1;
+    bySlug.set(slug, { file, size: 0, dir });
+    count();
   }
 }
 
@@ -239,6 +273,17 @@ async function isDarkMark(buffer) {
   return total / weight < 0.34;
 }
 
+/**
+ * Short content hash, carried in the filename.
+ *
+ * A mark that gets corrected keeps its slug, so without this the URL never
+ * changes and a browser holding the old image has no reason to ask for the new
+ * one. Hashing the bytes means a changed mark is a changed URL.
+ */
+function fingerprint(buffer) {
+  return createHash("sha256").update(buffer).digest("hex").slice(0, 8);
+}
+
 function normalise(buffer) {
   const head = buffer.subarray(0, 400).toString("utf8").trimStart().toLowerCase();
   if (head.startsWith("<svg") || head.startsWith("<?xml")) return { kind: "svg", buffer };
@@ -261,49 +306,86 @@ for (const [slug, { file, dir }] of [...bySlug.entries()].sort()) {
       .toBuffer();
 
     if (MISLABELLED.has(slug)) {
-      entries.push({ slug, name: displayName(slug), category: categorize(slug), ext: null, dark: false });
+      entries.push({ slug, name: displayName(slug), category: categorize(slug), file: null, dark: false });
       continue;
     }
 
-    await sharp(rendered).webp({ quality: 88, effort: 6 }).toFile(join(OUT_DIR, `${slug}.webp`));
+    const webp = await sharp(rendered).webp({ quality: 88, effort: 6 }).toBuffer();
+    const hash = fingerprint(webp);
+    const file = `${slug}-${hash}.webp`;
+    writeFileSync(join(OUT_DIR, file), webp);
     entries.push({
       slug,
       name: displayName(slug),
       category: categorize(slug),
-      ext: "webp",
+      file,
       dark: await isDarkMark(rendered),
+      hash,
     });
   } catch {
     // Some SVGs use features the rasteriser refuses. They are already small and
     // scale perfectly, so pass them through untouched rather than dropping the
     // service from the catalogue.
     if (kind === "svg") {
-      writeFileSync(join(OUT_DIR, `${slug}.svg`), buffer);
+      const hash = fingerprint(buffer);
+      const name = `${slug}-${hash}.svg`;
+      writeFileSync(join(OUT_DIR, name), buffer);
       // An unrasterisable SVG cannot be measured; assume it needs the plate,
       // which is the safe direction — a light plate never hides a mark.
-      entries.push({ slug, name: displayName(slug), category: categorize(slug), ext: "svg", dark: true });
+      entries.push({ slug, name: displayName(slug), category: categorize(slug), file: name, dark: true, hash });
     } else {
       skipped.push(file);
     }
   }
 }
 
+/**
+ * Artwork that several unrelated services share is a placeholder, not a brand.
+ *
+ * The source set uses a marketplace's "APIKEY" tile for anything it has no mark
+ * for. Two services sharing a file is usually one company under two names
+ * (PostGrid and PostGrid Verify); three or more is the placeholder, and those
+ * services fall back to a lettered tile.
+ */
+const byImage = new Map();
+for (const entry of entries) {
+  if (!entry.file) continue;
+  const shared = byImage.get(entry.hash) ?? [];
+  shared.push(entry);
+  byImage.set(entry.hash, shared);
+}
+let placeholders = 0;
+for (const shared of byImage.values()) {
+  if (shared.length < 3) continue;
+  for (const entry of shared) {
+    rmSync(join(OUT_DIR, entry.file), { force: true });
+    entry.file = null;
+    entry.dark = false;
+    placeholders += 1;
+  }
+}
+
+// The hash did its job in the filename; it is not part of the catalogue.
+for (const entry of entries) delete entry.hash;
+
 const header = `// GENERATED FILE — do not edit by hand.
 // Regenerate with: node scripts/sync-integrations.mjs <path-to-open-logos>
 // Source: ComposioHQ/open-logos (one file per toolkit), with vetted marks for
-// well-known brands from homarr-labs/dashboard-icons (assets/logo-overrides).
-// ${entries.length} services, logo assets in public/logos/<slug>.webp
+// well-known brands from homarr-labs/dashboard-icons (assets/logo-overrides)
+// and owner-chosen marks from assets/logo-supplied.
+// ${entries.length} services, logo assets in public/logos/<slug>-<hash>.webp
 
 export interface CatalogEntry {
   slug: string;
   name: string;
   category: string;
   /**
-   * Asset extension under /logos: "webp" for rasterised marks, "svg" for
-   * pass-through, null when no trustworthy mark exists and the interface should
-   * fall back to a lettered tile.
+   * Asset filename under /logos, carrying a hash of the image itself, or null
+   * when no trustworthy mark exists and the interface should fall back to a
+   * lettered tile. The hash is what lets a corrected mark actually reach a
+   * browser that already cached the old one.
    */
-  ext: "webp" | "svg" | null;
+  file: string | null;
   /** True when the mark is too dark to read on Cowind's surfaces unaided. */
   dark: boolean;
 }
@@ -312,5 +394,7 @@ export const CATALOG: CatalogEntry[] = ${JSON.stringify(entries, null, 2)};
 `;
 
 writeFileSync(OUT_FILE, header);
-console.log(`catalogued ${entries.length} services (${overridden} marks from the vetted set)`);
+console.log(
+  `catalogued ${entries.length} services (${overridden} vetted marks, ${supplied} supplied, ${placeholders} placeholders dropped)`,
+);
 if (skipped.length > 0) console.log(`skipped (unreadable): ${skipped.join(", ")}`);

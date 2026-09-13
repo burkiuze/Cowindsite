@@ -70,10 +70,10 @@ const EXTRA_SERVICES: Array<{ slug: string; name: string; category: string }> = 
 
 /** Asset path for a service's real brand mark. */
 const BY_SLUG = new Map(CATALOG.map((entry) => [entry.slug, entry]));
-const EXT_BY_SLUG = new Map(CATALOG.map((entry) => [entry.slug, entry.ext]));
+const FILE_BY_SLUG = new Map(CATALOG.map((entry) => [entry.slug, entry.file]));
 export function logoPath(slug: string): string | null {
-  const ext = EXT_BY_SLUG.get(slug);
-  return ext ? `/logos/${slug}.${ext}` : null;
+  const file = FILE_BY_SLUG.get(slug);
+  return file ? `/logos/${file}` : null;
 }
 
 export function catalogEntry(slug: string): CatalogEntry | undefined {

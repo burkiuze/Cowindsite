@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { WindMark } from "@/components/brand/WindMark";
 import { Icon } from "@/components/ui/Icon";
 import { ServiceLogo } from "@/components/app/ServiceLogo";
+import { catalogEntry, logoPath } from "@/lib/workspace/integrations";
 
 type LaneState = "waiting" | "running" | "completed";
 
@@ -14,12 +15,18 @@ const LANES = [
   { id: "risk", label: "Risk assessment", actor: "Wind Reasoning", at: 3 },
 ];
 
-const TOUCHED: Array<{ slug: string; name: string; logo: string; dark: boolean }> = [
-  { slug: "github", name: "GitHub", logo: "/logos/github.webp", dark: false },
-  { slug: "stripe", name: "Stripe", logo: "/logos/stripe.webp", dark: false },
-  { slug: "notion", name: "Notion", logo: "/logos/notion.webp", dark: false },
-  { slug: "slack", name: "Slack", logo: "/logos/slack.webp", dark: false },
-];
+// Asset paths come from the catalogue: it knows each mark's current filename,
+// which carries a hash of the image, so a corrected logo is picked up here too.
+const TOUCHED: Array<{ slug: string; name: string; logo: string | null; dark: boolean }> = [
+  { slug: "github", name: "GitHub" },
+  { slug: "stripe", name: "Stripe" },
+  { slug: "notion", name: "Notion" },
+  { slug: "slack", name: "Slack" },
+].map((service) => ({
+  ...service,
+  logo: logoPath(service.slug),
+  dark: catalogEntry(service.slug)?.dark ?? false,
+}));
 
 /**
  * A run, shown the way the product actually shows it.

@@ -18,6 +18,13 @@ const nextConfig: NextConfig = {
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
         ],
       },
+      {
+        // Every logo filename carries a hash of the image, so a given URL can
+        // never change meaning: cache it hard, and let a corrected mark arrive
+        // as the new URL it already is.
+        source: "/logos/:file*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
     ];
   },
 };

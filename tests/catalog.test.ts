@@ -19,9 +19,7 @@ describe("generated catalogue", () => {
   });
 
   it("ships a real logo asset for every entry that claims one", () => {
-    const missing = CATALOG.filter(
-      (entry) => entry.ext && !existsSync(join("public", "logos", `${entry.slug}.${entry.ext}`)),
-    );
+    const missing = CATALOG.filter((entry) => entry.file && !existsSync(join("public", "logos", entry.file)));
     expect(missing.map((entry) => entry.slug)).toEqual([]);
   });
 
@@ -29,10 +27,9 @@ describe("generated catalogue", () => {
     // A handful of marks in the source set belong to a different brand. Those
     // entries keep their place and fall back to a lettered tile — showing the
     // wrong company's logo would be worse than showing none.
-    const unmarked = CATALOG.filter((entry) => entry.ext === null);
+    const unmarked = CATALOG.filter((entry) => entry.file === null);
     expect(unmarked.length).toBeGreaterThan(0);
     for (const entry of unmarked) {
-      expect(existsSync(join("public", "logos", `${entry.slug}.webp`))).toBe(false);
       expect(logoPath(entry.slug)).toBeNull();
     }
   });
@@ -81,7 +78,9 @@ describe("curated services", () => {
     const github = allServices().find((service) => service.slug === "github");
     expect(github?.implemented).toBe(true);
     expect(github?.description).toBeTruthy();
-    expect(github?.logo).toBe("/logos/github.webp");
+    // The filename carries a hash of the image, so a corrected mark reaches a
+    // browser that cached the old one.
+    expect(github?.logo).toMatch(/^\/logos\/github-[0-9a-f]{8}\.webp$/);
   });
 
   it("resolves every featured service", () => {
