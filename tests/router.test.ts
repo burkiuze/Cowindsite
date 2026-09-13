@@ -40,6 +40,47 @@ describe("lane planning", () => {
     expect(lanes.every((lane) => lane.dependsOn.length === 0)).toBe(true);
   });
 
+  it("hears a Turkish scheduling request as an action", () => {
+    const heuristic = heuristicClassify("Yarın 18:00 için toplantı ayarla ve katılımcılara davet gönder");
+    expect(heuristic.intent).toBe("ACTION_REQUEST");
+  });
+
+  it("runs the domain work an action request carries, then plans the action on top", () => {
+    const message =
+      "Yarın saat 18:00'de ürün ve büyüme ekipleriyle toplantı ayarla, herkese davet gönder. Mevcut sponsorluk anlaşmalarımızı incele ve yarının programına göz at.";
+    const heuristic = heuristicClassify(message);
+    const lanes = planLanes({
+      intent: heuristic.intent,
+      complexity: heuristic.complexity,
+      heuristic,
+      attachments: [],
+      needsAction: true,
+    });
+
+    const labels = lanes.map((lane) => lane.label);
+    expect(labels).toContain("Financial review");
+    expect(labels).toContain("Details");
+    expect(labels).toContain("Action planning");
+
+    // The groundwork runs in parallel; the action waits for all of it.
+    const action = lanes.find((lane) => lane.label === "Action planning")!;
+    const groundwork = lanes.filter((lane) => lane.label !== "Action planning");
+    expect(groundwork.every((lane) => lane.dependsOn.length === 0)).toBe(true);
+    expect(action.dependsOn.sort()).toEqual(groundwork.map((lane) => lane.id).sort());
+  });
+
+  it("keeps a bare action request to a single lane", () => {
+    const heuristic = heuristicClassify("Yarın 18:00 için toplantı kur ve katılımcılara davet gönder");
+    const lanes = planLanes({
+      intent: heuristic.intent,
+      complexity: heuristic.complexity,
+      heuristic,
+      attachments: [],
+      needsAction: true,
+    });
+    expect(lanes.map((lane) => lane.label)).toEqual(["Action planning"]);
+  });
+
   it("always opens a visual lane when an image is attached", () => {
     const attachment: Attachment = {
       id: "a1",

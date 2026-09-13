@@ -2,6 +2,7 @@ import "server-only";
 import { EventChannel } from "./channel";
 import { ExecutionBudget, LIMITS } from "./config";
 import { orchestrate } from "./orchestrator";
+import type { AvailableTool } from "./executor";
 import { route } from "./router";
 import { primaryStream } from "./adapters/primary";
 import { isConfigured } from "./adapters/endpoints";
@@ -32,6 +33,9 @@ export interface ApprovalDraft {
   /** Prepared content of the action, shown verbatim to the approver. */
   payload: string;
   risk: "low" | "medium" | "high";
+  /** The tool that would carry it out, when one was chosen from what is connected. */
+  toolId?: string;
+  integrationId?: string;
 }
 
 export interface RuntimeInput {
@@ -40,6 +44,8 @@ export interface RuntimeInput {
   history: WindMessage[];
   prompt: PromptContext;
   services?: RuntimeServices;
+  /** Tools the workspace can actually reach. Wind may only choose from these. */
+  availableTools?: AvailableTool[];
   signal?: AbortSignal;
   /** Set by callers that must not spend specialist budget (e.g. previews). */
   fastPathOnly?: boolean;
@@ -162,6 +168,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
     traceId,
     budget,
     signal: input.signal,
+    availableTools: input.availableTools,
     emit: (event) => channel.push(sanitizeEvent(event)),
   }).finally(() => channel.close());
 
@@ -225,11 +232,17 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
   // ---- APPROVAL -----------------------------------------------------------
   if (needsApproval(decision) && input.services?.requestApproval) {
     const actionLane = orchestration.completed.find((lane) => lane.label === "Action planning");
+    const chosen = extractTool(actionLane?.output ?? "", input.availableTools ?? []);
+
     const draft: ApprovalDraft = {
-      title: decision.summary,
+      // A prepared action names itself: its first line says what it is far
+      // better than the route summary ("Preparing an action") ever could.
+      title: (chosen.tool ? firstLine(chosen.payload) : "") || decision.summary,
       summary: firstLine(finalText) || "Wind prepared an action that needs your decision.",
-      payload: actionLane?.output ?? finalText,
+      payload: chosen.payload || finalText,
       risk: decision.complexity === "deep" ? "high" : "medium",
+      toolId: chosen.tool?.id,
+      integrationId: chosen.tool?.integrationId,
     };
     try {
       const approval = await input.services.requestApproval(draft);
@@ -286,6 +299,23 @@ function trimHistory(history: WindMessage[]): WindMessage[] {
 /** Replays non-streamed text in small pieces so the UI still animates. */
 function* chunkText(text: string, size = 90): Generator<string> {
   for (let index = 0; index < text.length; index += size) yield text.slice(index, index + size);
+}
+
+/**
+ * The action-planning lane is asked to name its tool on the first line. Take it
+ * only when it matches a tool the workspace can actually reach, and strip the
+ * line so the approver sees the action content and nothing else.
+ */
+function extractTool(
+  output: string,
+  available: AvailableTool[],
+): { tool?: AvailableTool; payload: string } {
+  const match = output.match(/^\s*TOOL:\s*([A-Za-z0-9_.-]+)\s*$/m);
+  if (!match) return { payload: output.trim() };
+
+  const payload = output.replace(match[0], "").trim();
+  const tool = available.find((candidate) => candidate.id === match[1]);
+  return { tool, payload };
 }
 
 function firstLine(text: string): string {

@@ -38,6 +38,7 @@ const LEXICON: Lexicon = {
     "kod", "yazılım", "hata", "derle", "fonksiyon", "depo", "test yaz", "bug bul", "çöz",
   ],
   FINANCE: [
+    "sponsorship", "sponsorluk", "sponsor", "contract value", "anlaşma bedeli", "sözleşme bedeli",
     "revenue", "burn rate", "runway", "balance sheet", "income statement", "cash flow", "ebitda",
     "valuation", "margin", "arr", "mrr", "cap table", "invoice", "budget", "forecast", "p&l",
     "investment", "portfolio", "bilanço", "gelir", "gider", "bütçe", "nakit akışı", "yatırım",
@@ -58,6 +59,11 @@ const LEXICON: Lexicon = {
   DATA_EXTRACTION: [
     "extract", "parse", "json", "csv", "convert to table", "list the", "pull out", "normalize",
     "çıkar", "ayıkla", "listele", "tabloya çevir", "dönüştür",
+    // Reading a day out of a calendar or agenda is extraction work. Kept as
+    // phrases: "program" alone means something else entirely in software.
+    "check the schedule", "check the calendar", "tomorrow's agenda", "tomorrow's schedule",
+    "programına göz at", "programımıza göz at", "takvimi kontrol", "takvime bak", "gündemi çıkar",
+    "günü planla",
   ],
   COMPLEX_REASONING: [
     "analyze deeply", "contradiction", "trade-off", "root cause", "strategy", "assess risk",
@@ -67,6 +73,11 @@ const LEXICON: Lexicon = {
     "send", "email", "post", "publish", "schedule", "create ticket", "update the", "delete",
     "notify", "message the team", "gönder", "yayınla", "planla", "oluştur", "güncelle", "sil",
     "bildir", "paylaş",
+    // Scheduling is the most common consequential action a workspace asks for,
+    // and it was previously invisible to the router in Turkish.
+    "schedule a meeting", "set up a meeting", "book a meeting", "send an invite", "invite the",
+    "add to the calendar", "toplantı ayarla", "toplantı kur", "toplantı oluştur", "toplantı planla",
+    "davet gönder", "davetiye", "takvime ekle", "randevu ayarla", "toplantı ayarlar",
   ],
   WORKFLOW_REQUEST: [
     "every week", "recurring", "automate", "workflow", "whenever", "each morning", "pipeline",

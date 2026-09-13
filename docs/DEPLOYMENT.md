@@ -61,6 +61,23 @@ closed by middleware unless an operator opens them:
 With neither set, a workspace page redirects to `/access` and a workspace API
 returns 404. `/api/health` stays public.
 
+## Making an approved action actually run
+
+An approval only executes when two things are true: the integration is
+connected (its credentials are present) **and** an action endpoint is wired for
+it. The endpoint receives the tool id and the approved payload and performs the
+real call for that service:
+
+```bash
+INTEGRATION_ENDPOINT_GOOGLE_CALENDAR=https://actions.example.com/calendar
+INTEGRATION_ENDPOINT_GMAIL=https://actions.example.com/gmail
+```
+
+The variable name is `INTEGRATION_ENDPOINT_` plus the service slug, uppercased,
+with non-alphanumerics as underscores. Without one, an approved action is
+recorded and its receipt says plainly that nothing was sent — Cowind never
+reports work it did not do.
+
 ## After deploying
 
 - `/settings` shows which credentials the server can see and every active guardrail.

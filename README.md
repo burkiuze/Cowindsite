@@ -51,7 +51,10 @@ anything happens.
   near-black panel.
 - **Approval before consequence.** Anything that sends, publishes, changes or
   deletes outside Cowind is prepared in full, shown verbatim, editable by the
-  approver, and executed only on a yes — with a receipt either way.
+  approver, and executed only on a yes. Wind picks the tool from what is
+  genuinely connected, the approved payload is sent to that service's action
+  endpoint, and the receipt quotes what actually came back — or says plainly
+  that nothing was sent.
 - **Authority cannot inflate.** An agent's permissions are intersected with the
   permissions of the person who started the run. Narrower is allowed; wider is not.
 - **Scoped memory.** Knowledge belongs to departments and agent scopes. A finance

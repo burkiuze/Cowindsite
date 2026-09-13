@@ -197,9 +197,26 @@ export function planLanes({ intent, complexity, heuristic, attachments, needsAct
       break;
     }
 
-    case "ACTION_REQUEST":
-      add("wind-reasoning", "Action planning", "Draft the exact action to take, its content, and what could go wrong if it is wrong.");
+    case "ACTION_REQUEST": {
+      // "Set up the meeting, review the sponsorship agreements and check
+      // tomorrow" is three pieces of work, not one. Run the domain passes that
+      // the request actually carries, then plan the action on top of what they
+      // found — the action lane depends on them, everything else is parallel.
+      const s = heuristic.scores;
+      const groundwork: string[] = [];
+      if (s.FINANCE >= 3) groundwork.push(add("wind-finance", "Financial review", "Assess the financial material this action depends on, with figures where available."));
+      if (s.CODING >= 3) groundwork.push(add("wind-code", "Technical review", "Assess the technical material this action depends on."));
+      if (s.RESEARCH >= 3) groundwork.push(add("wind-research", "Background", "Establish the context this action depends on, separating fact from inference."));
+      if (s.DATA_EXTRACTION >= 3 || s.DOCUMENT >= 3) groundwork.push(add("wind-data", "Details", "Pull the concrete details the action needs: dates, names, figures, references."));
+
+      add(
+        "wind-reasoning",
+        "Action planning",
+        "Draft the exact action to take, its content, and what could go wrong if it is wrong.",
+        groundwork,
+      );
       break;
+    }
 
     case "WORKFLOW_REQUEST":
       add("wind-reasoning", "Flow design", "Design the repeatable steps, their triggers, inputs and approval points.");

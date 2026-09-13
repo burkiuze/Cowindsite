@@ -18,7 +18,8 @@ import {
   store,
   updateTask,
 } from "@/lib/workspace/store";
-import { INTEGRATIONS } from "@/lib/workspace/integrations";
+import { FIRST_CLASS } from "@/lib/workspace/integrations";
+import { TOOLS } from "@/lib/wind/tools/registry";
 import { can } from "@/lib/workspace/rbac";
 import { fail, handleRouteError, rateLimit, readJson, tooMany } from "@/lib/api";
 import type { TaskStep, TraceStep } from "@/lib/workspace/types";
@@ -81,10 +82,23 @@ export async function POST(request: Request) {
     // The current turn is passed separately.
     history.pop();
 
-    const connectedTools = store()
-      .connections.filter((connection) => connection.status === "connected")
-      .map((connection) => INTEGRATIONS.find((integration) => integration.id === connection.integrationId)?.name)
-      .filter((name): name is string => Boolean(name));
+    const connectedIds = new Set(
+      store()
+        .connections.filter((connection) => connection.status === "connected")
+        .map((connection) => connection.integrationId),
+    );
+
+    const connectedTools = FIRST_CLASS.filter((integration) => connectedIds.has(integration.id)).map(
+      (integration) => integration.name,
+    );
+
+    // Wind may only choose a tool that is genuinely reachable from here.
+    const availableTools = TOOLS.filter((tool) => connectedIds.has(tool.integrationId)).map((tool) => ({
+      id: tool.id,
+      name: tool.name,
+      integrationId: tool.integrationId,
+      effect: tool.effect,
+    }));
 
     const encoder = new TextEncoder();
     const abort = new AbortController();
@@ -109,6 +123,7 @@ export async function POST(request: Request) {
             attachments: attachments as Attachment[],
             history,
             signal: abort.signal,
+            availableTools,
             prompt: {
               workspaceName: session.workspace.name,
               userName: session.user.name,
@@ -137,6 +152,8 @@ export async function POST(request: Request) {
                   summary: draft.summary,
                   payload: draft.payload,
                   risk: draft.risk,
+                  toolId: draft.toolId,
+                  integrationId: draft.integrationId,
                   requestedBy: session.user.id,
                   requestedByAgent: "Wind",
                   conversationId: conversation.id,

@@ -4,6 +4,8 @@ import { decideApproval, logActivity, store, updateTask } from "@/lib/workspace/
 import { assertCan } from "@/lib/workspace/rbac";
 import { fail, handleRouteError, ok, rateLimit, readJson, tooMany } from "@/lib/api";
 import { integrationById } from "@/lib/workspace/integrations";
+import { executeTool } from "@/lib/wind/tools/execute";
+import { newTraceId } from "@/lib/wind/telemetry";
 
 export const dynamic = "force-dynamic";
 
@@ -42,30 +44,45 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     });
 
     if (body.decision === "approved") {
-      // Honesty rule: Cowind executes only against a genuinely connected
-      // integration. Otherwise the decision is recorded and the action is held.
+      // Honesty rule: an action counts as done only when something actually
+      // ran. The integration must be connected *and* have an action endpoint
+      // wired; otherwise the decision is recorded and the receipt says so.
       const connection = store().connections.find(
         (candidate) => candidate.integrationId === approval.integrationId,
       );
       const integration = approval.integrationId ? integrationById(approval.integrationId) : undefined;
 
       if (approval.integrationId && connection?.status === "connected") {
-        approval.status = "executed";
-        approval.receipt = `Executed against ${integration?.name ?? "the connected service"} at ${new Date().toISOString()}.`;
-        logActivity({
-          kind: "action.executed",
-          actor: "Wind",
-          summary: `Executed: ${approval.title}`,
-          approvalId: approval.id,
-          taskId: approval.taskId,
+        const outcome = await executeTool({
+          toolId: approval.toolId,
+          integrationId: approval.integrationId,
+          payload: approval.payload,
+          actor: session.user.name,
+          traceId: newTraceId(),
         });
+
+        approval.receipt = outcome.receipt;
+        if (outcome.status === "executed") {
+          approval.status = "executed";
+          logActivity({
+            kind: "action.executed",
+            actor: "Wind",
+            summary: `Executed: ${approval.title}`,
+            approvalId: approval.id,
+            taskId: approval.taskId,
+          });
+        } else if (outcome.status === "failed") {
+          approval.status = "failed";
+        }
       } else {
         approval.receipt = integration
           ? `Approved and recorded. ${integration.name} is not connected to this workspace, so nothing was sent. Connect it in Integrations and Wind will carry this out.`
           : "Approved and recorded. This action has no connected system behind it, so nothing was sent.";
       }
 
-      if (approval.taskId) updateTask(approval.taskId, { status: "completed" });
+      if (approval.taskId) {
+        updateTask(approval.taskId, { status: approval.status === "failed" ? "failed" : "completed" });
+      }
     } else if (approval.taskId) {
       updateTask(approval.taskId, { status: "cancelled" });
     }

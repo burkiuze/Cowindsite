@@ -86,15 +86,15 @@ export function ProductVideo() {
         preload="metadata"
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
-        aria-label="A run in the Cowind workspace: one request fans out across four specialist streams, then stops at an approval."
+        aria-label="A run in the Cowind workspace: one request fans out across specialist streams, prepares a meeting with invitations and assignments, and waits for a person to approve before anything is sent."
       >
         <source src="/video/preview.mp4" type="video/mp4" />
         <source src="/video/preview.webm" type="video/webm" />
       </video>
 
       <figcaption className="border-t border-[var(--color-hairline)] px-3.5 py-2.5 text-left text-[11.5px] text-[var(--color-ink-faint)]">
-        One request, four streams running at once, and an action held for a human — recorded in the product, not a
-        mockup.
+        One request in Turkish: Wind reviews the sponsorship agreements, checks tomorrow&rsquo;s schedule, prepares
+        the meeting with its invitations and per-person assignments — and sends nothing until a person approves.
       </figcaption>
     </figure>
   );

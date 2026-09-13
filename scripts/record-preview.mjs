@@ -105,6 +105,13 @@ async function glide(x, y, steps = 26) {
 async function glideToSelector(selector, { dx = 0, dy = 0 } = {}) {
   const element = page.locator(selector).first();
   await element.waitFor({ state: "visible", timeout: 15_000 });
+
+  // A target below the fold has a bounding box outside the viewport, and a
+  // mouse move there lands on nothing. Bring it into view first, exactly as a
+  // person would, and let the scroll settle before reading its position.
+  await element.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(450);
+
   const box = await element.boundingBox();
   if (!box) throw new Error(`no box for ${selector}`);
   await glide(box.x + box.width / 2 + dx, box.y + box.height / 2 + dy);
@@ -145,8 +152,8 @@ await page.waitForTimeout(1200);
 await click("textarea");
 await page.waitForTimeout(350);
 await type(
-  "Review our startup for the founders: code architecture and technical debt in the repo, burn rate and runway from the finances, and how we compare against competitors in the market.",
-  26,
+  "Yarın saat 18:00'de ürün ve büyüme ekipleriyle toplantı ayarla, herkese davet gönder. Mevcut sponsorluk anlaşmalarımızı incele ve yarının programına göz at.",
+  24,
 );
 await page.waitForTimeout(500);
 await page.keyboard.press("Enter");
@@ -158,13 +165,19 @@ await page.waitForTimeout(6000);
 await glide(880, 520, 18);
 await page.waitForTimeout(4800);
 
-// The approval that was held.
+// The action Wind prepared, and the decision that releases it.
 await click('a[href="/app/approvals"]');
-await page.waitForTimeout(1500);
-await glide(900, 430, 22);
-await page.waitForTimeout(1200);
-await glideToSelector("text=Approve", { dx: 0, dy: 0 });
 await page.waitForTimeout(1600);
+await glide(900, 420, 24);
+await page.waitForTimeout(1400);
+
+await click("text=Approve");
+await page.waitForTimeout(2400);
+
+// The receipt: what actually ran, not what was claimed. The decided card moves
+// down the page, so follow it rather than assuming where it landed.
+await glideToSelector("text=Executed against");
+await page.waitForTimeout(3400);
 
 // End on the catalogue.
 await click('a[href="/app/integrations"]');

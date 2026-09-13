@@ -1,6 +1,6 @@
 import "server-only";
 import { LIMITS, ExecutionBudget } from "./config";
-import { runLane, type LaneContext } from "./executor";
+import { runLane, type AvailableTool, type LaneContext } from "./executor";
 import { telemetry } from "./telemetry";
 import type { Attachment, LanePlan, LaneResult, WindEvent } from "./types";
 
@@ -24,6 +24,7 @@ export interface OrchestrationInput {
   budget: ExecutionBudget;
   signal?: AbortSignal;
   emit: (event: WindEvent) => void;
+  availableTools?: AvailableTool[];
 }
 
 export interface OrchestrationOutput {
@@ -88,6 +89,7 @@ export async function orchestrate(input: OrchestrationInput): Promise<Orchestrat
             traceId: input.traceId,
             budget,
             signal: input.signal,
+            availableTools: input.availableTools,
             onNote: (note) => emit({ type: "lane", id: lane.id, status: "running", label: lane.label, role: lane.role, note }),
           };
           return runLane(lane, context);

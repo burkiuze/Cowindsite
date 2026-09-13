@@ -122,6 +122,14 @@ export const FIRST_CLASS: IntegrationDefinition[] = [
     requiredEnv: ["NOTION_TOKEN"],
   },
   {
+    id: "linkedin",
+    name: "LinkedIn",
+    category: "marketing",
+    description: "Company page posts and audience activity.",
+    implemented: true,
+    requiredEnv: ["LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET"],
+  },
+  {
     id: "stripe",
     name: "Stripe",
     category: "finance",

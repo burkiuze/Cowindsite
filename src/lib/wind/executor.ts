@@ -16,6 +16,13 @@ import type { Attachment, LanePlan, LaneResult, WindMessage } from "./types";
  * continue with whatever else succeeded.
  */
 
+export interface AvailableTool {
+  id: string;
+  name: string;
+  integrationId: string;
+  effect: "read" | "write";
+}
+
 export interface LaneContext {
   userRequest: string;
   attachments: Attachment[];
@@ -27,6 +34,8 @@ export interface LaneContext {
   budget: ExecutionBudget;
   signal?: AbortSignal;
   onNote?: (note: string) => void;
+  /** Tools the workspace can genuinely reach, for the action-planning lane. */
+  availableTools?: AvailableTool[];
 }
 
 export async function runLane(lane: LanePlan, context: LaneContext): Promise<LaneResult> {
@@ -104,6 +113,23 @@ export function buildLanePrompt(lane: LanePlan, context: LaneContext): string {
   if (upstream.length > 0) {
     parts.push("", "Findings from earlier passes — build on these, do not repeat them:");
     for (const result of upstream) parts.push(`\n[${result.label}]\n${result.output.slice(0, 8_000)}`);
+  }
+
+  // Only the planning lane picks a tool, and only from what is actually
+  // connected — an unreachable tool is not an option Wind may take.
+  if (lane.label === "Action planning" && context.availableTools && context.availableTools.length > 0) {
+    const writable = context.availableTools.filter((tool) => tool.effect === "write");
+    if (writable.length > 0) {
+      parts.push(
+        "",
+        "Tools this workspace can actually reach:",
+        ...writable.map((tool) => `  ${tool.id} — ${tool.name}`),
+        "",
+        "Begin your output with a single line `TOOL: <id>` naming the one tool that would carry this out,",
+        "choosing only from the list above. If none of them fits, write `TOOL: none`.",
+        "Then, on the following lines, write the exact content of the action.",
+      );
+    }
   }
 
   const textAttachments = context.attachments.filter((a) => a.text);
