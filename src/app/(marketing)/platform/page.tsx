@@ -8,7 +8,7 @@ import { RunDemo } from "@/components/marketing/RunDemo";
 export const metadata = {
   title: "Platform",
   description:
-    "How Cowind works underneath: one assistant, a router, an orchestrator that runs work in parallel, scoped company memory, and an approval gate in front of every consequence.",
+    "How Navio works underneath: one assistant, a router, an orchestrator that runs work in parallel, scoped company memory, and an approval gate in front of every consequence.",
 };
 
 const SPECIALISTS: Array<{ name: string; role: string; icon: IconName }> = [
@@ -33,7 +33,7 @@ export default function PlatformPage() {
         </h1>
         <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
           People do not want to choose a model, wire a chain, or babysit an agent. They want an outcome, and they want
-          to know what happened. Cowind is built around exactly that: Wind decides what a request needs, does the parts
+          to know what happened. Navio is built around exactly that: Wind decides what a request needs, does the parts
           it is allowed to do, and stops in front of anything that would be hard to take back.
         </p>
       </section>

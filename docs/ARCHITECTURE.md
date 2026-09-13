@@ -1,4 +1,4 @@
-# Cowind architecture
+# Navio architecture
 
 ## The path of one request
 
@@ -15,7 +15,7 @@ browser
        └─ SSE event stream          status · plan · lane · delta · approval · done
 ```
 
-The browser never speaks to an engine. It speaks to Cowind; Cowind speaks to
+The browser never speaks to an engine. It speaks to Navio; Navio speaks to
 Wind; Wind speaks to the private adapters.
 
 ## The gather phase

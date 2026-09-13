@@ -5,7 +5,7 @@ import { isConfigured } from "@/lib/wind/adapters/endpoints";
 import { Icon } from "@/components/ui/Icon";
 import { Panel, PageHeader, Pill, SectionHeader, Stat, relativeTime } from "@/components/ui/primitives";
 import { StreamField } from "@/components/app/StreamField";
-import { WindMark } from "@/components/brand/WindMark";
+import { NavioMark } from "@/components/brand/NavioMark";
 import { ActivityTimeline } from "@/components/app/ActivityTimeline";
 
 export const dynamic = "force-dynamic";
@@ -33,7 +33,7 @@ export default async function HomePage() {
       <div className="mx-auto w-full max-w-6xl px-8 py-10">
         <PageHeader
           title={`${greeting}, ${session.user.name.split(" ")[0]}`}
-          description={`Here is what Cowind is holding for ${session.workspace.name} right now.`}
+          description={`Here is what Navio is holding for ${session.workspace.name} right now.`}
           action={
             <Link
               href="/app/wind"
@@ -52,7 +52,7 @@ export default async function HomePage() {
               <p className="text-[13.5px] font-medium text-[var(--color-ink)]">Wind is not connected to its engines</p>
               <p className="mt-1 text-[12.5px] leading-relaxed text-[var(--color-ink-muted)]">
                 Everything in the workspace works, but Wind cannot run until the workspace credentials are set on the
-                server. The rest of Cowind is fully usable meanwhile.
+                server. The rest of Navio is fully usable meanwhile.
               </p>
               <Link
                 href="/app/settings"
@@ -121,7 +121,7 @@ export default async function HomePage() {
 
             <Panel padded={false}>
               <div className="px-5 py-4">
-                <SectionHeader title="Activity" hint="Every meaningful step Cowind took, in order" />
+                <SectionHeader title="Activity" hint="Every meaningful step Navio took, in order" />
               </div>
               <div className="border-t border-[var(--color-hairline)] px-5 py-4">
                 <ActivityTimeline events={recentActivity(7)} compact />
@@ -139,7 +139,7 @@ export default async function HomePage() {
           <div className="space-y-6">
             <Panel>
               <div className="flex items-start gap-3">
-                <WindMark size={30} state="flow" />
+                <NavioMark size={30} state="flow" />
                 <div className="min-w-0">
                   <h3 className="text-[14px] font-semibold text-[var(--color-ink)]">Ask, plan, act, report</h3>
                   <p className="mt-1.5 text-[12.5px] leading-relaxed text-[var(--color-ink-muted)]">

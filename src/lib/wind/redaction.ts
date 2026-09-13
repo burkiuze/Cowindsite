@@ -1,7 +1,7 @@
 /**
  * Outbound sanitiser.
  *
- * Cowind presents a single assistant — Wind. Nothing about the private engine
+ * Navio presents a single assistant — Wind. Nothing about the private engine
  * layer (hosts, vendor names, raw engine identifiers, HTTP semantics) may reach
  * a browser, a chat bubble, an execution card or an error toast.
  *
@@ -134,14 +134,14 @@ export class StreamSanitizer {
   }
 }
 
-/** Cowind's own links stay intact; everything external is scrubbed. */
+/** Navio's own links stay intact; everything external is scrubbed. */
 function isSafeUrl(url: string): boolean {
   try {
     const { hostname } = new URL(url);
     return (
       hostname === "localhost" ||
-      hostname.endsWith("cowind.ai") ||
-      hostname.endsWith("cowind.app") ||
+      hostname.endsWith("navio.ai") ||
+      hostname.endsWith("navio.app") ||
       hostname === "127.0.0.1"
     );
   } catch {
@@ -167,7 +167,7 @@ function isSafePath(value: string): boolean {
 }
 
 /**
- * Map any failure to a calm, Cowind-branded message. The caller logs the real
+ * Map any failure to a calm, Navio-branded message. The caller logs the real
  * error server-side; the user sees only this.
  */
 export function userFacingError(code: ErrorCode): string {
@@ -204,7 +204,7 @@ export type ErrorCode =
   | "cancelled"
   | "unknown";
 
-/** Classify a thrown value into a Cowind error code. Never returns raw text. */
+/** Classify a thrown value into a Navio error code. Never returns raw text. */
 export function classifyError(error: unknown): ErrorCode {
   if (error instanceof WindError) return error.code;
   const message = error instanceof Error ? error.message : String(error ?? "");

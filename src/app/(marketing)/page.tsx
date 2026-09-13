@@ -7,12 +7,12 @@ import { Reveal } from "@/components/marketing/Reveal";
 import { StepFlow } from "@/components/marketing/StepFlow";
 import { ServiceLogo } from "@/components/app/ServiceLogo";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { WindMark } from "@/components/brand/WindMark";
+import { NavioMark } from "@/components/brand/NavioMark";
 import { CATALOG, allServices, featuredServices } from "@/lib/workspace/integrations";
 import { LIMITS } from "@/lib/wind/config";
 
 export const metadata = {
-  title: "Cowind — the AI work operating system",
+  title: "Navio — the AI work operating system",
   description:
     "Ask for an outcome. Wind reads the tools it is allowed to read, runs the work across specialists, holds anything consequential for approval, and reports exactly what it did.",
 };
@@ -102,7 +102,7 @@ export default function LandingPage() {
             </h1>
 
             <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
-              Cowind runs a company&rsquo;s work the way a good operator would: it reads what it is allowed to read,
+              Navio runs a company&rsquo;s work the way a good operator would: it reads what it is allowed to read,
               runs what can run at once, stops before anything consequential, and shows its receipts.
             </p>
 
@@ -172,7 +172,7 @@ export default function LandingPage() {
           <Reveal delay={80} className="lg:pt-12">
             <div className="panel-accent overflow-hidden">
               <div className="flex items-center gap-2.5 border-b border-[var(--color-hairline)] px-4 py-3">
-                <span className="font-mono text-[11.5px] text-[var(--color-ink-faint)]">cowind · one run</span>
+                <span className="font-mono text-[11.5px] text-[var(--color-ink-faint)]">navio · one run</span>
                 <span className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-[#164254] bg-[#0c2733] px-2 py-[3px] text-[10.5px] font-medium text-[#7fdcff]">
                   <span
                     className="h-1.5 w-1.5 rounded-full bg-[#7fdcff]"
@@ -282,7 +282,7 @@ export default function LandingPage() {
           <Reveal>
             <p className="eyebrow">The part nobody markets</p>
             <h2 className="display mt-4 max-w-2xl text-[38px] text-[var(--color-ink)]">
-              What Cowind refuses to do is what makes it safe to leave running.
+              What Navio refuses to do is what makes it safe to leave running.
             </h2>
           </Reveal>
 
@@ -349,9 +349,9 @@ export default function LandingPage() {
         <Aurora className="opacity-70" />
         <div className="mx-auto w-full max-w-3xl px-6 py-24 text-center">
           <Reveal>
-            <WindMark size={44} state="flow" className="mx-auto" />
+            <NavioMark size={44} state="flow" className="mx-auto" />
             <h2 className="display mt-7 text-[40px] text-[var(--color-ink)] sm:text-[46px]">
-              Put your work on Cowind
+              Put your work on Navio
             </h2>
             <p className="mx-auto mt-4 max-w-md text-[14.5px] leading-relaxed text-[var(--color-ink-muted)]">
               Bring the workspace&rsquo;s knowledge, connect the tools you already use, and let Wind carry the parts

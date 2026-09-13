@@ -355,7 +355,7 @@ export async function POST(request: Request) {
             taskId,
           });
         } catch (error) {
-          console.error("[cowind:wind]", error);
+          console.error("[navio:wind]", error);
           send({ type: "error", message: "Temporary Wind service error. Nothing was changed — try again." });
           if (taskId) updateTask(taskId, { status: "failed" });
         } finally {

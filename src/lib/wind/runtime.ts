@@ -15,7 +15,7 @@ import type { Attachment, LaneResult, RouteDecision, WindEvent, WindMessage } fr
 /**
  * Wind runtime — ASK → PLAN → ACT → REPORT.
  *
- * This is the seam between Cowind the product and Wind the system. It emits a
+ * This is the seam between Navio the product and Wind the system. It emits a
  * stream of user-safe events and returns the final answer text. Everything it
  * emits is sanitised: no engine names, no vendors, no transport detail, no
  * private reasoning.

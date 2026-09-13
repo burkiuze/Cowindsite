@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { WindMark } from "@/components/brand/WindMark";
+import { NavioMark } from "@/components/brand/NavioMark";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import type { Conversation } from "@/lib/workspace/types";
 
@@ -60,9 +60,9 @@ export function Sidebar(props: SidebarProps) {
       {/* Brand + workspace */}
       <div className="flex h-[60px] items-center gap-2 border-b border-[var(--color-hairline)] px-3.5">
         <Link href="/app/home" className="focus-ring flex items-center gap-2.5 rounded-lg">
-          <WindMark size={24} state="flow" priority />
+          <NavioMark size={24} state="flow" priority />
           {!collapsed ? (
-            <span className="text-[15px] font-semibold tracking-[-0.02em] text-[var(--color-ink)]">Cowind</span>
+            <span className="text-[15px] font-semibold tracking-[-0.02em] text-[var(--color-ink)]">Navio</span>
           ) : null}
         </Link>
         {!collapsed ? (

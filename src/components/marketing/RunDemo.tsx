@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { WindMark } from "@/components/brand/WindMark";
+import { NavioMark } from "@/components/brand/NavioMark";
 import { Icon } from "@/components/ui/Icon";
 import { ServiceLogo } from "@/components/app/ServiceLogo";
 import { catalogEntry, logoPath } from "@/lib/workspace/integrations";
@@ -57,7 +57,7 @@ export function RunDemo() {
   return (
     <div className="panel mx-auto max-w-3xl overflow-hidden text-left">
       <div className="flex items-center gap-2.5 border-b border-[var(--color-hairline)] px-4 py-3">
-        <WindMark size={18} state={finished ? "flow" : "thinking"} />
+        <NavioMark size={18} state={finished ? "flow" : "thinking"} />
         <span className="text-[12.5px] text-[var(--color-ink-muted)]">
           {finished ? "Run complete — one action held for approval" : `Wind is working across ${LANES.length} streams`}
         </span>

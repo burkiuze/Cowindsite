@@ -1,4 +1,4 @@
-/** Openers that show what Cowind is for: outcomes, not prompts. */
+/** Openers that show what Navio is for: outcomes, not prompts. */
 export const SUGGESTIONS = [
   {
     title: "Prepare tomorrow's product meeting",

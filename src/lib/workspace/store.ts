@@ -141,17 +141,17 @@ function createStore(): WorkspaceStore {
 }
 
 // Survives hot reload in development and module re-evaluation in serverless.
-const globalRef = globalThis as unknown as { __cowindStore?: WorkspaceStore };
+const globalRef = globalThis as unknown as { __navioStore?: WorkspaceStore };
 
 export function store(): WorkspaceStore {
-  if (!globalRef.__cowindStore) globalRef.__cowindStore = createStore();
-  return globalRef.__cowindStore;
+  if (!globalRef.__navioStore) globalRef.__navioStore = createStore();
+  return globalRef.__navioStore;
 }
 
 /** Test seam: drop all state and reseed. */
 export function resetStore(): WorkspaceStore {
-  globalRef.__cowindStore = createStore();
-  return globalRef.__cowindStore;
+  globalRef.__navioStore = createStore();
+  return globalRef.__navioStore;
 }
 
 export function id(prefix: string): string {

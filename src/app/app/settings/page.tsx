@@ -37,7 +37,7 @@ export default async function SettingsPage() {
           {!ready ? (
             <div className="mt-4 rounded-lg border border-[var(--color-hairline)] bg-[var(--color-surface)] p-3.5">
               <p className="text-[12.5px] leading-relaxed text-[var(--color-ink-muted)]">
-                Set both variables in your server environment (locally in <code className="rounded bg-[var(--color-raised)] px-1 py-0.5 font-mono text-[11.5px]">.env.local</code>, in production in your host&apos;s environment panel), then restart. Cowind reads them
+                Set both variables in your server environment (locally in <code className="rounded bg-[var(--color-raised)] px-1 py-0.5 font-mono text-[11.5px]">.env.local</code>, in production in your host&apos;s environment panel), then restart. Navio reads them
                 server-side only.
               </p>
             </div>

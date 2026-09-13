@@ -5,12 +5,12 @@ export const dynamic = "force-dynamic";
 
 /**
  * Public health. Deliberately says nothing about who serves Wind's engines —
- * only whether Cowind is able to run them.
+ * only whether Navio is able to run them.
  */
 export async function GET() {
   return ok({
     status: "ok",
-    product: "Cowind",
+    product: "Navio",
     assistant: "Wind",
     windReady: isConfigured(),
     time: new Date().toISOString(),

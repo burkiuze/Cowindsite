@@ -1,4 +1,4 @@
-# Deploying Cowind
+# Deploying Navio
 
 ## Requirements
 
@@ -18,7 +18,7 @@ Set the environment before starting:
 ```bash
 WIND_PRIMARY_API_KEY=…
 WIND_SPECIALIST_API_KEY=…
-NEXT_PUBLIC_COWIND_URL=https://your-domain
+NEXT_PUBLIC_NAVIO_URL=https://your-domain
 ```
 
 ## Vercel
@@ -32,7 +32,7 @@ NEXT_PUBLIC_COWIND_URL=https://your-domain
    | --- | --- | --- |
    | `WIND_PRIMARY_API_KEY` | yes | Fast conversational layer |
    | `WIND_SPECIALIST_API_KEY` | yes | Specialist pool |
-   | `NEXT_PUBLIC_COWIND_URL` | recommended | Public URL, used for metadata |
+   | `NEXT_PUBLIC_NAVIO_URL` | recommended | Public URL, used for metadata |
    | `WIND_MODEL_*` | no | Per-role engine overrides |
    | `WIND_*_TIMEOUT_MS`, `WIND_MAX_*`, `WIND_RATE_LIMIT_PER_MINUTE` | no | Guardrails |
 
@@ -55,8 +55,8 @@ closed by middleware unless an operator opens them:
 
 | Variable | Effect |
 | --- | --- |
-| `COWIND_WORKSPACE_ENABLED=1` | Opens the workspace to everyone |
-| `COWIND_PREVIEW_KEY=<secret>` | Opens it to whoever visits `/app?preview=<secret>`, which sets an http-only cookie and drops the secret from the URL |
+| `NAVIO_WORKSPACE_ENABLED=1` | Opens the workspace to everyone |
+| `NAVIO_PREVIEW_KEY=<secret>` | Opens it to whoever visits `/app?preview=<secret>`, which sets an http-only cookie and drops the secret from the URL |
 
 With neither set, a workspace page redirects to `/access` and a workspace API
 returns 404. `/api/health` stays public.
@@ -75,7 +75,7 @@ INTEGRATION_ENDPOINT_GMAIL=https://actions.example.com/gmail
 
 The variable name is `INTEGRATION_ENDPOINT_` plus the service slug, uppercased,
 with non-alphanumerics as underscores. Without one, an approved action is
-recorded and its receipt says plainly that nothing was sent — Cowind never
+recorded and its receipt says plainly that nothing was sent — Navio never
 reports work it did not do.
 
 ## After deploying

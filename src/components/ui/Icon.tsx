@@ -6,7 +6,7 @@ type IconProps = {
 };
 
 /**
- * Cowind's icon set.
+ * Navio's icon set.
  *
  * Hand-drawn on a 24-grid with a single 1.6 stroke weight and rounded caps, so
  * the whole interface reads as one system. Several glyphs carry the product's

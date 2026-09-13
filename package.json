@@ -1,8 +1,8 @@
 {
-  "name": "cowind",
+  "name": "navio",
   "version": "0.1.0",
   "private": true,
-  "description": "Cowind — an AI work operating system. Wind is the unified assistant.",
+  "description": "Navio — an AI work operating system. Wind is the unified assistant.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -27,7 +27,7 @@ export interface HeuristicResult {
 type Lexicon = Partial<Record<Intent, string[]>>;
 
 /**
- * Domain vocabulary. Deliberately bilingual: Cowind's first users work in
+ * Domain vocabulary. Deliberately bilingual: Navio's first users work in
  * Turkish and English in the same thread.
  */
 const LEXICON: Lexicon = {
@@ -306,7 +306,7 @@ export function estimateComplexity(
 /** Prompt used when the heuristic is not confident enough to stand alone. */
 export function classifierPrompt(message: string, attachmentSummary: string): string {
   return [
-    "You are Cowind's internal task classifier. Answer with one compact JSON object and nothing else.",
+    "You are Navio's internal task classifier. Answer with one compact JSON object and nothing else.",
     "",
     "Fields:",
     '  intent: one of GENERAL, CODING, FINANCE, VISION, DOCUMENT, RESEARCH, LONG_CONTEXT, DATA_EXTRACTION, COMPLEX_REASONING, MULTI_DOMAIN, ACTION_REQUEST, WORKFLOW_REQUEST',

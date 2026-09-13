@@ -10,7 +10,7 @@ const inter = Inter({
 
 /**
  * Display voice. A high-contrast serif for headlines only — it gives the page
- * an editorial weight that a grotesk at 56px cannot, and it keeps Cowind from
+ * an editorial weight that a grotesk at 56px cannot, and it keeps Navio from
  * looking like every other dark developer-tool site.
  */
 const display = Instrument_Serif({
@@ -28,7 +28,7 @@ const display = Instrument_Serif({
  * every card at localhost.
  */
 function siteUrl(): string {
-  const configured = process.env.NEXT_PUBLIC_COWIND_URL?.trim();
+  const configured = (process.env.NEXT_PUBLIC_NAVIO_URL ?? process.env.NEXT_PUBLIC_COWIND_URL)?.trim();
   if (configured) return configured.replace(/\/+$/, "");
 
   const production = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
@@ -43,24 +43,24 @@ function siteUrl(): string {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: {
-    default: "Cowind — the AI work operating system",
-    template: "%s · Cowind",
+    default: "Navio — the AI work operating system",
+    template: "%s · Navio",
   },
   description:
-    "Cowind is an AI work operating system. Ask Wind for an outcome; it plans the work, runs it across specialists and your connected tools, holds anything consequential for approval, and reports what it did.",
-  applicationName: "Cowind",
+    "Navio is an AI work operating system. Ask Wind for an outcome; it plans the work, runs it across specialists and your connected tools, holds anything consequential for approval, and reports what it did.",
+  applicationName: "Navio",
   openGraph: {
-    title: "Cowind — the AI work operating system",
+    title: "Navio — the AI work operating system",
     description:
       "Ask for an outcome. Wind plans it, runs it, holds what matters for approval, and shows its receipts.",
     url: "/",
-    siteName: "Cowind",
+    siteName: "Navio",
     images: ["/brand/og.png"],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cowind — the AI work operating system",
+    title: "Navio — the AI work operating system",
     description: "Ask for an outcome. Wind does the work and shows its receipts.",
     images: ["/brand/og.png"],
   },

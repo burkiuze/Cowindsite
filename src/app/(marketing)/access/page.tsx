@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { WindMark } from "@/components/brand/WindMark";
+import { NavioMark } from "@/components/brand/NavioMark";
 import { Icon } from "@/components/ui/Icon";
 import { CATALOG } from "@/lib/workspace/integrations";
 
 export const metadata = {
   title: "Request access",
-  description: "Cowind's workspace is in private access. Tell us what you would put on it.",
+  description: "Navio's workspace is in private access. Tell us what you would put on it.",
 };
 
 const WANTS = [
@@ -15,7 +15,7 @@ const WANTS = [
 ];
 
 export default function AccessPage() {
-  const subject = encodeURIComponent("Cowind access");
+  const subject = encodeURIComponent("Navio access");
   const body = encodeURIComponent(
     [
       "Company:",
@@ -28,14 +28,14 @@ export default function AccessPage() {
 
   return (
     <div className="mx-auto w-full max-w-2xl px-6 py-20">
-      <WindMark size={40} state="flow" />
+      <NavioMark size={40} state="flow" />
 
       <h1 className="display mt-7 text-[42px] text-[var(--color-ink)]">
         The workspace is in private access
       </h1>
 
       <p className="mt-5 text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
-        Cowind runs a company&rsquo;s work, which means it holds that company&rsquo;s knowledge and reaches its tools.
+        Navio runs a company&rsquo;s work, which means it holds that company&rsquo;s knowledge and reaches its tools.
         We open it one workspace at a time, with the integrations that workspace actually needs, rather than handing
         out a login and hoping.
       </p>
@@ -52,7 +52,7 @@ export default function AccessPage() {
         </ul>
 
         <a
-          href={`mailto:access@cowind.app?subject=${subject}&body=${body}`}
+          href={`mailto:access@navio.app?subject=${subject}&body=${body}`}
           className="focus-ring mt-5 inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] px-4 py-2.5 text-[13.5px] font-medium text-[#04121a] transition-opacity hover:opacity-90"
         >
           Write to us

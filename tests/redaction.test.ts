@@ -52,7 +52,7 @@ describe("error mapping", () => {
     expect(classifyError(new WindError("context", "too long"))).toBe("context");
   });
 
-  it("produces calm, Cowind-branded copy for every code", () => {
+  it("produces calm, Navio-branded copy for every code", () => {
     for (const code of ["timeout", "capacity", "context", "unavailable", "unconfigured", "invalid", "budget"] as const) {
       const message = userFacingError(code);
       expect(message.length).toBeGreaterThan(10);

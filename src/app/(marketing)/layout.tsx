@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { WindMark } from "@/components/brand/WindMark";
+import { NavioMark } from "@/components/brand/NavioMark";
 import { Icon } from "@/components/ui/Icon";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
 
@@ -18,8 +18,8 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           <div className="flex flex-wrap items-start justify-between gap-10">
             <div className="max-w-xs">
               <Link href="/" className="focus-ring inline-flex items-center gap-2.5 rounded-lg">
-                <WindMark size={22} state="flow" />
-                <span className="text-[15px] font-semibold tracking-[-0.02em]">Cowind</span>
+                <NavioMark size={22} state="flow" />
+                <span className="text-[15px] font-semibold tracking-[-0.02em]">Navio</span>
               </Link>
               <p className="mt-3 text-[12.5px] leading-relaxed text-[var(--color-ink-faint)]">
                 An AI work operating system. Ask for an outcome; Wind plans it, runs it, and holds anything
@@ -55,7 +55,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           </div>
 
           <div className="mt-12 flex flex-wrap items-center gap-3 border-t border-[var(--color-hairline)] pt-6 text-[12px] text-[var(--color-ink-faint)]">
-            <span>© {new Date().getFullYear()} Cowind</span>
+            <span>© {new Date().getFullYear()} Navio</span>
             <span className="flex items-center gap-1.5">
               <Icon name="shield" size={13} />
               Nothing consequential happens without a human decision

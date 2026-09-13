@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { WindMark } from "@/components/brand/WindMark";
+import { NavioMark } from "@/components/brand/NavioMark";
 import { Icon } from "@/components/ui/Icon";
 import { Markdown } from "@/components/app/Markdown";
 import { ExecutionTrace, type TraceLane } from "@/components/app/ExecutionTrace";
@@ -307,7 +307,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
   return (
     <div className="flex h-dvh flex-col">
       <header className="flex h-[60px] shrink-0 items-center gap-3 border-b border-[var(--color-hairline)] px-6">
-        <WindMark size={20} state={streaming ? "thinking" : "idle"} />
+        <NavioMark size={20} state={streaming ? "thinking" : "idle"} />
         <div className="min-w-0">
           <h1 className="text-[14px] leading-none font-semibold text-[var(--color-ink)]">Wind</h1>
           <p className="mt-1 text-[11.5px] leading-none text-[var(--color-ink-faint)]">
@@ -341,7 +341,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
                   {lanes.length > 0 ? <ExecutionTrace lanes={lanes} phase={phase} /> : null}
                   <ActionCards actions={actions} />
                   <div className="flex gap-3.5">
-                    <WindMark size={26} state="thinking" className="mt-0.5" />
+                    <NavioMark size={26} state="thinking" className="mt-0.5" />
                     <div className="min-w-0 flex-1">
                       {draft ? (
                         <Markdown text={draft} />
@@ -511,7 +511,7 @@ function MessageRow({ message, userInitials }: { message: ChatMessage; userIniti
       {message.trace && message.trace.length > 0 ? <ExecutionTrace lanes={message.trace} collapsed /> : null}
       {message.actions && message.actions.length > 0 ? <ActionCards actions={message.actions} /> : null}
       <div className="flex gap-3.5">
-        <WindMark size={26} className="mt-0.5" />
+        <NavioMark size={26} className="mt-0.5" />
         <div className="min-w-0 flex-1">
           <Markdown text={message.content} />
           {message.taskId ? (
@@ -564,7 +564,7 @@ function EmptyChat({
 }) {
   return (
     <div className="flex flex-col items-center pt-12 text-center">
-      <WindMark size={64} state="flow" />
+      <NavioMark size={64} state="flow" />
       <h2 className="mt-5 text-[20px] font-semibold tracking-[-0.02em] text-[var(--color-ink)]">
         What should Wind get done?
       </h2>

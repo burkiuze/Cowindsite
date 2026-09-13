@@ -16,7 +16,7 @@ export interface CatalogEntry {
    * browser that already cached the old one.
    */
   file: string | null;
-  /** True when the mark is too dark to read on Cowind's surfaces unaided. */
+  /** True when the mark is too dark to read on Navio's surfaces unaided. */
   dark: boolean;
 }
 

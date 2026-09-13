@@ -44,7 +44,7 @@ export default async function WorkspaceIntegrationsPage() {
     <div className="mx-auto w-full max-w-6xl px-8 py-10">
       <PageHeader
         title="Integrations"
-        description={`${connectedCount} connected of ${FIRST_CLASS.length} with adapters, inside a catalogue of ${CATALOG.length} services. Cowind shows the true state of every connection — one without credentials is never treated as if it worked.`}
+        description={`${connectedCount} connected of ${FIRST_CLASS.length} with adapters, inside a catalogue of ${CATALOG.length} services. Navio shows the true state of every connection — one without credentials is never treated as if it worked.`}
       />
 
       <div className="mt-5 flex items-start gap-2.5 rounded-[14px] border border-[var(--color-hairline)] bg-[var(--color-panel)] px-4 py-3">
@@ -127,7 +127,7 @@ export default async function WorkspaceIntegrationsPage() {
           Catalogue
         </h2>
         <p className="mt-1.5 text-[12.5px] text-[var(--color-ink-faint)]">
-          Services Cowind knows how to represent. None of these is connected to this workspace yet — Wind is told
+          Services Navio knows how to represent. None of these is connected to this workspace yet — Wind is told
           exactly which tools exist, so it cannot claim to have used one.
         </p>
         <div className="mt-4">

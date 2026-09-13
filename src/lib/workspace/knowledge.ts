@@ -5,7 +5,7 @@ import type { KnowledgeSource, WorkspaceMember } from "./types";
 /**
  * Workspace knowledge retrieval.
  *
- * Memory in Cowind is scoped, not global. A retrieval always runs as a specific
+ * Memory in Navio is scoped, not global. A retrieval always runs as a specific
  * member (and optionally as a specific agent), and a source is only visible
  * when both the member's departments and the agent's granted scopes allow it.
  * Finance knowledge does not leak into an engineering agent because it happens

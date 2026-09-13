@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { WindMark } from "@/components/brand/WindMark";
+import { NavioMark } from "@/components/brand/NavioMark";
 import { Icon } from "@/components/ui/Icon";
 
 const LINKS = [
@@ -42,8 +42,8 @@ export function MarketingNav() {
           }`}
         >
           <Link href="/" className="focus-ring flex shrink-0 items-center gap-2.5 rounded-full pr-1">
-            <WindMark size={24} state="flow" priority />
-            <span className="text-[15px] font-semibold tracking-[-0.02em]">Cowind</span>
+            <NavioMark size={24} state="flow" priority />
+            <span className="text-[15px] font-semibold tracking-[-0.02em]">Navio</span>
           </Link>
 
           <span className="mx-2 hidden h-4 w-px bg-[var(--color-hairline)] md:block" />

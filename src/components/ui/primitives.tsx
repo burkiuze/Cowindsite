@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 /**
  * Shared surface primitives.
  *
- * Cowind's density comes from a small set of pieces used consistently: a panel
+ * Navio's density comes from a small set of pieces used consistently: a panel
  * with a hairline border, a section header with an optional action, a status
  * pill, and a stat. Pages compose these rather than inventing their own.
  */

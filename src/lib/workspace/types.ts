@@ -1,6 +1,6 @@
 import type { Permission, Role } from "./rbac";
 
-/** Core entities of the Cowind workspace. */
+/** Core entities of the Navio workspace. */
 
 export interface User {
   id: string;
@@ -240,7 +240,7 @@ export interface IntegrationConnection {
   status: "connected" | "available" | "not_configured" | "error";
   connectedBy?: string;
   connectedAt?: number;
-  /** Account label, e.g. "cowind/product". Never a credential. */
+  /** Account label, e.g. "navio/product". Never a credential. */
   accountLabel?: string;
 }
 

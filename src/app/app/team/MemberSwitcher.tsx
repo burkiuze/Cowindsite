@@ -7,7 +7,7 @@ import { Icon } from "@/components/ui/Icon";
 /**
  * Switch the acting member.
  *
- * Not a login screen: a way to see Cowind through another role's permissions,
+ * Not a login screen: a way to see Navio through another role's permissions,
  * which is the fastest way to check that scoping actually holds.
  */
 export function MemberSwitcher({

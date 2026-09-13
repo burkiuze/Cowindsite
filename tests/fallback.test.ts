@@ -49,7 +49,7 @@ describe("engine registry", () => {
     expect(engineForRole("wind-vision").vision).toBe(true);
   });
 
-  it("labels every engine with Cowind branding only", () => {
+  it("labels every engine with Navio branding only", () => {
     for (const engine of Object.values(ENGINES)) {
       expect(engine.label.startsWith("Wind")).toBe(true);
     }

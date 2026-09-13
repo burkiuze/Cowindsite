@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="public/brand/wind-mark-128.png" width="72" alt="" />
+<img src="public/brand/navio-mark-128.png" width="72" alt="" />
 
-# Cowind
+# Navio
 
 **An AI work operating system.** Ask for an outcome — **Wind** plans the work,
 runs it across specialists and connected tools, holds anything consequential for
@@ -14,7 +14,7 @@ a human decision, and reports exactly what it did.
 
 ## What this is
 
-Cowind is not a chat wrapper. It is a workspace with a runtime underneath it:
+Navio is not a chat wrapper. It is a workspace with a runtime underneath it:
 
 ```
 USER → WIND → intent + task router → orchestrator → specialist workers
@@ -51,7 +51,7 @@ anything happens.
   as dark ink at build time get a light plate so none of them vanish on a
   near-black panel.
 - **Approval before consequence.** Anything that sends, publishes, changes or
-  deletes outside Cowind is prepared in full, shown verbatim, editable by the
+  deletes outside Navio is prepared in full, shown verbatim, editable by the
   approver, and executed only on a yes. Wind picks the tool from what is
   genuinely connected, the approved payload is sent to that service's action
   endpoint, and the receipt quotes what actually came back — or says plainly
@@ -67,7 +67,7 @@ anything happens.
 
 The site at `/` is public: home, platform, integrations, about, FAQ, access.
 The workspace at `/app` is sealed by middleware and opens only with
-`COWIND_WORKSPACE_ENABLED=1` or a `COWIND_PREVIEW_KEY` — see
+`NAVIO_WORKSPACE_ENABLED=1` or a `NAVIO_PREVIEW_KEY` — see
 [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
 
 The hero video is a real run recorded in that workspace by
@@ -82,7 +82,7 @@ cp .env.example .env.local     # fill in the two keys, server-side only
 npm run dev                    # http://localhost:3000
 ```
 
-Cowind runs fully without credentials — the workspace, tasks, approvals,
+Navio runs fully without credentials — the workspace, tasks, approvals,
 knowledge, integrations and audit trail are all live. Wind itself is disabled
 until the two keys are present, and says so instead of failing obscurely.
 

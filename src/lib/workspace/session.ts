@@ -13,7 +13,7 @@ import type { User, WorkspaceMember, Workspace } from "./types";
  * depends on the resolved member, not on how it was resolved.
  */
 
-const COOKIE = "cowind_member";
+const COOKIE = "navio_member";
 const DEFAULT_USER_ID = "usr_burak";
 
 export interface Session {

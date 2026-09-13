@@ -6,7 +6,7 @@ import type { Capability, WindRole } from "./types";
  * THE ONLY PLACE WHERE ENGINE IDENTIFIERS LIVE.
  * ---------------------------------------------------------------------------
  * Every engine Wind can reach is declared here once. Routing, fallback and
- * telemetry all refer to engines by their Cowind `key` — never by a raw
+ * telemetry all refer to engines by their Navio `key` — never by a raw
  * identifier — so swapping an engine is a one-line change in this file (or a
  * single environment variable, no deploy of code required).
  *
@@ -25,7 +25,7 @@ export interface EngineSpec {
   identifier: string;
   /** Product-facing Wind role this engine backs. */
   role: WindRole;
-  /** Human label shown in execution traces (Cowind branding only). */
+  /** Human label shown in execution traces (Navio branding only). */
   label: string;
   capabilities: Capability[];
   /** Usable context window in tokens (approximate, used for routing). */

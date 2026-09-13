@@ -6,7 +6,7 @@ import type { Permission } from "../../workspace/rbac";
  *
  * A tool is a capability Wind can invoke against a connected system. Every tool
  * declares the permission it needs and whether it changes anything outside
- * Cowind — that flag is what forces a human approval before execution.
+ * Navio — that flag is what forces a human approval before execution.
  *
  * Nothing here fakes a result. If the integration behind a tool is not
  * connected, the tool is not runnable and Wind is told so explicitly.

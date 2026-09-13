@@ -5,7 +5,7 @@ import type { MetadataRoute } from "next";
  * not — they are sealed by middleware, and this keeps crawlers from knocking.
  */
 function siteUrl(): string {
-  const configured = process.env.NEXT_PUBLIC_COWIND_URL?.trim();
+  const configured = (process.env.NEXT_PUBLIC_NAVIO_URL ?? process.env.NEXT_PUBLIC_COWIND_URL)?.trim();
   if (configured) return configured.replace(/\/+$/, "");
   const production = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
   if (production) return `https://${production}`;

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { WindMark } from "@/components/brand/WindMark";
+import { NavioMark } from "@/components/brand/NavioMark";
 
 /**
  * Last line of defence in the browser. It says what happened and gives a way
@@ -11,12 +11,12 @@ import { WindMark } from "@/components/brand/WindMark";
 export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
     // Server-side logging already has the detail; this keeps the digest linkable.
-    console.error("[cowind] render failed", error.digest);
+    console.error("[navio] render failed", error.digest);
   }, [error]);
 
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center">
-      <WindMark size={44} state="flow" />
+      <NavioMark size={44} state="flow" />
       <h1 className="text-[20px] font-semibold tracking-[-0.02em]">Something went wrong on this page</h1>
       <p className="max-w-sm text-[13.5px] leading-relaxed text-[var(--color-ink-muted)]">
         Nothing was changed. Try again, and if it keeps happening the reference is{" "}

@@ -29,7 +29,7 @@ const TAKES: Take[] = [
     caption:
       "One request in Turkish. Wind reads the calendar, the mail threads and the workspace notes it is allowed to read, reviews the sponsorship agreements, then prepares the meeting with its invitations and per-person assignments — and sends nothing until a person approves.",
     description:
-      "A run in the Cowind workspace: one request fans out across specialist streams, prepares a meeting with invitations and assignments, and waits for a person to approve before anything is sent.",
+      "A run in the Navio workspace: one request fans out across specialist streams, prepares a meeting with invitations and assignments, and waits for a person to approve before anything is sent.",
   },
   {
     id: "engineering",
@@ -38,7 +38,7 @@ const TAKES: Take[] = [
     caption:
       "The same request shape, a different department. Wind reads the open pull requests and the blocker issues, finds the one decision the release actually turns on, puts it at the top of the agenda and prepares the invitation — still waiting on a person.",
     description:
-      "A run in the Cowind workspace: Wind reads a repository and an issue tracker, prepares a release meeting around the blocking decision, and holds the invitations for approval.",
+      "A run in the Navio workspace: Wind reads a repository and an issue tracker, prepares a release meeting around the blocking decision, and holds the invitations for approval.",
   },
   {
     id: "social",
@@ -47,7 +47,7 @@ const TAKES: Take[] = [
     caption:
       "One approval, four steps, in order. The video is generated first and the upload waits for it; the posts wait for the upload. Each step runs in front of you and leaves its own receipt — nothing is marked done before it is.",
     description:
-      "A run in the Cowind workspace: an approved action produces a video, uploads it, then publishes to three channels one step at a time, each leaving a receipt.",
+      "A run in the Navio workspace: an approved action produces a video, uploads it, then publishes to three channels one step at a time, each leaving a receipt.",
   },
 ];
 
@@ -105,7 +105,7 @@ export function ProductVideo() {
           ))}
         </span>
         <span className="ml-1 font-mono text-[11.5px] text-[var(--color-ink-faint)]">
-          cowind · workspace preview
+          navio · workspace preview
         </span>
         <span className="ml-auto flex items-center gap-2">
           <span className="hidden items-center gap-1.5 rounded-full border border-[#164254] bg-[#0c2733] px-2 py-[3px] text-[10.5px] font-medium text-[#7fdcff] sm:inline-flex">

@@ -12,12 +12,12 @@ type Props = {
  * The Wind mark.
  *
  * The artwork itself is never redrawn or recoloured — it is the supplied mark,
- * with the black plate lifted to alpha so it can sit on Cowind's charcoal
+ * with the black plate lifted to alpha so it can sit on Navio's charcoal
  * surfaces. Motion is applied to the whole mark (a slow airflow drift, and a
  * breath while Wind is working) rather than to its geometry, so the logo stays
  * exactly as designed while still feeling alive instead of spinning.
  */
-export function WindMark({ size = 28, state = "idle", className = "", priority = false }: Props) {
+export function NavioMark({ size = 28, state = "idle", className = "", priority = false }: Props) {
   const animation =
     state === "thinking"
       ? "breathe 2.4s ease-in-out infinite"
@@ -42,7 +42,7 @@ export function WindMark({ size = 28, state = "idle", className = "", priority =
         />
       ) : null}
       <Image
-        src="/brand/wind-mark.png"
+        src="/brand/navio-mark.png"
         alt=""
         width={size}
         height={size}
@@ -56,7 +56,7 @@ export function WindMark({ size = 28, state = "idle", className = "", priority =
 }
 
 /** Lockup used in the sidebar, auth and marketing headers. */
-export function WindLockup({
+export function NavioLockup({
   size = 26,
   className = "",
   priority = false,
@@ -67,8 +67,8 @@ export function WindLockup({
 }) {
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <WindMark size={size} state="flow" priority={priority} />
-      <span className="text-[15px] font-semibold tracking-[-0.02em] text-[var(--color-ink)]">Cowind</span>
+      <NavioMark size={size} state="flow" priority={priority} />
+      <span className="text-[15px] font-semibold tracking-[-0.02em] text-[var(--color-ink)]">Navio</span>
     </span>
   );
 }

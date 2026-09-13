@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { WindMark } from "@/components/brand/WindMark";
+import { NavioMark } from "@/components/brand/NavioMark";
 
 export default function NotFound() {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center">
-      <WindMark size={44} state="flow" />
+      <NavioMark size={44} state="flow" />
       <h1 className="text-[20px] font-semibold tracking-[-0.02em]">That page is not here</h1>
       <p className="max-w-sm text-[13.5px] leading-relaxed text-[var(--color-ink-muted)]">
         The link may be stale, or the page it pointed at has moved.

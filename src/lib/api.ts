@@ -7,7 +7,7 @@ import { sanitizeForUser, userFacingError, WindError } from "./wind/redaction";
 /**
  * API helpers.
  *
- * Every response that leaves Cowind goes through here, so a stack trace, an
+ * Every response that leaves Navio goes through here, so a stack trace, an
  * engine name or a transport detail cannot reach a browser by accident.
  */
 
@@ -29,8 +29,8 @@ export function handleRouteError(error: unknown): NextResponse {
   if (error instanceof SyntaxError) {
     return fail(400, "That request could not be read.");
   }
-  console.error("[cowind:route]", error);
-  return fail(500, "Something went wrong on Cowind's side. Nothing was changed.");
+  console.error("[navio:route]", error);
+  return fail(500, "Something went wrong on Navio's side. Nothing was changed.");
 }
 
 // --- rate limiting ---------------------------------------------------------

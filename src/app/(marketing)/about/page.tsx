@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { WindMark } from "@/components/brand/WindMark";
+import { NavioMark } from "@/components/brand/NavioMark";
 import { Icon } from "@/components/ui/Icon";
 
 export const metadata = {
   title: "About",
-  description: "Why Cowind exists, what it refuses to do, and the principles the product is built on.",
+  description: "Why Navio exists, what it refuses to do, and the principles the product is built on.",
 };
 
 const PRINCIPLES = [
@@ -14,7 +14,7 @@ const PRINCIPLES = [
   },
   {
     title: "One voice",
-    body: "A company does not want to manage a roster of assistants. Cowind presents one — Wind — and keeps the machinery behind it out of the conversation entirely.",
+    body: "A company does not want to manage a roster of assistants. Navio presents one — Wind — and keeps the machinery behind it out of the conversation entirely.",
   },
   {
     title: "Consequence needs a person",
@@ -22,7 +22,7 @@ const PRINCIPLES = [
   },
   {
     title: "Never pretend",
-    body: "If a tool is not connected, Cowind says so and refuses to imply the action happened. An honest “I did not do that” is worth more than a convincing lie, and a system that fabricates once cannot be trusted again.",
+    body: "If a tool is not connected, Navio says so and refuses to imply the action happened. An honest “I did not do that” is worth more than a convincing lie, and a system that fabricates once cannot be trusted again.",
   },
   {
     title: "Authority flows down, never up",
@@ -37,7 +37,7 @@ const PRINCIPLES = [
 export default function AboutPage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-16">
-      <WindMark size={40} state="flow" />
+      <NavioMark size={40} state="flow" />
 
       <h1 className="display mt-7 text-[44px] text-[var(--color-ink)]">
         Most work inside a company is coordination
@@ -50,7 +50,7 @@ export default function AboutPage() {
           the business, and all of it eats the day.
         </p>
         <p>
-          Cowind exists to carry that layer. Not as a chat window bolted onto a workspace, but as an operating layer:
+          Navio exists to carry that layer. Not as a chat window bolted onto a workspace, but as an operating layer:
           it holds the company&rsquo;s knowledge with real boundaries, reaches the tools the work already lives in, runs
           what can run at once, and stops in front of anything a person should decide.
         </p>

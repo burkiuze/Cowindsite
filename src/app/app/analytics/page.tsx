@@ -38,7 +38,7 @@ export default async function AnalyticsPage() {
     <div className="mx-auto w-full max-w-5xl px-8 py-10">
       <PageHeader
         title="Analytics"
-        description="What Cowind actually did: runs, decisions, and where the work went. Counted from recorded steps, not estimated."
+        description="What Navio actually did: runs, decisions, and where the work went. Counted from recorded steps, not estimated."
       />
 
       <div className="mt-7 grid grid-cols-2 gap-3 lg:grid-cols-4">

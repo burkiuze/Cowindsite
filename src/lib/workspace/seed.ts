@@ -17,9 +17,9 @@ import type {
 /**
  * Seed workspace.
  *
- * A new Cowind instance starts with a populated workspace so the product can be
+ * A new Navio instance starts with a populated workspace so the product can be
  * evaluated immediately. Nothing here is a fake integration result: every
- * artefact below is content that lives inside Cowind itself.
+ * artefact below is content that lives inside Navio itself.
  */
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -401,7 +401,7 @@ export const SEED_APPROVALS: Approval[] = [
       "Product shipped approvals v2 and knowledge scoping; SSO slips two weeks against plan.",
       "",
       "One risk needs a decision: 22% of ARR sits with three accounts and one is in procurement review.",
-      "Full pack: [Cowind artifact link]",
+      "Full pack: [Navio artifact link]",
     ].join("\n"),
     toolId: "gmail.send_email",
     integrationId: "gmail",
@@ -448,7 +448,7 @@ export const SEED_APPROVALS: Approval[] = [
     decidedAt: now - 2 * DAY + 90 * 60 * 1000,
     decidedBy: "usr_burak",
     decisionNote: "Approved — keep two spare seats for contractors.",
-    receipt: "Recorded. No external system was contacted: this vendor is not connected to Cowind.",
+    receipt: "Recorded. No external system was contacted: this vendor is not connected to Navio.",
   },
 ];
 

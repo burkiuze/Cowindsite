@@ -7,8 +7,11 @@ import { NextResponse, type NextRequest } from "next/server";
  * that drive it are sealed off unless an operator deliberately opens them.
  * Two ways in, both server-side:
  *
- *   COWIND_WORKSPACE_ENABLED=1   opens the workspace to everyone
- *   COWIND_PREVIEW_KEY=<secret>  opens it to whoever visits /app?preview=<secret>,
+ *   NAVIO_WORKSPACE_ENABLED=1   opens the workspace to everyone
+ *
+ * The pre-rename names (COWIND_*) are still accepted, so a deployment that
+ * already holds them keeps working through the rename.
+ *   NAVIO_PREVIEW_KEY=<secret>  opens it to whoever visits /app?preview=<secret>,
  *                                which sets an http-only cookie for later visits
  *
  * With neither set — the default — a page request is redirected to the public
@@ -16,7 +19,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * workspace behind the door.
  */
 
-const PREVIEW_COOKIE = "cowind_preview";
+const PREVIEW_COOKIE = "navio_preview";
 
 /** API routes that belong to the workspace. `/api/health` stays public. */
 const SEALED_API = [
@@ -41,9 +44,11 @@ export function middleware(request: NextRequest) {
   const isWorkspaceApi = SEALED_API.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
   if (!isWorkspacePage && !isWorkspaceApi) return NextResponse.next();
 
-  if (clean(process.env.COWIND_WORKSPACE_ENABLED) === "1") return NextResponse.next();
+  if (clean(process.env.NAVIO_WORKSPACE_ENABLED ?? process.env.COWIND_WORKSPACE_ENABLED) === "1") {
+    return NextResponse.next();
+  }
 
-  const key = clean(process.env.COWIND_PREVIEW_KEY);
+  const key = clean(process.env.NAVIO_PREVIEW_KEY ?? process.env.COWIND_PREVIEW_KEY);
   if (key) {
     if (request.cookies.get(PREVIEW_COOKIE)?.value === key) return NextResponse.next();
 

@@ -46,14 +46,14 @@ const RASTER = new Set([".png", ".jpg", ".jpeg", ".webp", ".avif", ".svg"]);
 /**
  * Services that must never appear in the catalogue.
  *
- * Cowind presents one assistant, Wind, and nothing about the private engine
+ * Navio presents one assistant, Wind, and nothing about the private engine
  * layer may surface anywhere in the product. A gateway that serves Wind's own
  * specialists would name that layer just by being listed next to 770 ordinary
  * SaaS tools, so it is excluded here — at the source, not by filtering later.
  */
 const EXCLUDED = new Set([
   "openrouter",
-  // The logo set's own brand. It provides the marks; it is not a service Cowind
+  // The logo set's own brand. It provides the marks; it is not a service Navio
   // connects to, so it has no place in a catalogue of integrations.
   "composio",
   "composio-dark",
@@ -251,7 +251,7 @@ const skipped = [];
  * as .png, an ICO wrapping a PNG. Sniff the bytes instead of trusting the name.
  */
 /**
- * Cowind's surfaces are near-black, so a mark drawn in black disappears on them.
+ * Navio's surfaces are near-black, so a mark drawn in black disappears on them.
  *
  * The right measure here is brightness, not luminance: a saturated red mark has
  * low luminance but reads perfectly well against near-black, and putting it on a
@@ -386,7 +386,7 @@ export interface CatalogEntry {
    * browser that already cached the old one.
    */
   file: string | null;
-  /** True when the mark is too dark to read on Cowind's surfaces unaided. */
+  /** True when the mark is too dark to read on Navio's surfaces unaided. */
   dark: boolean;
 }
 
