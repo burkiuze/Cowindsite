@@ -41,7 +41,8 @@ export async function GET(request: Request) {
   const startedAt = Date.now();
   try {
     const result = await primaryComplete([{ role: "user", content: "Reply with the single word: ready" }], "probe", {
-      maxTokens: 8,
+      // Room enough that an engine which thinks first can still answer.
+      maxTokens: 64,
       temperature: 0,
     });
     return ok({ ...base, probe: { ok: true, ms: Date.now() - startedAt, chars: result.text.trim().length } });

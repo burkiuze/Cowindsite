@@ -88,6 +88,11 @@ export interface CallOptions {
  * not read as an outage. When one is rejected, the call is retried once with
  * whatever that upstream says it actually serves today.
  */
+/** An engine that returned no content at all. */
+function isEmptyCompletion(error: unknown): boolean {
+  return error instanceof WindError && error.message.includes("empty completion");
+}
+
 function isUnknownModel(error: unknown): boolean {
   const text = error instanceof Error ? error.message : String(error);
   return /model_not_found|does not exist|unknown model|no such model|model .* not found/i.test(text);
@@ -99,19 +104,33 @@ export async function complete(options: CallOptions): Promise<ChatCompletionResu
   const config = poolConfig(spec.pool);
   if (!config.apiKey) throw new WindError("unconfigured", "no credential for pool " + spec.pool);
 
+  const budget = options.maxTokens ?? spec.maxOutputTokens;
+  const roomy = Math.min(spec.maxOutputTokens, Math.max(budget * 4, 512));
+
   try {
     return await completeOnce(options, spec, config, spec.identifier);
   } catch (error) {
-    if (!isUnknownModel(error)) throw error;
+    const retired = isUnknownModel(error);
+    const starved = isEmptyCompletion(error) && roomy > budget;
+    if (!retired && !starved) throw error;
 
-    const replacement = await discoverIdentifier(spec.pool);
-    if (!replacement || replacement === spec.identifier) throw error;
+    const identifier = retired ? await discoverIdentifier(spec.pool) : spec.identifier;
+    if (!identifier || (retired && identifier === spec.identifier)) throw error;
 
-    telemetry.error(options.traceId, `identifier retired for ${spec.key}, using what the pool serves`, {
-      code: "recovered",
-      replacement,
-    });
-    return completeOnce(options, spec, config, replacement);
+    telemetry.error(
+      options.traceId,
+      retired ? `identifier retired for ${spec.key}, using what the pool serves` : `retrying ${spec.key} with room to answer`,
+      { code: "recovered", ...(retired ? { replacement: identifier } : { budget, roomy }) },
+    );
+
+    try {
+      return await completeOnce(options, spec, config, identifier, retired ? undefined : roomy);
+    } catch (second) {
+      // A replacement that also comes back empty is a budget problem too: give
+      // it the room, once, before calling the call a failure.
+      if (!isEmptyCompletion(second) || !retired) throw second;
+      return completeOnce(options, spec, config, identifier, roomy);
+    }
   }
 }
 
@@ -120,12 +139,13 @@ async function completeOnce(
   spec: ReturnType<typeof engine>,
   config: ReturnType<typeof poolConfig>,
   identifier: string,
+  maxTokens?: number,
 ): Promise<ChatCompletionResult> {
   const payload: WirePayload = {
     model: identifier,
     messages: toWireMessages(options.messages, spec.vision),
     temperature: options.temperature ?? spec.temperature,
-    max_tokens: options.maxTokens ?? spec.maxOutputTokens,
+    max_tokens: maxTokens ?? options.maxTokens ?? spec.maxOutputTokens,
     stream: false,
   };
 
@@ -157,6 +177,10 @@ async function completeOnce(
 
     if (json.error?.message) throw new WindError("unavailable", json.error.message.slice(0, 300));
 
+    // An engine that thinks before it writes can spend a small budget entirely
+    // on thinking and return nothing. That is a budget problem, not an outage,
+    // and the caller above retries it once with room to answer. Whatever it
+    // thought is never read: only content is ever returned.
     const text = json.choices?.[0]?.message?.content ?? "";
     if (!text.trim()) throw new WindError("invalid", "empty completion");
 

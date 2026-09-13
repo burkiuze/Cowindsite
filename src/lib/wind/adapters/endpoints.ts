@@ -103,15 +103,24 @@ const discovered = new Map<Pool, string>();
 /** Entries that are not general-purpose chat engines. */
 const NOT_CHAT = ["whisper", "tts", "embed", "guard", "moderation", "rerank", "transcribe", "ocr"];
 
+/**
+ * Reasoning-first engines spend their budget thinking before they write, so a
+ * short answer can come back empty — and their thinking is not something Navio
+ * would ever show. When the pool offers a plain instruction-following engine,
+ * that is the one to take.
+ */
+const REASONING = ["gpt-oss", "reason", "think", "qwq", "-r1", "deepseek-r"];
+
 function rank(id: string): number {
   const lower = id.toLowerCase();
   if (NOT_CHAT.some((fragment) => lower.includes(fragment))) return -1;
   let score = 0;
   if (/(120b|70b|72b|versatile|large|maverick)/.test(lower)) score += 4;
   if (/(32b|17b|scout)/.test(lower)) score += 2;
-  if (lower.includes("instruct") || lower.includes("chat")) score += 1;
+  if (lower.includes("instruct") || lower.includes("chat")) score += 2;
   if (lower.includes("instant") || /\b8b\b/.test(lower)) score += 1;
   if (lower.includes("preview") || lower.includes("deprecated")) score -= 2;
+  if (REASONING.some((fragment) => lower.includes(fragment))) score -= 5;
   return score;
 }
 
