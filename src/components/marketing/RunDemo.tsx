@@ -9,10 +9,10 @@ import { catalogEntry, logoPath } from "@/lib/workspace/integrations";
 type LaneState = "waiting" | "running" | "completed";
 
 const LANES = [
-  { id: "fin", label: "Financial analysis", actor: "Wind Finance", at: 1 },
-  { id: "code", label: "Code architecture", actor: "Wind Code", at: 1 },
-  { id: "market", label: "Market research", actor: "Wind Research", at: 2 },
-  { id: "risk", label: "Risk assessment", actor: "Wind Reasoning", at: 3 },
+  { id: "fin", label: "Financial analysis", actor: "Navio Finance", at: 1 },
+  { id: "code", label: "Code architecture", actor: "Navio Code", at: 1 },
+  { id: "market", label: "Market research", actor: "Navio Research", at: 2 },
+  { id: "risk", label: "Risk assessment", actor: "Navio Reasoning", at: 3 },
 ];
 
 // Asset paths come from the catalogue: it knows each mark's current filename,
@@ -59,7 +59,7 @@ export function RunDemo() {
       <div className="flex items-center gap-2.5 border-b border-[var(--color-hairline)] px-4 py-3">
         <NavioMark size={18} state={finished ? "flow" : "thinking"} />
         <span className="text-[12.5px] text-[var(--color-ink-muted)]">
-          {finished ? "Run complete — one action held for approval" : `Wind is working across ${LANES.length} streams`}
+          {finished ? "Run complete — one action held for approval" : `Navio is working across ${LANES.length} streams`}
         </span>
         <span className="ml-auto font-mono text-[11.5px] text-[var(--color-ink-faint)]">
           {done}/{LANES.length}

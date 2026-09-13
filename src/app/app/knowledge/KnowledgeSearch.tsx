@@ -9,7 +9,7 @@ type Chunk = { sourceId: string; title: string; scope: string; text: string; sco
 /**
  * Retrieval, made visible.
  *
- * The same retrieval Wind runs before it answers — exposed so a workspace can
+ * The same retrieval Navio runs before it answers — exposed so a workspace can
  * see exactly what its agents would read, and what they would not.
  */
 export function KnowledgeSearch({ canWrite }: { canWrite: boolean }) {
@@ -41,7 +41,7 @@ export function KnowledgeSearch({ canWrite }: { canWrite: boolean }) {
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search what Wind would retrieve…"
+            placeholder="Search what Navio would retrieve…"
             className="flex-1 bg-transparent text-[13.5px] text-[var(--color-ink)] placeholder:text-[var(--color-ink-faint)] focus:outline-none"
           />
         </div>
@@ -62,7 +62,7 @@ export function KnowledgeSearch({ canWrite }: { canWrite: boolean }) {
       {chunks ? (
         chunks.length === 0 ? (
           <Panel className="py-8 text-center text-[13px] text-[var(--color-ink-faint)]">
-            Nothing in your scopes matches that. Wind would answer without workspace context.
+            Nothing in your scopes matches that. Navio would answer without workspace context.
           </Panel>
         ) : (
           <ul className="space-y-2">

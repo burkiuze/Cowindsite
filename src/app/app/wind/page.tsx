@@ -4,7 +4,7 @@ import { isConfigured } from "@/lib/wind/adapters/endpoints";
 import { SUGGESTIONS } from "./suggestions";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Wind" };
+export const metadata = { title: "Navio" };
 
 export default async function NewChatPage() {
   const session = await currentSession();

@@ -5,7 +5,7 @@ import { CATEGORY_LABEL, CATEGORY_ORDER, allServices } from "@/lib/workspace/int
 export const metadata = {
   title: "Integrations",
   description:
-    "Every service Navio can reach, with the real state of each connection. Wind reads what it is allowed to read and holds every write for a human decision.",
+    "Every service Navio can reach, with the real state of each connection. Navio reads what it is allowed to read and holds every write for a human decision.",
 };
 
 export default function IntegrationsPage() {
@@ -27,7 +27,7 @@ export default function IntegrationsPage() {
           {services.length} services, one way of working
         </h1>
         <p className="mt-4 text-[14.5px] leading-relaxed text-[var(--color-ink-muted)]">
-          Wind reaches your tools through one path: permission check, then an approval check for anything that writes,
+          Navio reaches your tools through one path: permission check, then an approval check for anything that writes,
           then execution, then an audit receipt. Reads run without interrupting you. Writes wait for a person.
         </p>
       </header>
@@ -45,7 +45,7 @@ export default function IntegrationsPage() {
       <p className="mt-10 flex items-start gap-2 text-[12.5px] leading-relaxed text-[var(--color-ink-faint)]">
         <Icon name="alert" size={14} className="mt-px shrink-0" />
         A service in this catalogue is one Navio knows how to represent — not one that is already connected to your
-        workspace. Connection state is per workspace, shown honestly inside the product, and never assumed by Wind.
+        workspace. Connection state is per workspace, shown honestly inside the product, and never assumed by Navio.
       </p>
     </div>
   );

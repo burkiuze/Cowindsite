@@ -4,7 +4,7 @@
 
 # Navio
 
-**An AI work operating system.** Ask for an outcome — **Wind** plans the work,
+**An AI work operating system.** Ask for an outcome — **Navio** plans the work,
 runs it across specialists and connected tools, holds anything consequential for
 a human decision, and reports exactly what it did.
 
@@ -19,10 +19,10 @@ Navio is not a chat wrapper. It is a workspace with a runtime underneath it:
 ```
 USER → WIND → intent + task router → orchestrator → specialist workers
      → tools / knowledge / integrations → approval if required
-     → action → Wind's final answer
+     → action → Navio's final answer
 ```
 
-The user sees **one** assistant. Wind decides internally what the request is,
+The user sees **one** assistant. Navio decides internally what the request is,
 how hard it is, which specialists are needed, whether workspace knowledge should
 be searched, what can run in parallel, and whether a human has to say yes before
 anything happens.
@@ -32,14 +32,14 @@ anything happens.
 | Beat | What happens |
 | --- | --- |
 | **Ask** | Someone describes an outcome in their own words, in any language. |
-| **Look** | Wind runs read-only lookups on the tools that are genuinely connected — calendar, mail, notes — and feeds what comes back into the work. |
-| **Plan** | Wind classifies intent and complexity, picks specialists, and builds an execution plan with dependencies. |
+| **Look** | Navio runs read-only lookups on the tools that are genuinely connected — calendar, mail, notes — and feeds what comes back into the work. |
+| **Plan** | Navio classifies intent and complexity, picks specialists, and builds an execution plan with dependencies. |
 | **Act** | Independent lanes run in parallel; every lane has a fallback path; the whole run is bounded by an execution budget. |
-| **Report** | One answer in one voice, plus a task record, an audit trail, and any approval Wind is holding. |
+| **Report** | One answer in one voice, plus a task record, an audit trail, and any approval Navio is holding. |
 
 ## Product rules that are enforced in code
 
-- **One assistant.** Users see Wind, and product roles like Wind Code or Wind
+- **One assistant.** Users see Navio, and product roles like Navio Code or Navio
   Finance. Engine identifiers, vendors, endpoints, HTTP semantics and raw error
   bodies are stripped from everything user-facing — including mid-stream, across
   chunk boundaries (`src/lib/wind/redaction.ts`, `StreamSanitizer`).
@@ -52,7 +52,7 @@ anything happens.
   near-black panel.
 - **Approval before consequence.** Anything that sends, publishes, changes or
   deletes outside Navio is prepared in full, shown verbatim, editable by the
-  approver, and executed only on a yes. Wind picks the tool from what is
+  approver, and executed only on a yes. Navio picks the tool from what is
   genuinely connected, the approved payload is sent to that service's action
   endpoint, and the receipt quotes what actually came back — or says plainly
   that nothing was sent.
@@ -83,7 +83,7 @@ npm run dev                    # http://localhost:3000
 ```
 
 Navio runs fully without credentials — the workspace, tasks, approvals,
-knowledge, integrations and audit trail are all live. Wind itself is disabled
+knowledge, integrations and audit trail are all live. Navio itself is disabled
 until the two keys are present, and says so instead of failing obscurely.
 
 | Script | Purpose |

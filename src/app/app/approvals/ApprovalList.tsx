@@ -37,7 +37,7 @@ export function ApprovalList({ approvals, canDecide }: { approvals: Approval[]; 
           <Panel className="py-10 text-center">
             <p className="text-[13.5px] text-[var(--color-ink)]">Nothing is waiting on you.</p>
             <p className="mt-1 text-[12.5px] text-[var(--color-ink-faint)]">
-              Wind will hold anything that sends, publishes, changes or deletes until someone decides.
+              Navio will hold anything that sends, publishes, changes or deletes until someone decides.
             </p>
           </Panel>
         ) : (
@@ -198,7 +198,7 @@ function ApprovalCard({ approval, canDecide }: { approval: Approval; canDecide: 
           </div>
           <p className="mt-1.5 text-[12.5px] leading-relaxed text-[var(--color-ink-muted)]">{approval.summary}</p>
           <p className="mt-1.5 text-[11.5px] text-[var(--color-ink-faint)]">
-            Prepared by {approval.requestedByAgent ?? "Wind"} · {relativeTime(approval.createdAt)}
+            Prepared by {approval.requestedByAgent ?? "Navio"} · {relativeTime(approval.createdAt)}
           </p>
         </div>
       </div>

@@ -26,9 +26,9 @@ export const LIMITS = {
   requestTimeoutMs: num("WIND_REQUEST_TIMEOUT_MS", 60_000, 5_000, 120_000),
   /** Timeout for an entire orchestrated task. */
   taskTimeoutMs: num("WIND_TASK_TIMEOUT_MS", 180_000, 10_000, 600_000),
-  /** Largest single upload Wind will accept. */
+  /** Largest single upload Navio will accept. */
   maxUploadBytes: num("WIND_MAX_UPLOAD_BYTES", 10 * 1024 * 1024, 64 * 1024, 25 * 1024 * 1024),
-  /** Largest prompt Wind will assemble, in characters. */
+  /** Largest prompt Navio will assemble, in characters. */
   maxPromptChars: num("WIND_MAX_PROMPT_CHARS", 240_000, 4_000, 1_500_000),
   /** Message characters accepted from one request. */
   maxMessageChars: num("WIND_MAX_MESSAGE_CHARS", 32_000, 500, 200_000),

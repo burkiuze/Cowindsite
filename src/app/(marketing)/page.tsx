@@ -14,7 +14,7 @@ import { LIMITS } from "@/lib/wind/config";
 export const metadata = {
   title: "Navio — the AI work operating system",
   description:
-    "Ask for an outcome. Wind reads the tools it is allowed to read, runs the work across specialists, holds anything consequential for approval, and reports exactly what it did.",
+    "Ask for an outcome. Navio reads the tools it is allowed to read, runs the work across specialists, holds anything consequential for approval, and reports exactly what it did.",
 };
 
 const STEPS = [
@@ -26,7 +26,7 @@ const STEPS = [
   {
     n: "02",
     title: "Look",
-    body: "Wind reads what it is allowed to read: the calendar, the mail threads, the workspace notes, the repository. Read-only, on connected services only, and every lookup is shown to you as it happens.",
+    body: "Navio reads what it is allowed to read: the calendar, the mail threads, the workspace notes, the repository. Read-only, on connected services only, and every lookup is shown to you as it happens.",
   },
   {
     n: "03",
@@ -59,12 +59,12 @@ const NEVERS: Array<{ title: string; body: string; icon: IconName }> = [
 ];
 
 const SPECIALISTS = [
-  { name: "Wind Code", role: "repositories, architecture, debugging" },
-  { name: "Wind Finance", role: "statements, runway, unit economics" },
-  { name: "Wind Reasoning", role: "long material, trade-offs, risk" },
-  { name: "Wind Research", role: "markets, competitors, prior art" },
-  { name: "Wind Vision", role: "screenshots, diagrams, scans" },
-  { name: "Wind Data", role: "extraction, structure, fast passes" },
+  { name: "Navio Code", role: "repositories, architecture, debugging" },
+  { name: "Navio Finance", role: "statements, runway, unit economics" },
+  { name: "Navio Reasoning", role: "long material, trade-offs, risk" },
+  { name: "Navio Research", role: "markets, competitors, prior art" },
+  { name: "Navio Vision", role: "screenshots, diagrams, scans" },
+  { name: "Navio Data", role: "extraction, structure, fast passes" },
 ];
 
 export default function LandingPage() {
@@ -98,7 +98,7 @@ export default function LandingPage() {
             <h1 className="display mt-5 text-[46px] text-[var(--color-ink)] sm:text-[60px]">
               Ask for the outcome.
               <br />
-              <span className="text-gradient-stream">Wind does the work.</span>
+              <span className="text-gradient-stream">Navio does the work.</span>
             </h1>
 
             <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
@@ -184,9 +184,9 @@ export default function LandingPage() {
 
               <ul className="divide-y divide-[var(--color-hairline)]">
                 {[
-                  { label: "Financial review", actor: "Wind Finance", state: "Completed" },
-                  { label: "Details", actor: "Wind Data", state: "Completed" },
-                  { label: "Action planning", actor: "Wind Reasoning", state: "Running" },
+                  { label: "Financial review", actor: "Navio Finance", state: "Completed" },
+                  { label: "Details", actor: "Navio Data", state: "Completed" },
+                  { label: "Action planning", actor: "Navio Reasoning", state: "Running" },
                 ].map((lane) => (
                   <li key={lane.label} className="flex items-center gap-3 px-4 py-3">
                     <span
@@ -238,7 +238,7 @@ export default function LandingPage() {
               <div>
                 <p className="eyebrow">One assistant</p>
                 <h2 className="display mt-4 max-w-xl text-[38px] text-[var(--color-ink)]">
-                  You never pick a specialist. Wind picks several, and answers as one.
+                  You never pick a specialist. Navio picks several, and answers as one.
                 </h2>
               </div>
               <p className="max-w-xs text-[13.5px] leading-relaxed text-[var(--color-ink-muted)]">
@@ -307,10 +307,10 @@ export default function LandingPage() {
         <div className="mx-auto grid w-full max-w-6xl gap-10 px-6 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <Reveal>
             <p className="eyebrow">Integrations</p>
-            <h2 className="display mt-4 text-[38px] text-[var(--color-ink)]">Wind works where the work already is.</h2>
+            <h2 className="display mt-4 text-[38px] text-[var(--color-ink)]">Navio works where the work already is.</h2>
             <p className="mt-5 max-w-md text-[14px] leading-relaxed text-[var(--color-ink-muted)]">
               {CATALOG.length} services in the catalogue, each with its own brand mark. Every connection reports its
-              true state — and a service without credentials is one Wind will tell you it cannot use, rather than
+              true state — and a service without credentials is one Navio will tell you it cannot use, rather than
               quietly pretending it did.
             </p>
             <Link
@@ -354,7 +354,7 @@ export default function LandingPage() {
               Put your work on Navio
             </h2>
             <p className="mx-auto mt-4 max-w-md text-[14.5px] leading-relaxed text-[var(--color-ink-muted)]">
-              Bring the workspace&rsquo;s knowledge, connect the tools you already use, and let Wind carry the parts
+              Bring the workspace&rsquo;s knowledge, connect the tools you already use, and let Navio carry the parts
               that never needed a person.
             </p>
             <Link

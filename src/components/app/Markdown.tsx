@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 
 /**
- * A small, dependency-free renderer for Wind's answers.
+ * A small, dependency-free renderer for Navio's answers.
  *
- * Wind writes plain prose with light structure — headings, lists, bold, code,
+ * Navio writes plain prose with light structure — headings, lists, bold, code,
  * the occasional table. Rendering that ourselves keeps the client bundle small
  * and, more importantly, keeps the output inert: nothing here can execute HTML
  * that arrived in a model response.

@@ -51,7 +51,7 @@ describe("engine registry", () => {
 
   it("labels every engine with Navio branding only", () => {
     for (const engine of Object.values(ENGINES)) {
-      expect(engine.label.startsWith("Wind")).toBe(true);
+      expect(engine.label.startsWith("Navio")).toBe(true);
     }
   });
 });

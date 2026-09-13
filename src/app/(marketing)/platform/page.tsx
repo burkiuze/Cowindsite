@@ -12,13 +12,13 @@ export const metadata = {
 };
 
 const SPECIALISTS: Array<{ name: string; role: string; icon: IconName }> = [
-  { name: "Wind", role: "Conversation, routing, planning, and the final answer in one voice.", icon: "wind" },
-  { name: "Wind Code", role: "Repositories, architecture, debugging, multi-file change, tests.", icon: "integrations" },
-  { name: "Wind Finance", role: "Statements, unit economics, runway, valuation, financial documents.", icon: "analytics" },
-  { name: "Wind Reasoning", role: "Long material, contradictions, trade-offs, root cause, risk.", icon: "sparkle" },
-  { name: "Wind Research", role: "Markets, competitors, prior art, comparative evaluation.", icon: "search" },
-  { name: "Wind Vision", role: "Screenshots, diagrams, charts, scanned documents, UI.", icon: "home" },
-  { name: "Wind Data", role: "Extraction, structure, fast passes over long text.", icon: "knowledge" },
+  { name: "Navio", role: "Conversation, routing, planning, and the final answer in one voice.", icon: "wind" },
+  { name: "Navio Code", role: "Repositories, architecture, debugging, multi-file change, tests.", icon: "integrations" },
+  { name: "Navio Finance", role: "Statements, unit economics, runway, valuation, financial documents.", icon: "analytics" },
+  { name: "Navio Reasoning", role: "Long material, contradictions, trade-offs, root cause, risk.", icon: "sparkle" },
+  { name: "Navio Research", role: "Markets, competitors, prior art, comparative evaluation.", icon: "search" },
+  { name: "Navio Vision", role: "Screenshots, diagrams, charts, scanned documents, UI.", icon: "home" },
+  { name: "Navio Data", role: "Extraction, structure, fast passes over long text.", icon: "knowledge" },
 ];
 
 export default function PlatformPage() {
@@ -33,7 +33,7 @@ export default function PlatformPage() {
         </h1>
         <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
           People do not want to choose a model, wire a chain, or babysit an agent. They want an outcome, and they want
-          to know what happened. Navio is built around exactly that: Wind decides what a request needs, does the parts
+          to know what happened. Navio is built around exactly that: Navio decides what a request needs, does the parts
           it is allowed to do, and stops in front of anything that would be hard to take back.
         </p>
       </section>
@@ -51,15 +51,15 @@ export default function PlatformPage() {
             {[
               {
                 title: "Intent and complexity",
-                body: "A deterministic pass reads the attachments first, then the wording, in English and Turkish alike. An image routes to visual work no matter how the sentence is phrased. A greeting costs nothing: Wind answers it directly, with no specialist involved.",
+                body: "A deterministic pass reads the attachments first, then the wording, in English and Turkish alike. An image routes to visual work no matter how the sentence is phrased. A greeting costs nothing: Navio answers it directly, with no specialist involved.",
               },
               {
                 title: "A plan, not a chain",
-                body: "Wind produces lanes with dependencies rather than a fixed pipeline. Independent lanes are allowed to run at the same time; dependent ones wait for what they actually need.",
+                body: "Navio produces lanes with dependencies rather than a fixed pipeline. Independent lanes are allowed to run at the same time; dependent ones wait for what they actually need.",
               },
               {
                 title: "Scoped retrieval",
-                body: "Before answering, Wind searches the workspace knowledge the person in front of it is allowed to read — filtered by department and by the agent's own scopes, not by what happens to be in the same workspace.",
+                body: "Before answering, Navio searches the workspace knowledge the person in front of it is allowed to read — filtered by department and by the agent's own scopes, not by what happens to be in the same workspace.",
               },
               {
                 title: "Parallel execution",
@@ -71,7 +71,7 @@ export default function PlatformPage() {
               },
               {
                 title: "Approval, then a receipt",
-                body: "If the work implies sending, publishing, changing or deleting anything, Wind prepares the exact content and stops. A person approves, edits or rejects — and the decision is receipted either way.",
+                body: "If the work implies sending, publishing, changing or deleting anything, Navio prepares the exact content and stops. A person approves, edits or rejects — and the decision is receipted either way.",
               },
             ].map((step, index) => (
               <li key={step.title} className="panel flex gap-4 px-5 py-4">
@@ -93,7 +93,7 @@ export default function PlatformPage() {
         <div className="mx-auto w-full max-w-5xl px-6 py-16">
           <p className="eyebrow">Specialists</p>
           <h2 className="display mt-4 max-w-2xl text-[34px] text-[var(--color-ink)]">
-            You never pick one. Wind does, per request, and often picks several at once.
+            You never pick one. Navio does, per request, and often picks several at once.
           </h2>
 
           <ul className="mt-8 grid gap-3 sm:grid-cols-2">
@@ -138,12 +138,12 @@ export default function PlatformPage() {
             <Note
               icon="shield"
               title="No fabricated tool results"
-              body={`Wind is told which of the ${CATALOG.length} services are actually connected. It cannot claim to have used one that is not.`}
+              body={`Navio is told which of the ${CATALOG.length} services are actually connected. It cannot claim to have used one that is not.`}
             />
             <Note
               icon="alert"
               title="Failure degrades, it does not break"
-              body="Each lane walks an ordered fallback path. You see one calm line — Wind switched paths — while the cause goes to server telemetry."
+              body="Each lane walks an ordered fallback path. You see one calm line — Navio switched paths — while the cause goes to server telemetry."
             />
             <Note
               icon="analytics"

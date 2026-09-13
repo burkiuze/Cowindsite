@@ -291,10 +291,10 @@ export const SEED_WORKFLOWS: Workflow[] = [
     createdAt: now - 58 * DAY,
     lastRunAt: now - 2 * DAY,
     steps: [
-      { id: "st1", title: "Collect merged changes", actor: "Wind Code", toolId: "github.list_pull_requests", requiresApproval: false },
-      { id: "st2", title: "Group by impact", actor: "Wind Code", requiresApproval: false },
-      { id: "st3", title: "Draft the notes", actor: "Wind", requiresApproval: false },
-      { id: "st4", title: "Publish to the channel", actor: "Wind", toolId: "slack.post_message", requiresApproval: true },
+      { id: "st1", title: "Collect merged changes", actor: "Navio Code", toolId: "github.list_pull_requests", requiresApproval: false },
+      { id: "st2", title: "Group by impact", actor: "Navio Code", requiresApproval: false },
+      { id: "st3", title: "Draft the notes", actor: "Navio", requiresApproval: false },
+      { id: "st4", title: "Publish to the channel", actor: "Navio", toolId: "slack.post_message", requiresApproval: true },
     ],
   },
   {
@@ -308,10 +308,10 @@ export const SEED_WORKFLOWS: Workflow[] = [
     createdAt: now - 74 * DAY,
     lastRunAt: now - 6 * DAY,
     steps: [
-      { id: "st1", title: "Pull the current figures", actor: "Wind Finance", toolId: "stripe.read_metrics", requiresApproval: false },
-      { id: "st2", title: "Explain the variance", actor: "Wind Finance", requiresApproval: false },
-      { id: "st3", title: "Write the brief", actor: "Wind", requiresApproval: false },
-      { id: "st4", title: "Send to finance leads", actor: "Wind", toolId: "gmail.send_email", requiresApproval: true },
+      { id: "st1", title: "Pull the current figures", actor: "Navio Finance", toolId: "stripe.read_metrics", requiresApproval: false },
+      { id: "st2", title: "Explain the variance", actor: "Navio Finance", requiresApproval: false },
+      { id: "st3", title: "Write the brief", actor: "Navio", requiresApproval: false },
+      { id: "st4", title: "Send to finance leads", actor: "Navio", toolId: "gmail.send_email", requiresApproval: true },
     ],
   },
   {
@@ -324,9 +324,9 @@ export const SEED_WORKFLOWS: Workflow[] = [
     createdBy: "usr_ilker",
     createdAt: now - 11 * DAY,
     steps: [
-      { id: "st1", title: "Extract the key terms", actor: "Wind Data", requiresApproval: false },
-      { id: "st2", title: "Compare against usage", actor: "Wind Reasoning", requiresApproval: false },
-      { id: "st3", title: "Draft the position", actor: "Wind", requiresApproval: false },
+      { id: "st1", title: "Extract the key terms", actor: "Navio Data", requiresApproval: false },
+      { id: "st2", title: "Compare against usage", actor: "Navio Reasoning", requiresApproval: false },
+      { id: "st3", title: "Draft the position", actor: "Navio", requiresApproval: false },
     ],
   },
 ];
@@ -343,11 +343,11 @@ export const SEED_TASKS: Task[] = [
     updatedAt: now - 40 * 60 * 1000,
     artifactIds: ["art_board_pack"],
     steps: [
-      { id: "s1", title: "Read the quarter's financials", actor: "Wind Finance", status: "completed", startedAt: now - 3 * 60 * 60 * 1000, finishedAt: now - 175 * 60 * 1000 },
-      { id: "s2", title: "Summarise product progress", actor: "Wind Reasoning", status: "completed", startedAt: now - 3 * 60 * 60 * 1000, finishedAt: now - 172 * 60 * 1000 },
-      { id: "s3", title: "Assess the concentration risk", actor: "Wind Reasoning", status: "completed", startedAt: now - 170 * 60 * 1000, finishedAt: now - 160 * 60 * 1000 },
-      { id: "s4", title: "Assemble the pack", actor: "Wind", status: "completed", startedAt: now - 160 * 60 * 1000, finishedAt: now - 150 * 60 * 1000 },
-      { id: "s5", title: "Send to the board list", actor: "Wind", status: "needs_approval", note: "Waiting on a human decision" },
+      { id: "s1", title: "Read the quarter's financials", actor: "Navio Finance", status: "completed", startedAt: now - 3 * 60 * 60 * 1000, finishedAt: now - 175 * 60 * 1000 },
+      { id: "s2", title: "Summarise product progress", actor: "Navio Reasoning", status: "completed", startedAt: now - 3 * 60 * 60 * 1000, finishedAt: now - 172 * 60 * 1000 },
+      { id: "s3", title: "Assess the concentration risk", actor: "Navio Reasoning", status: "completed", startedAt: now - 170 * 60 * 1000, finishedAt: now - 160 * 60 * 1000 },
+      { id: "s4", title: "Assemble the pack", actor: "Navio", status: "completed", startedAt: now - 160 * 60 * 1000, finishedAt: now - 150 * 60 * 1000 },
+      { id: "s5", title: "Send to the board list", actor: "Navio", status: "needs_approval", note: "Waiting on a human decision" },
     ],
   },
   {
@@ -361,10 +361,10 @@ export const SEED_TASKS: Task[] = [
     updatedAt: now - 2 * DAY + 26 * 60 * 1000,
     artifactIds: ["art_latency"],
     steps: [
-      { id: "s1", title: "Read the service topology", actor: "Wind Code", status: "completed" },
-      { id: "s2", title: "Correlate with the job schedule", actor: "Wind Data", status: "completed" },
-      { id: "s3", title: "Assess the fix options", actor: "Wind Reasoning", status: "completed" },
-      { id: "s4", title: "Write the recommendation", actor: "Wind", status: "completed" },
+      { id: "s1", title: "Read the service topology", actor: "Navio Code", status: "completed" },
+      { id: "s2", title: "Correlate with the job schedule", actor: "Navio Data", status: "completed" },
+      { id: "s3", title: "Assess the fix options", actor: "Navio Reasoning", status: "completed" },
+      { id: "s4", title: "Write the recommendation", actor: "Navio", status: "completed" },
     ],
   },
   {
@@ -378,9 +378,9 @@ export const SEED_TASKS: Task[] = [
     updatedAt: now - 2 * 60 * 1000,
     artifactIds: [],
     steps: [
-      { id: "s1", title: "Extract contract terms", actor: "Wind Data", status: "completed", startedAt: now - 18 * 60 * 1000, finishedAt: now - 14 * 60 * 1000 },
-      { id: "s2", title: "Compare commit against usage", actor: "Wind Finance", status: "running", startedAt: now - 14 * 60 * 1000 },
-      { id: "s3", title: "Propose a position per vendor", actor: "Wind Reasoning", status: "waiting" },
+      { id: "s1", title: "Extract contract terms", actor: "Navio Data", status: "completed", startedAt: now - 18 * 60 * 1000, finishedAt: now - 14 * 60 * 1000 },
+      { id: "s2", title: "Compare commit against usage", actor: "Navio Finance", status: "running", startedAt: now - 14 * 60 * 1000 },
+      { id: "s3", title: "Propose a position per vendor", actor: "Navio Reasoning", status: "waiting" },
     ],
   },
 ];
@@ -408,7 +408,7 @@ export const SEED_APPROVALS: Approval[] = [
     risk: "high",
     status: "pending",
     requestedBy: "usr_burak",
-    requestedByAgent: "Wind",
+    requestedByAgent: "Navio",
     createdAt: now - 40 * 60 * 1000,
     taskId: "tsk_board_pack",
   },
@@ -484,21 +484,21 @@ export const SEED_MESSAGES: Message[] = [
       "I would ship the chunked pass. The risk is a partially compacted state if a chunk fails mid-run — that needs an idempotent resume before it goes out.",
     ].join("\n"),
     trace: [
-      { id: "t1", label: "Engineering analysis", actor: "Wind Code", status: "completed", startedAt: now - 2 * DAY, finishedAt: now - 2 * DAY + 90_000 },
-      { id: "t2", label: "Risk and trade-offs", actor: "Wind Reasoning", status: "completed", startedAt: now - 2 * DAY + 90_000, finishedAt: now - 2 * DAY + 160_000 },
+      { id: "t1", label: "Engineering analysis", actor: "Navio Code", status: "completed", startedAt: now - 2 * DAY, finishedAt: now - 2 * DAY + 90_000 },
+      { id: "t2", label: "Risk and trade-offs", actor: "Navio Reasoning", status: "completed", startedAt: now - 2 * DAY + 90_000, finishedAt: now - 2 * DAY + 160_000 },
     ],
   },
 ];
 
 export const SEED_ACTIVITY: ActivityEvent[] = [
   { id: "act_1", workspaceId: "ws_meridian", kind: "task.started", actor: "Burak Şimşek", summary: "Started “Prepare the Q3 board pack”", at: now - 3 * 60 * 60 * 1000, taskId: "tsk_board_pack" },
-  { id: "act_2", workspaceId: "ws_meridian", kind: "knowledge.searched", actor: "Wind", summary: "Searched workspace knowledge — 3 sources matched", at: now - 3 * 60 * 60 * 1000 + 20_000, taskId: "tsk_board_pack" },
-  { id: "act_3", workspaceId: "ws_meridian", kind: "specialist.started", actor: "Wind Finance", summary: "Financial analysis started", at: now - 3 * 60 * 60 * 1000 + 25_000, taskId: "tsk_board_pack" },
-  { id: "act_4", workspaceId: "ws_meridian", kind: "specialist.completed", actor: "Wind Finance", summary: "Financial analysis completed", at: now - 175 * 60 * 1000, taskId: "tsk_board_pack" },
-  { id: "act_5", workspaceId: "ws_meridian", kind: "specialist.completed", actor: "Wind Reasoning", summary: "Risk assessment completed", at: now - 160 * 60 * 1000, taskId: "tsk_board_pack" },
-  { id: "act_6", workspaceId: "ws_meridian", kind: "approval.requested", actor: "Wind", summary: "Approval requested: send the Q3 pack to the board list", at: now - 40 * 60 * 1000, approvalId: "apr_board_email", taskId: "tsk_board_pack" },
+  { id: "act_2", workspaceId: "ws_meridian", kind: "knowledge.searched", actor: "Navio", summary: "Searched workspace knowledge — 3 sources matched", at: now - 3 * 60 * 60 * 1000 + 20_000, taskId: "tsk_board_pack" },
+  { id: "act_3", workspaceId: "ws_meridian", kind: "specialist.started", actor: "Navio Finance", summary: "Financial analysis started", at: now - 3 * 60 * 60 * 1000 + 25_000, taskId: "tsk_board_pack" },
+  { id: "act_4", workspaceId: "ws_meridian", kind: "specialist.completed", actor: "Navio Finance", summary: "Financial analysis completed", at: now - 175 * 60 * 1000, taskId: "tsk_board_pack" },
+  { id: "act_5", workspaceId: "ws_meridian", kind: "specialist.completed", actor: "Navio Reasoning", summary: "Risk assessment completed", at: now - 160 * 60 * 1000, taskId: "tsk_board_pack" },
+  { id: "act_6", workspaceId: "ws_meridian", kind: "approval.requested", actor: "Navio", summary: "Approval requested: send the Q3 pack to the board list", at: now - 40 * 60 * 1000, approvalId: "apr_board_email", taskId: "tsk_board_pack" },
   { id: "act_7", workspaceId: "ws_meridian", kind: "approval.decided", actor: "Burak Şimşek", summary: "Approved: downgrade the support desk seat count", at: now - 2 * DAY + 90 * 60 * 1000, approvalId: "apr_downgrade" },
-  { id: "act_8", workspaceId: "ws_meridian", kind: "task.completed", actor: "Wind", summary: "Completed “Find the cause of the 03:00 latency spike”", at: now - 2 * DAY + 26 * 60 * 1000, taskId: "tsk_latency" },
+  { id: "act_8", workspaceId: "ws_meridian", kind: "task.completed", actor: "Navio", summary: "Completed “Find the cause of the 03:00 latency spike”", at: now - 2 * DAY + 26 * 60 * 1000, taskId: "tsk_latency" },
   { id: "act_9", workspaceId: "ws_meridian", kind: "knowledge.added", actor: "İlker Demir", summary: "Added “Vendor contracts index” to workspace knowledge", at: now - 3 * DAY },
   { id: "act_10", workspaceId: "ws_meridian", kind: "flow.run", actor: "Monday finance brief", summary: "Flow run completed — brief prepared, sending held for approval", at: now - 6 * DAY },
 ];

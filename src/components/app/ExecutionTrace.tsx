@@ -30,7 +30,7 @@ const STATUS_LABEL: Record<TraceLane["status"], string> = {
 /**
  * Execution trace.
  *
- * Shows what Wind is doing — never how it thinks. Each row is one stream of
+ * Shows what Navio is doing — never how it thinks. Each row is one stream of
  * work with a product-facing name and a state. Streams that run at the same
  * time appear at the same time, which is the honest picture of a parallel run.
  */
@@ -54,7 +54,7 @@ export function ExecutionTrace({
         <StreamGlyph active={running > 0} />
         <span className="text-[12.5px] font-medium text-[var(--color-ink)]">
           {running > 0
-            ? `Wind is working across ${lanes.length} stream${lanes.length === 1 ? "" : "s"}`
+            ? `Navio is working across ${lanes.length} stream${lanes.length === 1 ? "" : "s"}`
             : phase && done < lanes.length
               ? phase
               : `${done} of ${lanes.length} complete`}

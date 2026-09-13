@@ -67,7 +67,7 @@ export function rateLimit(key: string, perMinute = LIMITS.rateLimitPerMinute): {
 
 export function tooMany(retryAfter: number): NextResponse {
   return NextResponse.json(
-    { error: "You are sending requests faster than Wind can take them. Try again in a moment." },
+    { error: "You are sending requests faster than Navio can take them. Try again in a moment." },
     { status: 429, headers: { "Retry-After": String(retryAfter) } },
   );
 }

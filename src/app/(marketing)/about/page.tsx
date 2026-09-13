@@ -14,7 +14,7 @@ const PRINCIPLES = [
   },
   {
     title: "One voice",
-    body: "A company does not want to manage a roster of assistants. Navio presents one — Wind — and keeps the machinery behind it out of the conversation entirely.",
+    body: "A company does not want to manage a roster of assistants. Navio presents one — Navio — and keeps the machinery behind it out of the conversation entirely.",
   },
   {
     title: "Consequence needs a person",

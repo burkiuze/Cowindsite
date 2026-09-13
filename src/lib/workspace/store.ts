@@ -74,7 +74,7 @@ function seedArtifacts(): Artifact[] {
       title: "Q3 board pack",
       kind: "document",
       createdAt: now - 150 * 60 * 1000,
-      createdBy: "Wind",
+      createdBy: "Navio",
       taskId: "tsk_board_pack",
       content: [
         "# Q3 board pack",
@@ -97,7 +97,7 @@ function seedArtifacts(): Artifact[] {
       title: "03:00 latency — cause and fix",
       kind: "analysis",
       createdAt: now - 2 * DAY + 24 * 60 * 1000,
-      createdBy: "Wind",
+      createdBy: "Navio",
       taskId: "tsk_latency",
       content: [
         "Cause: nightly compaction in the graph service holds one writer lock for the full pass.",

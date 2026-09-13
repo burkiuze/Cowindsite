@@ -7,7 +7,7 @@ import type { ChatCompletionResult, WindMessage } from "../types";
 import { poolConfig } from "./endpoints";
 
 /**
- * The single transport used by every Wind adapter. Chat-completions dialect,
+ * The single transport used by every Navio adapter. Chat-completions dialect,
  * streaming and non-streaming. All failures are converted to `WindError` with a
  * Navio error code; raw response bodies stay in server telemetry.
  */

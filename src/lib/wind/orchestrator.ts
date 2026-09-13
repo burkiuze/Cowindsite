@@ -68,7 +68,7 @@ export async function orchestrate(input: OrchestrationInput): Promise<Orchestrat
         // Cyclic or unsatisfiable dependency: fail the remainder safely.
         for (const id of pending) {
           const lane = byId.get(id)!;
-          results.set(id, skipped(lane, "Wind skipped this step because a step it depended on did not finish."));
+          results.set(id, skipped(lane, "Navio skipped this step because a step it depended on did not finish."));
           emit({ type: "lane", id, status: "skipped", label: lane.label, role: lane.role });
         }
         break;
@@ -113,10 +113,10 @@ export async function orchestrate(input: OrchestrationInput): Promise<Orchestrat
       if (budget.exhausted) {
         for (const id of pending) {
           const lane = byId.get(id)!;
-          results.set(id, skipped(lane, "Wind stopped here to stay inside its execution budget."));
+          results.set(id, skipped(lane, "Navio stopped here to stay inside its execution budget."));
           emit({ type: "lane", id, status: "skipped", label: lane.label, role: lane.role });
         }
-        emit({ type: "notice", level: "warn", message: "Wind reached its execution budget for this request." });
+        emit({ type: "notice", level: "warn", message: "Navio reached its execution budget for this request." });
         break;
       }
     }

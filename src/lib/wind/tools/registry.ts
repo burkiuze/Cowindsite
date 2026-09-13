@@ -4,12 +4,12 @@ import type { Permission } from "../../workspace/rbac";
 /**
  * Tool registry.
  *
- * A tool is a capability Wind can invoke against a connected system. Every tool
+ * A tool is a capability Navio can invoke against a connected system. Every tool
  * declares the permission it needs and whether it changes anything outside
  * Navio — that flag is what forces a human approval before execution.
  *
  * Nothing here fakes a result. If the integration behind a tool is not
- * connected, the tool is not runnable and Wind is told so explicitly.
+ * connected, the tool is not runnable and Navio is told so explicitly.
  */
 
 export type ToolEffect = "read" | "write";
@@ -25,12 +25,12 @@ export interface ToolDefinition {
   requiredPermission: Permission;
   /** Write tools always need approval unless an operator lowers it explicitly. */
   approvalDefault: boolean;
-  /** JSON-ish parameter description, used when briefing Wind. */
+  /** JSON-ish parameter description, used when briefing Navio. */
   parameters: Record<string, string>;
 }
 
 export const TOOLS: ToolDefinition[] = [
-  // --- reads: what Wind may look at while it works -------------------------
+  // --- reads: what Navio may look at while it works -------------------------
   {
     id: "gmail.list_threads",
     integrationId: "gmail",

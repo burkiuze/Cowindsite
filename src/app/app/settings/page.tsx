@@ -21,7 +21,7 @@ export default async function SettingsPage() {
         <Panel>
           <div className="flex items-start justify-between gap-4">
             <SectionHeader
-              title="Wind engines"
+              title="Navio engines"
               hint="Credentials live only on the server. They are never sent to the browser, never embedded in a page, and never logged."
             />
             <Pill tone={ready ? "success" : "warning"} dot>

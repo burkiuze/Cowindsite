@@ -22,7 +22,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                 <span className="text-[15px] font-semibold tracking-[-0.02em]">Navio</span>
               </Link>
               <p className="mt-3 text-[12.5px] leading-relaxed text-[var(--color-ink-faint)]">
-                An AI work operating system. Ask for an outcome; Wind plans it, runs it, and holds anything
+                An AI work operating system. Ask for an outcome; Navio plans it, runs it, and holds anything
                 consequential for a human decision.
               </p>
             </div>

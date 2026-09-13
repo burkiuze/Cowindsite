@@ -44,7 +44,7 @@ const MAX_ATTACHMENTS = 6;
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 
 /**
- * The Wind surface.
+ * The Navio surface.
  *
  * One conversation, one assistant. While a request runs, the execution trace
  * shows which streams are open and what state each is in; the answer streams in
@@ -107,7 +107,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
 
     for (const file of Array.from(fileList).slice(0, MAX_ATTACHMENTS - attachments.length)) {
       if (file.size > MAX_FILE_BYTES) {
-        setError(`${file.name} is larger than Wind accepts in one go (10 MB).`);
+        setError(`${file.name} is larger than Navio accepts in one go (10 MB).`);
         continue;
       }
       const kind = kindOf(file);
@@ -152,7 +152,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
     };
     setMessages((current) => [...current, optimistic]);
     setStreaming(true);
-    setPhase("Wind is thinking");
+    setPhase("Navio is thinking");
 
     const controller = new AbortController();
     abortRef.current = controller;
@@ -173,8 +173,8 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
       });
 
       if (!response.ok || !response.body) {
-        const payload = await response.json().catch(() => ({ error: "Temporary Wind service error." }));
-        throw new Error(payload.error ?? "Temporary Wind service error.");
+        const payload = await response.json().catch(() => ({ error: "Temporary Navio service error." }));
+        throw new Error(payload.error ?? "Temporary Navio service error.");
       }
 
       const reader = response.body.getReader();
@@ -280,7 +280,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
       }
     } catch (caught) {
       if ((caught as Error).name !== "AbortError") {
-        setError((caught as Error).message || "Temporary Wind service error. Nothing was changed — try again.");
+        setError((caught as Error).message || "Temporary Navio service error. Nothing was changed — try again.");
       }
       if (answer) {
         setMessages((current) => [
@@ -309,7 +309,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
       <header className="flex h-[60px] shrink-0 items-center gap-3 border-b border-[var(--color-hairline)] px-6">
         <NavioMark size={20} state={streaming ? "thinking" : "idle"} />
         <div className="min-w-0">
-          <h1 className="text-[14px] leading-none font-semibold text-[var(--color-ink)]">Wind</h1>
+          <h1 className="text-[14px] leading-none font-semibold text-[var(--color-ink)]">Navio</h1>
           <p className="mt-1 text-[11.5px] leading-none text-[var(--color-ink-faint)]">
             {streaming ? phase || "Working" : windReady ? "Ready" : "Standing by"}
           </p>
@@ -347,7 +347,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
                         <Markdown text={draft} />
                       ) : (
                         <p className="flex items-center gap-2 pt-1 text-[13.5px] text-[var(--color-ink-muted)]">
-                          {phase || "Wind is thinking"}
+                          {phase || "Navio is thinking"}
                           <span className="inline-flex gap-1">
                             {[0, 1, 2].map((dot) => (
                               <span
@@ -444,7 +444,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
                   if (canSend) void send();
                 }
               }}
-              placeholder={windReady ? "Ask Wind for an outcome…" : "Connect Wind's engines in Settings to start"}
+              placeholder={windReady ? "Ask Navio for an outcome…" : "Connect Navio's engines in Settings to start"}
               className="max-h-[200px] flex-1 resize-none bg-transparent py-2 text-[14px] leading-6 text-[var(--color-ink)] placeholder:text-[var(--color-ink-faint)] focus:outline-none disabled:cursor-not-allowed"
             />
 
@@ -471,7 +471,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
           </div>
 
           <p className="mt-2 text-center text-[11px] text-[var(--color-ink-faint)]">
-            Wind holds anything consequential for your approval before it acts.
+            Navio holds anything consequential for your approval before it acts.
           </p>
         </div>
       </div>
@@ -538,7 +538,7 @@ function ApprovalCard({ approval }: { approval: { id: string; title: string; sum
           <p className="text-[13.5px] font-medium text-[var(--color-ink)]">{approval.title}</p>
           <p className="mt-1 text-[12.5px] leading-relaxed text-[var(--color-ink-muted)]">{approval.summary}</p>
           <p className="mt-2 text-[12px] text-[var(--color-ink-faint)]">
-            Nothing has been sent. Wind is holding this until someone decides.
+            Nothing has been sent. Navio is holding this until someone decides.
           </p>
           <Link
             href="/app/approvals"
@@ -566,10 +566,10 @@ function EmptyChat({
     <div className="flex flex-col items-center pt-12 text-center">
       <NavioMark size={64} state="flow" />
       <h2 className="mt-5 text-[20px] font-semibold tracking-[-0.02em] text-[var(--color-ink)]">
-        What should Wind get done?
+        What should Navio get done?
       </h2>
       <p className="mt-2 max-w-md text-[13.5px] leading-relaxed text-[var(--color-ink-muted)]">
-        Describe the outcome, not the steps. Wind works out what it needs, runs the parts that can run at once, and
+        Describe the outcome, not the steps. Navio works out what it needs, runs the parts that can run at once, and
         stops for you before anything leaves the workspace.
       </p>
 
@@ -595,16 +595,16 @@ function EmptyChat({
 
 function actorOf(role: string): string {
   const map: Record<string, string> = {
-    wind: "Wind",
-    "wind-code": "Wind Code",
-    "wind-finance": "Wind Finance",
-    "wind-vision": "Wind Vision",
-    "wind-reasoning": "Wind Reasoning",
-    "wind-research": "Wind Research",
-    "wind-data": "Wind Data",
-    "wind-fast": "Wind Fast",
+    wind: "Navio",
+    "wind-code": "Navio Code",
+    "wind-finance": "Navio Finance",
+    "wind-vision": "Navio Vision",
+    "wind-reasoning": "Navio Reasoning",
+    "wind-research": "Navio Research",
+    "wind-data": "Navio Data",
+    "wind-fast": "Navio Fast",
   };
-  return map[role] ?? "Wind";
+  return map[role] ?? "Navio";
 }
 
 function kindOf(file: File): ChatAttachment["kind"] {

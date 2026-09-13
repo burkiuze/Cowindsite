@@ -5,7 +5,7 @@ import type { Capability, WindRole } from "./types";
  * ---------------------------------------------------------------------------
  * THE ONLY PLACE WHERE ENGINE IDENTIFIERS LIVE.
  * ---------------------------------------------------------------------------
- * Every engine Wind can reach is declared here once. Routing, fallback and
+ * Every engine Navio can reach is declared here once. Routing, fallback and
  * telemetry all refer to engines by their Navio `key` — never by a raw
  * identifier — so swapping an engine is a one-line change in this file (or a
  * single environment variable, no deploy of code required).
@@ -23,7 +23,7 @@ export interface EngineSpec {
   pool: Pool;
   /** Raw upstream identifier. Server-side only. Overridable via env. */
   identifier: string;
-  /** Product-facing Wind role this engine backs. */
+  /** Product-facing Navio role this engine backs. */
   role: WindRole;
   /** Human label shown in execution traces (Navio branding only). */
   label: string;
@@ -64,7 +64,7 @@ export const ENGINES: Record<string, EngineSpec> = {
     pool: "primary",
     identifier: IDENTIFIERS.primary,
     role: "wind",
-    label: "Wind",
+    label: "Navio",
     capabilities: ["conversation", "routing", "synthesis"],
     contextTokens: 128_000,
     latencyClass: 1,
@@ -79,7 +79,7 @@ export const ENGINES: Record<string, EngineSpec> = {
     pool: "specialist",
     identifier: IDENTIFIERS.code,
     role: "wind-code",
-    label: "Wind Code",
+    label: "Navio Code",
     capabilities: ["code", "deep-reasoning", "long-context"],
     contextTokens: 262_000,
     latencyClass: 2,
@@ -94,7 +94,7 @@ export const ENGINES: Record<string, EngineSpec> = {
     pool: "specialist",
     identifier: IDENTIFIERS.finance,
     role: "wind-finance",
-    label: "Wind Finance",
+    label: "Navio Finance",
     capabilities: ["finance", "deep-reasoning", "long-context"],
     contextTokens: 262_000,
     latencyClass: 2,
@@ -109,7 +109,7 @@ export const ENGINES: Record<string, EngineSpec> = {
     pool: "specialist",
     identifier: IDENTIFIERS.reasoning,
     role: "wind-reasoning",
-    label: "Wind Reasoning",
+    label: "Navio Reasoning",
     capabilities: ["deep-reasoning", "long-context", "research", "synthesis", "vision"],
     contextTokens: 1_050_000,
     latencyClass: 3,
@@ -124,7 +124,7 @@ export const ENGINES: Record<string, EngineSpec> = {
     pool: "specialist",
     identifier: IDENTIFIERS.vision,
     role: "wind-vision",
-    label: "Wind Vision",
+    label: "Navio Vision",
     capabilities: ["vision", "conversation"],
     contextTokens: 262_000,
     latencyClass: 2,
@@ -139,7 +139,7 @@ export const ENGINES: Record<string, EngineSpec> = {
     pool: "specialist",
     identifier: IDENTIFIERS.data,
     role: "wind-data",
-    label: "Wind Data",
+    label: "Navio Data",
     capabilities: ["extraction", "long-context", "conversation"],
     contextTokens: 66_000,
     latencyClass: 1,
@@ -149,7 +149,7 @@ export const ENGINES: Record<string, EngineSpec> = {
   },
 };
 
-/** Default engine for a Wind role. */
+/** Default engine for a Navio role. */
 export const ROLE_ENGINE: Record<WindRole, string> = {
   wind: "wind.core",
   "wind-code": "wind.code",
@@ -162,7 +162,7 @@ export const ROLE_ENGINE: Record<WindRole, string> = {
 };
 
 /**
- * Ordered fallback chains. When the preferred engine fails, Wind walks the
+ * Ordered fallback chains. When the preferred engine fails, Navio walks the
  * chain instead of surfacing an error. Every chain ends at an engine served by
  * the primary pool so a specialist-pool outage never breaks a conversation.
  */
@@ -177,7 +177,7 @@ export const FALLBACK_CHAIN: Record<string, string[]> = {
 
 export function engine(key: string): EngineSpec {
   const spec = ENGINES[key];
-  if (!spec) throw new Error(`Unknown Wind engine key: ${key}`);
+  if (!spec) throw new Error(`Unknown Navio engine key: ${key}`);
   return spec;
 }
 
@@ -187,14 +187,14 @@ export function engineForRole(role: WindRole): EngineSpec {
 
 /** Public label for a role — the only naming users ever see. */
 export const ROLE_LABEL: Record<WindRole, string> = {
-  wind: "Wind",
-  "wind-code": "Wind Code",
-  "wind-finance": "Wind Finance",
-  "wind-vision": "Wind Vision",
-  "wind-reasoning": "Wind Reasoning",
-  "wind-research": "Wind Research",
-  "wind-data": "Wind Data",
-  "wind-fast": "Wind Fast",
+  wind: "Navio",
+  "wind-code": "Navio Code",
+  "wind-finance": "Navio Finance",
+  "wind-vision": "Navio Vision",
+  "wind-reasoning": "Navio Reasoning",
+  "wind-research": "Navio Research",
+  "wind-data": "Navio Data",
+  "wind-fast": "Navio Fast",
 };
 
 /** Engines that can satisfy a capability, best first. */

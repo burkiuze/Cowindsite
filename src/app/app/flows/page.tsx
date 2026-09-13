@@ -86,7 +86,7 @@ export default async function FlowsPage() {
                     {integration && connection?.status !== "connected" ? (
                       <p className="mt-3 flex items-center gap-1.5 text-[12px] text-[var(--color-ink-faint)]">
                         <Icon name="alert" size={13} className="text-[var(--color-stream-amber)]" />
-                        This flow needs {integration.name}, which is not connected — Wind will prepare the work and hold
+                        This flow needs {integration.name}, which is not connected — Navio will prepare the work and hold
                         the step rather than pretend it ran.
                       </p>
                     ) : null}

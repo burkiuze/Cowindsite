@@ -47,12 +47,12 @@ export const metadata: Metadata = {
     template: "%s · Navio",
   },
   description:
-    "Navio is an AI work operating system. Ask Wind for an outcome; it plans the work, runs it across specialists and your connected tools, holds anything consequential for approval, and reports what it did.",
+    "Navio is an AI work operating system. Ask Navio for an outcome; it plans the work, runs it across specialists and your connected tools, holds anything consequential for approval, and reports what it did.",
   applicationName: "Navio",
   openGraph: {
     title: "Navio — the AI work operating system",
     description:
-      "Ask for an outcome. Wind plans it, runs it, holds what matters for approval, and shows its receipts.",
+      "Ask for an outcome. Navio plans it, runs it, holds what matters for approval, and shows its receipts.",
     url: "/",
     siteName: "Navio",
     images: ["/brand/og.png"],
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Navio — the AI work operating system",
-    description: "Ask for an outcome. Wind does the work and shows its receipts.",
+    description: "Ask for an outcome. Navio does the work and shows its receipts.",
     images: ["/brand/og.png"],
   },
   robots: { index: true, follow: true },

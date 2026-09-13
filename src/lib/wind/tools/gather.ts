@@ -9,14 +9,14 @@ import type { Intent } from "../types";
 /**
  * The gather phase.
  *
- * Before Wind plans the work, it looks at what it is allowed to look at. Only
+ * Before Navio plans the work, it looks at what it is allowed to look at. Only
  * read-effect tools, only on integrations that are both connected and wired to
  * an endpoint, and only a handful per request. Writes never happen here — those
  * go through an approval, always.
  *
  * The tools are chosen by the fast engine from the list of what is genuinely
  * reachable, with a deterministic fallback by intent so a classification
- * hiccup cannot leave Wind blind.
+ * hiccup cannot leave Navio blind.
  */
 
 export interface GatheredAction {

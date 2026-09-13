@@ -31,7 +31,7 @@ const KIND_COLOR: Partial<Record<ActivityKind, string>> = {
  * The audit trail, as a timeline.
  *
  * Operational events only: what ran, what it touched, who decided. Never the
- * content of Wind's reasoning — that is deliberately not recorded here.
+ * content of Navio's reasoning — that is deliberately not recorded here.
  */
 export function ActivityTimeline({ events, compact = false }: { events: ActivityEvent[]; compact?: boolean }) {
   if (events.length === 0) {

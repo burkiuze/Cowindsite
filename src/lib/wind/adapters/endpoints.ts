@@ -4,7 +4,7 @@ import type { Pool } from "../models";
 /**
  * PRIVATE SERVER-SIDE CONFIGURATION.
  *
- * This is the only module in the codebase that knows where Wind's engines are
+ * This is the only module in the codebase that knows where Navio's engines are
  * physically served from. Nothing here is ever imported by a client component,
  * returned from an API route, or rendered. If you are looking for something to
  * show a user, you are in the wrong file.

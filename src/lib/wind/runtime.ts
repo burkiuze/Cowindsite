@@ -13,9 +13,9 @@ import { newTraceId, telemetry } from "./telemetry";
 import type { Attachment, LaneResult, RouteDecision, WindEvent, WindMessage } from "./types";
 
 /**
- * Wind runtime — ASK → PLAN → ACT → REPORT.
+ * Navio runtime — ASK → PLAN → ACT → REPORT.
  *
- * This is the seam between Navio the product and Wind the system. It emits a
+ * This is the seam between Navio the product and Navio the system. It emits a
  * stream of user-safe events and returns the final answer text. Everything it
  * emits is sanitised: no engine names, no vendors, no transport detail, no
  * private reasoning.
@@ -54,7 +54,7 @@ export interface RuntimeInput {
   history: WindMessage[];
   prompt: PromptContext;
   services?: RuntimeServices;
-  /** Tools the workspace can actually reach. Wind may only choose from these. */
+  /** Tools the workspace can actually reach. Navio may only choose from these. */
   availableTools?: AvailableTool[];
   signal?: AbortSignal;
   /** Set by callers that must not spend specialist budget (e.g. previews). */
@@ -65,11 +65,11 @@ export interface RuntimeOutput {
   text: string;
   decision: RouteDecision;
   laneResults: LaneResult[];
-  /** Read-only tool calls Wind actually made on connected integrations. */
+  /** Read-only tool calls Navio actually made on connected integrations. */
   actions: GatheredAction[];
   approvalId?: string;
   traceId: string;
-  /** True when Wind answered without any specialist pass. */
+  /** True when Navio answered without any specialist pass. */
   direct: boolean;
 }
 
@@ -94,7 +94,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
     };
   }
 
-  yield { type: "status", phase: "thinking", message: "Wind is thinking" };
+  yield { type: "status", phase: "thinking", message: "Navio is thinking" };
 
   // ---- PLAN ---------------------------------------------------------------
   let decision: RouteDecision;
@@ -117,7 +117,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
   // ---- LOOK ---------------------------------------------------------------
   // Read-only lookups on connected tools, before any of the work is planned.
   if ((input.availableTools?.length ?? 0) > 0 && decision.complexity !== "trivial") {
-    yield { type: "status", phase: "retrieving", message: "Wind is checking connected tools" };
+    yield { type: "status", phase: "retrieving", message: "Navio is checking connected tools" };
 
     const reads = new EventChannel<WindEvent>();
     const gathering = gather({
@@ -174,7 +174,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
 
   // ---- DIRECT ANSWER ------------------------------------------------------
   if (decision.lanes.length === 0) {
-    yield { type: "status", phase: "finalizing", message: "Wind is replying" };
+    yield { type: "status", phase: "finalizing", message: "Navio is replying" };
     try {
       for await (const chunk of primaryStream(
         [
@@ -204,8 +204,8 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
   }
 
   // ---- ACT ----------------------------------------------------------------
-  yield { type: "status", phase: "planning", message: "Wind is planning the work" };
-  yield { type: "status", phase: "routing", message: "Wind is routing the task" };
+  yield { type: "status", phase: "planning", message: "Navio is planning the work" };
+  yield { type: "status", phase: "routing", message: "Navio is routing the task" };
 
   // Lane events stream to the browser while lanes are still running.
   const channel = new EventChannel<WindEvent>();
@@ -229,7 +229,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
   laneResults = orchestration.results;
 
   if (!orchestration.usable) {
-    yield { type: "status", phase: "finalizing", message: "Wind is replying" };
+    yield { type: "status", phase: "finalizing", message: "Navio is replying" };
     try {
       for await (const chunk of primaryStream(
         [
@@ -272,7 +272,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
       }
     } catch (error) {
       telemetry.error(traceId, "synthesis failed, falling back to lane output", { code: classifyError(error) });
-      yield { type: "notice", level: "info", message: "Wind switched to another path to finish the summary." };
+      yield { type: "notice", level: "info", message: "Navio switched to another path to finish the summary." };
       finalText = outputs
         .map((lane) => `**${lane.label}**\n\n${stripToolMarkers(lane.output)}`)
         .join("\n\n---\n\n");
@@ -289,7 +289,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
       // A prepared action names itself: its first line says what it is far
       // better than the route summary ("Preparing an action") ever could.
       title: (chosen.tool ? firstLine(chosen.payload) : "") || decision.summary,
-      summary: firstLine(stripToolMarkers(finalText)) || "Wind prepared an action that needs your decision.",
+      summary: firstLine(stripToolMarkers(finalText)) || "Navio prepared an action that needs your decision.",
       payload: chosen.payload || finalText,
       risk: decision.complexity === "deep" ? "high" : "medium",
       toolId: chosen.tool?.id,
@@ -318,7 +318,7 @@ async function* recoverWithSpecialist(
   budget: ExecutionBudget,
 ): AsyncGenerator<WindEvent, string | null, unknown> {
   const { callWithFallback } = await import("./fallback");
-  yield { type: "notice", level: "info", message: "Wind switched to another reasoning path to finish this step." };
+  yield { type: "notice", level: "info", message: "Navio switched to another reasoning path to finish this step." };
   try {
     const result = await callWithFallback({
       preferredKey: "wind.reasoning",

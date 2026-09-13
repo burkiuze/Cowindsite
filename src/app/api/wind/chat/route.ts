@@ -49,10 +49,10 @@ export async function POST(request: Request) {
     const session = await currentSession();
 
     if (!can(session.role, "agents:run")) {
-      return fail(403, "Your role can read this workspace but cannot run Wind.");
+      return fail(403, "Your role can read this workspace but cannot run Navio.");
     }
 
-    // Refuse before anything is written: an unconfigured Wind should not leave
+    // Refuse before anything is written: an unconfigured Navio should not leave
     // half a conversation behind.
     if (!isConfigured()) return fail(503, userFacingError("unconfigured"));
 
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     if (!limit.allowed) return tooMany(limit.retryAfter);
 
     const parsed = bodySchema.safeParse(await readJson(request));
-    if (!parsed.success) return fail(400, "Wind could not read that request. Check the input and try again.");
+    if (!parsed.success) return fail(400, "Navio could not read that request. Check the input and try again.");
 
     const { message, attachments = [] } = parsed.data;
 
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
       (integration) => integration.name,
     );
 
-    // Wind may only choose a tool that is genuinely reachable from here.
+    // Navio may only choose a tool that is genuinely reachable from here.
     const availableTools = TOOLS.filter((tool) => connectedIds.has(tool.integrationId)).map((tool) => ({
       id: tool.id,
       name: tool.name,
@@ -142,7 +142,7 @@ export async function POST(request: Request) {
                 if (result.sources.length > 0) {
                   logActivity({
                     kind: "knowledge.searched",
-                    actor: "Wind",
+                    actor: "Navio",
                     summary: `Searched workspace knowledge — ${result.sources.length} source${result.sources.length === 1 ? "" : "s"} matched`,
                     conversationId: conversation.id,
                   });
@@ -167,13 +167,13 @@ export async function POST(request: Request) {
                     status: "pending" as const,
                   })),
                   requestedBy: session.user.id,
-                  requestedByAgent: "Wind",
+                  requestedByAgent: "Navio",
                   conversationId: conversation.id,
                   taskId,
                 });
                 logActivity({
                   kind: "approval.requested",
-                  actor: "Wind",
+                  actor: "Navio",
                   summary: `Approval requested: ${draft.title}`,
                   approvalId: approval.id,
                   conversationId: conversation.id,
@@ -288,7 +288,7 @@ export async function POST(request: Request) {
 
               logActivity({
                 kind: "action.executed",
-                actor: "Wind",
+                actor: "Navio",
                 summary: `${event.label} — ${service?.name ?? event.integrationId}`,
                 taskId,
                 conversationId: conversation.id,
@@ -338,7 +338,7 @@ export async function POST(request: Request) {
             updateTask(taskId, { status });
             logActivity({
               kind: status === "completed" ? "task.completed" : "task.started",
-              actor: "Wind",
+              actor: "Navio",
               summary:
                 status === "completed"
                   ? `Completed “${titleFrom(message)}”`
@@ -356,7 +356,7 @@ export async function POST(request: Request) {
           });
         } catch (error) {
           console.error("[navio:wind]", error);
-          send({ type: "error", message: "Temporary Wind service error. Nothing was changed — try again." });
+          send({ type: "error", message: "Temporary Navio service error. Nothing was changed — try again." });
           if (taskId) updateTask(taskId, { status: "failed" });
         } finally {
           controller.close();
@@ -378,7 +378,7 @@ export async function POST(request: Request) {
 }
 
 function roleLabel(role: WindRole): string {
-  return ROLE_LABEL[role] ?? "Wind";
+  return ROLE_LABEL[role] ?? "Navio";
 }
 
 function titleFrom(message: string): string {

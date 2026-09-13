@@ -4,7 +4,7 @@ import { engineForRole } from "../models";
 import type { ChatCompletionResult, WindMessage, WindRole } from "../types";
 
 /**
- * Wind's specialist pool. Selected by role, never by raw identifier, so a
+ * Navio's specialist pool. Selected by role, never by raw identifier, so a
  * specialist can be re-pointed in `models.ts` without touching call sites.
  */
 

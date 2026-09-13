@@ -70,7 +70,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
           approval.status = "executed";
           logActivity({
             kind: "action.executed",
-            actor: "Wind",
+            actor: "Navio",
             summary: `Executed: ${approval.title}`,
             approvalId: approval.id,
             taskId: approval.taskId,
@@ -80,7 +80,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         }
       } else {
         approval.receipt = integration
-          ? `Approved and recorded. ${integration.name} is not connected to this workspace, so nothing was sent. Connect it in Integrations and Wind will carry this out.`
+          ? `Approved and recorded. ${integration.name} is not connected to this workspace, so nothing was sent. Connect it in Integrations and Navio will carry this out.`
           : "Approved and recorded. This action has no connected system behind it, so nothing was sent.";
       }
 

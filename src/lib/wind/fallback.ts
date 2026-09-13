@@ -10,9 +10,9 @@ import type { AttemptRecord, ChatCompletionResult, WindMessage } from "./types";
  * Fallback execution.
  *
  * When the preferred engine errors, times out, is at capacity, blows its
- * context window or returns nothing usable, Wind walks a fallback chain rather
+ * context window or returns nothing usable, Navio walks a fallback chain rather
  * than surfacing a failure. The user sees at most a calm one-line note that
- * Wind took another path; the reason lives in server telemetry.
+ * Navio took another path; the reason lives in server telemetry.
  */
 
 export interface ResilientCall {
@@ -22,7 +22,7 @@ export interface ResilientCall {
   temperature?: number;
   maxTokens?: number;
   signal?: AbortSignal;
-  /** Called when Wind moves to a different engine. Safe, user-facing copy. */
+  /** Called when Navio moves to a different engine. Safe, user-facing copy. */
   onFallback?: (note: string) => void;
   /** Called before each attempt; returning false aborts (budget exhausted). */
   reserve?: () => boolean;
@@ -36,17 +36,17 @@ export interface ResilientResult extends ChatCompletionResult {
 /** Errors that are worth retrying somewhere else. */
 const RETRYABLE: ErrorCode[] = ["capacity", "unavailable", "timeout", "context", "invalid", "unknown"];
 
-/** Copy shown when Wind changes route. Never names an engine. */
+/** Copy shown when Navio changes route. Never names an engine. */
 function fallbackNote(reason: ErrorCode): string {
   switch (reason) {
     case "context":
-      return "Wind switched to a wider-context path to finish this step.";
+      return "Navio switched to a wider-context path to finish this step.";
     case "capacity":
-      return "Wind switched to another path while capacity frees up.";
+      return "Navio switched to another path while capacity frees up.";
     case "timeout":
-      return "Wind switched to a faster path after that step ran long.";
+      return "Navio switched to a faster path after that step ran long.";
     default:
-      return "Wind switched to another reasoning path to finish this step.";
+      return "Navio switched to another reasoning path to finish this step.";
   }
 }
 

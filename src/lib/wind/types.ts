@@ -1,12 +1,12 @@
 /**
- * Wind runtime — shared types.
+ * Navio runtime — shared types.
  *
  * Everything in `lib/wind` is server-only. Nothing here should ever be
  * imported into a client component: it carries routing metadata that is
  * deliberately not part of the user-facing surface.
  */
 
-/** Product-facing identity of a Wind capability. Users only ever see these. */
+/** Product-facing identity of a Navio capability. Users only ever see these. */
 export type WindRole =
   | "wind"
   | "wind-code"
@@ -83,7 +83,7 @@ export interface RouteDecision {
 
 export interface LanePlan {
   id: string;
-  /** Product-facing label, e.g. "Wind Code". */
+  /** Product-facing label, e.g. "Navio Code". */
   role: WindRole;
   /** What this lane is doing, safe to show. */
   label: string;

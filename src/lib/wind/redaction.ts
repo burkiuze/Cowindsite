@@ -1,7 +1,7 @@
 /**
  * Outbound sanitiser.
  *
- * Navio presents a single assistant — Wind. Nothing about the private engine
+ * Navio presents a single assistant — Navio. Nothing about the private engine
  * layer (hosts, vendor names, raw engine identifiers, HTTP semantics) may reach
  * a browser, a chat bubble, an execution card or an error toast.
  *
@@ -95,8 +95,8 @@ function scrub(input: string): string {
   out = out.replace(SECRET_LIKE, "[redacted]");
   out = out.replace(URL_LIKE, (match) => (isSafeUrl(match) ? match : "a private service"));
   out = out.replace(API_HOST, (match) => (isSafePath(match) ? match : "a private service"));
-  out = out.replace(ENGINE_IDENTIFIER, (match) => (isSafePath(match) ? match : "a Wind specialist"));
-  out = out.replace(VENDOR_PATTERN, "Wind");
+  out = out.replace(ENGINE_IDENTIFIER, (match) => (isSafePath(match) ? match : "a Navio specialist"));
+  out = out.replace(VENDOR_PATTERN, "Navio");
   for (const [pattern, replacement] of TRANSPORT_NOISE) out = out.replace(pattern, replacement);
   return out;
 }
@@ -173,23 +173,23 @@ function isSafePath(value: string): boolean {
 export function userFacingError(code: ErrorCode): string {
   switch (code) {
     case "timeout":
-      return "Wind took too long on that step and stopped it safely. Try again, or narrow the request.";
+      return "Navio took too long on that step and stopped it safely. Try again, or narrow the request.";
     case "capacity":
-      return "Wind is at capacity right now. Give it a moment and run this again.";
+      return "Navio is at capacity right now. Give it a moment and run this again.";
     case "context":
-      return "That is larger than Wind can hold in one pass. Split it up, or point Wind at the key sections.";
+      return "That is larger than Navio can hold in one pass. Split it up, or point Navio at the key sections.";
     case "unavailable":
-      return "A Wind service is temporarily unavailable. Wind saved your request — try again shortly.";
+      return "A Navio service is temporarily unavailable. Navio saved your request — try again shortly.";
     case "unconfigured":
-      return "Wind is not connected to its engines yet. Add the workspace credentials in Settings to enable it.";
+      return "Navio is not connected to its engines yet. Add the workspace credentials in Settings to enable it.";
     case "invalid":
-      return "Wind could not read that request. Check the input and try again.";
+      return "Navio could not read that request. Check the input and try again.";
     case "budget":
-      return "This request reached Wind's execution budget. Narrow the scope or split it into smaller tasks.";
+      return "This request reached Navio's execution budget. Narrow the scope or split it into smaller tasks.";
     case "cancelled":
-      return "Wind stopped this run.";
+      return "Navio stopped this run.";
     default:
-      return "Temporary Wind service error. Nothing was changed — try again.";
+      return "Temporary Navio service error. Nothing was changed — try again.";
   }
 }
 

@@ -73,7 +73,7 @@ export interface Message {
   attachments?: StoredAttachment[];
   /** Execution trace shown under an assistant message. Safe fields only. */
   trace?: TraceStep[];
-  /** Read-only tool calls Wind made on connected services during the run. */
+  /** Read-only tool calls Navio made on connected services during the run. */
   actions?: MessageAction[];
   taskId?: string;
   approvalId?: string;
@@ -90,7 +90,7 @@ export interface MessageAction {
 export interface TraceStep {
   id: string;
   label: string;
-  /** Product role label, e.g. "Wind Code". Never an engine name. */
+  /** Product role label, e.g. "Navio Code". Never an engine name. */
   actor: string;
   status: "waiting" | "running" | "completed" | "failed" | "skipped";
   note?: string;
@@ -134,7 +134,7 @@ export interface Agent {
   name: string;
   /** What this agent is for, in the operator's words. */
   purpose: string;
-  /** Wind role this agent leans on. */
+  /** Navio role this agent leans on. */
   role: string;
   /** Permissions granted to the agent — always intersected with the initiator. */
   grants: Permission[];
@@ -318,7 +318,7 @@ export interface ActivityEvent {
   id: string;
   workspaceId: string;
   kind: ActivityKind;
-  /** Who or what acted — a member name or a Wind role label. */
+  /** Who or what acted — a member name or a Navio role label. */
   actor: string;
   summary: string;
   at: number;

@@ -3,7 +3,7 @@ import { complete, stream, type CallOptions } from "./transport";
 import type { ChatCompletionResult, WindMessage } from "../types";
 
 /**
- * Wind's primary engine — the fast conversational layer. Handles everyday
+ * Navio's primary engine — the fast conversational layer. Handles everyday
  * conversation, intent classification, planning and final synthesis.
  */
 

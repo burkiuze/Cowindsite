@@ -27,7 +27,7 @@ const TAKES: Take[] = [
     tab: "Schedule a meeting",
     file: "preview",
     caption:
-      "One request in Turkish. Wind reads the calendar, the mail threads and the workspace notes it is allowed to read, reviews the sponsorship agreements, then prepares the meeting with its invitations and per-person assignments — and sends nothing until a person approves.",
+      "One request in Turkish. Navio reads the calendar, the mail threads and the workspace notes it is allowed to read, reviews the sponsorship agreements, then prepares the meeting with its invitations and per-person assignments — and sends nothing until a person approves.",
     description:
       "A run in the Navio workspace: one request fans out across specialist streams, prepares a meeting with invitations and assignments, and waits for a person to approve before anything is sent.",
   },
@@ -36,9 +36,9 @@ const TAKES: Take[] = [
     tab: "Prepare a release",
     file: "preview-engineering",
     caption:
-      "The same request shape, a different department. Wind reads the open pull requests and the blocker issues, finds the one decision the release actually turns on, puts it at the top of the agenda and prepares the invitation — still waiting on a person.",
+      "The same request shape, a different department. Navio reads the open pull requests and the blocker issues, finds the one decision the release actually turns on, puts it at the top of the agenda and prepares the invitation — still waiting on a person.",
     description:
-      "A run in the Navio workspace: Wind reads a repository and an issue tracker, prepares a release meeting around the blocking decision, and holds the invitations for approval.",
+      "A run in the Navio workspace: Navio reads a repository and an issue tracker, prepares a release meeting around the blocking decision, and holds the invitations for approval.",
   },
   {
     id: "social",

@@ -16,12 +16,12 @@ export type RunAction = {
 };
 
 /**
- * What Wind touched, grouped by service.
+ * What Navio touched, grouped by service.
  *
  * One card per integration, with its real mark and the number of calls that
  * actually completed. Expanding a card lists them individually. Nothing appears
- * here that Wind did not really do: a failed call says failed, and a service
- * Wind never reached has no card at all.
+ * here that Navio did not really do: a failed call says failed, and a service
+ * Navio never reached has no card at all.
  */
 export function ActionCards({ actions }: { actions: RunAction[] }) {
   if (actions.length === 0) return null;

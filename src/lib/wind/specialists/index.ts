@@ -10,7 +10,7 @@ import { visionBrief } from "./vision";
 export type { SpecialistBrief } from "./shared";
 
 export const BRIEFS: Record<WindRole, SpecialistBrief> = {
-  wind: { role: "wind", label: "Wind", system: SHARED_RULES },
+  wind: { role: "wind", label: "Navio", system: SHARED_RULES },
   "wind-code": codeBrief,
   "wind-finance": financeBrief,
   "wind-vision": visionBrief,
@@ -19,7 +19,7 @@ export const BRIEFS: Record<WindRole, SpecialistBrief> = {
   "wind-data": dataBrief,
   "wind-fast": {
     role: "wind-fast",
-    label: "Wind Fast",
+    label: "Navio Fast",
     system: [SHARED_RULES, "", "You handle short, low-stakes passes quickly. Be brief and literal."].join("\n"),
   },
 };

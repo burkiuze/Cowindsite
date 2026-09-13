@@ -63,7 +63,7 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
 
           logActivity({
             kind: step.status === "completed" ? "action.executed" : "task.failed",
-            actor: "Wind",
+            actor: "Navio",
             summary: `${step.label} — ${step.status}`,
             approvalId: approval.id,
             taskId: approval.taskId,

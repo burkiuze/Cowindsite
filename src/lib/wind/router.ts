@@ -6,9 +6,9 @@ import { telemetry } from "./telemetry";
 import type { Attachment, Complexity, Intent, LanePlan, RouteDecision, WindMessage, WindRole } from "./types";
 
 /**
- * The Wind router.
+ * The Navio router.
  *
- * Decides — for every single user turn — whether Wind answers directly or
+ * Decides — for every single user turn — whether Navio answers directly or
  * whether specialists are needed, which ones, and whether they can run in
  * parallel. It combines deterministic signal (cheap, instant, predictable) with
  * a single lightweight classification call (only when the deterministic layer
@@ -117,7 +117,7 @@ interface PlanInput {
 
 /**
  * Maps an intent + complexity onto concrete specialist lanes.
- * Returning an empty array means "Wind answers this itself".
+ * Returning an empty array means "Navio answers this itself".
  */
 export function planLanes({ intent, complexity, heuristic, attachments, needsAction }: PlanInput): LanePlan[] {
   const hasImage = attachments.some((a) => a.kind === "image");
@@ -236,7 +236,7 @@ export function planLanes({ intent, complexity, heuristic, attachments, needsAct
   }
 
   if (needsAction && !lanes.some((lane) => lane.label === "Action planning") && intent !== "ACTION_REQUEST") {
-    add("wind-reasoning", "Action planning", "Draft the action that the user is asking Wind to carry out.");
+    add("wind-reasoning", "Action planning", "Draft the action that the user is asking Navio to carry out.");
   }
 
   return lanes;

@@ -25,7 +25,7 @@ export type SidebarProps = {
  * Workspace navigation.
  *
  * Ordered by how the product is actually used: what is happening now (Home,
- * Wind), what is in flight (Tasks, Flows, Approvals), and what the workspace is
+ * Navio), what is in flight (Tasks, Flows, Approvals), and what the workspace is
  * made of (Agents, Knowledge, Integrations, Team, Analytics). Counts appear
  * only where a number means someone is waiting.
  */
@@ -36,7 +36,7 @@ export function Sidebar(props: SidebarProps) {
 
   const work: NavItem[] = [
     { href: "/app/home", label: "Home", icon: "home" },
-    { href: "/app/wind", label: "Wind", icon: "wind" },
+    { href: "/app/wind", label: "Navio", icon: "wind" },
     { href: "/app/tasks", label: "Tasks", icon: "tasks", badge: props.runningTasks || undefined },
     { href: "/app/flows", label: "Flows", icon: "flows" },
     { href: "/app/approvals", label: "Approvals", icon: "approvals", badge: props.pendingApprovals || undefined },

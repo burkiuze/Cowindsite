@@ -40,7 +40,7 @@ export default async function HomePage() {
               className="focus-ring inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] px-3.5 py-2 text-[13px] font-medium text-[#04121a] transition-opacity hover:opacity-90"
             >
               <Icon name="wind" size={15} strokeWidth={1.9} />
-              Ask Wind
+              Ask Navio
             </Link>
           }
         />
@@ -49,9 +49,9 @@ export default async function HomePage() {
           <div className="mt-6 flex items-start gap-3 rounded-[14px] border border-[#4a3812] bg-[#1a1408] px-4 py-3.5">
             <Icon name="alert" size={16} className="mt-0.5 shrink-0 text-[var(--color-stream-amber)]" />
             <div>
-              <p className="text-[13.5px] font-medium text-[var(--color-ink)]">Wind is not connected to its engines</p>
+              <p className="text-[13.5px] font-medium text-[var(--color-ink)]">Navio is not connected to its engines</p>
               <p className="mt-1 text-[12.5px] leading-relaxed text-[var(--color-ink-muted)]">
-                Everything in the workspace works, but Wind cannot run until the workspace credentials are set on the
+                Everything in the workspace works, but Navio cannot run until the workspace credentials are set on the
                 server. The rest of Navio is fully usable meanwhile.
               </p>
               <Link
@@ -76,7 +76,7 @@ export default async function HomePage() {
           <div className="space-y-6">
             <Panel padded={false}>
               <div className="flex items-center justify-between px-5 py-4">
-                <SectionHeader title="In flight" hint="Work Wind is running or holding right now" />
+                <SectionHeader title="In flight" hint="Work Navio is running or holding right now" />
                 <Link
                   href="/app/tasks"
                   className="focus-ring shrink-0 rounded-md px-2 py-1 text-[12.5px] text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
@@ -113,7 +113,7 @@ export default async function HomePage() {
                 })}
                 {running.length + needsApproval.length === 0 ? (
                   <li className="px-5 py-8 text-center text-[13px] text-[var(--color-ink-faint)]">
-                    Nothing is running. Ask Wind for an outcome and it will open a run here.
+                    Nothing is running. Ask Navio for an outcome and it will open a run here.
                   </li>
                 ) : null}
               </ul>
@@ -143,7 +143,7 @@ export default async function HomePage() {
                 <div className="min-w-0">
                   <h3 className="text-[14px] font-semibold text-[var(--color-ink)]">Ask, plan, act, report</h3>
                   <p className="mt-1.5 text-[12.5px] leading-relaxed text-[var(--color-ink-muted)]">
-                    Describe an outcome. Wind works out what it needs, runs what can run at once, and reports what it
+                    Describe an outcome. Navio works out what it needs, runs what can run at once, and reports what it
                     did — including what it deliberately did not do.
                   </p>
                 </div>

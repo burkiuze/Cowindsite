@@ -11,7 +11,7 @@ export const metadata = {
 const FAQ: Array<{ q: string; a: string }> = [
   {
     q: "Which model does it use?",
-    a: "That is deliberately not a question you have to answer. Navio presents one assistant, Wind, and routes each request internally to the capability it needs — engineering, finance, visual, long-context, extraction — often several at once. The engine layer is private, and it is designed so that swapping a specialist is a configuration change rather than something you would notice in the product.",
+    a: "That is deliberately not a question you have to answer. Navio presents one assistant, Navio, and routes each request internally to the capability it needs — engineering, finance, visual, long-context, extraction — often several at once. The engine layer is private, and it is designed so that swapping a specialist is a configuration change rather than something you would notice in the product.",
   },
   {
     q: "Will it send emails or post messages on its own?",
@@ -31,7 +31,7 @@ const FAQ: Array<{ q: string; a: string }> = [
   },
   {
     q: "What happens when something fails mid-run?",
-    a: `Each stream walks an ordered fallback path rather than surfacing an error. You see one calm line — that Wind switched paths — while the real cause goes to server-side telemetry. A run is bounded too: ${LIMITS.maxSpecialistCalls} specialist calls, depth ${LIMITS.maxOrchestrationDepth}, and a hard timeout, so a loop is not possible rather than merely unlikely.`,
+    a: `Each stream walks an ordered fallback path rather than surfacing an error. You see one calm line — that Navio switched paths — while the real cause goes to server-side telemetry. A run is bounded too: ${LIMITS.maxSpecialistCalls} specialist calls, depth ${LIMITS.maxOrchestrationDepth}, and a hard timeout, so a loop is not possible rather than merely unlikely.`,
   },
   {
     q: "Can I see what it actually did?",
@@ -39,7 +39,7 @@ const FAQ: Array<{ q: string; a: string }> = [
   },
   {
     q: `Are all ${CATALOG.length} integrations connected?`,
-    a: "No — and the product never implies otherwise. The catalogue is what Navio can represent; connection state is per workspace and shown honestly. A service without credentials reads as not connected, Wind is told which tools genuinely exist, and it cannot claim to have used one that does not.",
+    a: "No — and the product never implies otherwise. The catalogue is what Navio can represent; connection state is per workspace and shown honestly. A service without credentials reads as not connected, Navio is told which tools genuinely exist, and it cannot claim to have used one that does not.",
   },
   {
     q: "Where do my credentials live?",

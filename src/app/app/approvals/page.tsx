@@ -15,7 +15,7 @@ export default async function ApprovalsPage() {
     <div className="mx-auto w-full max-w-4xl px-8 py-10">
       <PageHeader
         title="Approvals"
-        description="Wind prepares the action and stops. You see exactly what would happen, change it if you want, and decide. Every decision leaves a receipt."
+        description="Navio prepares the action and stops. You see exactly what would happen, change it if you want, and decide. Every decision leaves a receipt."
       />
       <ApprovalList approvals={approvals} canDecide={can(session.role, "approvals:decide")} />
     </div>

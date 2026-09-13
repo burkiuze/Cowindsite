@@ -90,7 +90,7 @@ export function IntegrationGallery({
         <div className="panel-quiet mt-5 px-6 py-16 text-center">
           <p className="text-[14px] text-[var(--color-ink)]">Nothing matches “{query}”.</p>
           <p className="mt-1.5 text-[13px] text-[var(--color-ink-faint)]">
-            If the service has an API, Wind can reach it — tell us what you need connected.
+            If the service has an API, Navio can reach it — tell us what you need connected.
           </p>
         </div>
       ) : (

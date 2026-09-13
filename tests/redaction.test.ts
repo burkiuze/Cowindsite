@@ -39,7 +39,7 @@ describe("sanitizeForUser", () => {
   });
 
   it("keeps ordinary product text and file paths intact", () => {
-    expect(sanitizeForUser("Wind read src/lib/wind/router.ts and found the issue")).toContain("src/lib/wind/router.ts");
+    expect(sanitizeForUser("Navio read src/lib/wind/router.ts and found the issue")).toContain("src/lib/wind/router.ts");
     expect(sanitizeForUser("Runway is 17.9 months on 6.9M cash")).toBe("Runway is 17.9 months on 6.9M cash");
   });
 });

@@ -9,12 +9,12 @@ type Props = {
 };
 
 /**
- * The Wind mark.
+ * The Navio mark.
  *
  * The artwork itself is never redrawn or recoloured — it is the supplied mark,
  * with the black plate lifted to alpha so it can sit on Navio's charcoal
  * surfaces. Motion is applied to the whole mark (a slow airflow drift, and a
- * breath while Wind is working) rather than to its geometry, so the logo stays
+ * breath while Navio is working) rather than to its geometry, so the logo stays
  * exactly as designed while still feeling alive instead of spinning.
  */
 export function NavioMark({ size = 28, state = "idle", className = "", priority = false }: Props) {

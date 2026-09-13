@@ -93,8 +93,8 @@ export async function runLane(lane: LanePlan, context: LaneContext): Promise<Lan
       output: "",
       note:
         code === "budget"
-          ? "Wind stopped this step to stay inside its execution budget."
-          : "Wind could not complete this step.",
+          ? "Navio stopped this step to stay inside its execution budget."
+          : "Navio could not complete this step.",
       startedAt,
       finishedAt: Date.now(),
       diagnostics: { attempts: [], totalMs: Date.now() - startedAt },
@@ -116,7 +116,7 @@ export function buildLanePrompt(lane: LanePlan, context: LaneContext): string {
   }
 
   // Only the planning lane picks a tool, and only from what is actually
-  // connected — an unreachable tool is not an option Wind may take.
+  // connected — an unreachable tool is not an option Navio may take.
   if (lane.label === "Action planning" && context.availableTools && context.availableTools.length > 0) {
     const writable = context.availableTools.filter((tool) => tool.effect === "write");
     if (writable.length > 0) {

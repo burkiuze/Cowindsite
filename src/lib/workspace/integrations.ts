@@ -12,7 +12,7 @@ import type { IntegrationCategory, IntegrationConnection, IntegrationDefinition 
  *
  * Honesty rule: Navio never pretends. A service is "Connected" only when real
  * credentials for it exist in the server environment. Everything else reads
- * "Available", and Wind is told in its system prompt which tools actually
+ * "Available", and Navio is told in its system prompt which tools actually
  * exist, so it cannot claim to have used one.
  */
 
@@ -137,7 +137,7 @@ export const FIRST_CLASS: IntegrationDefinition[] = [
     id: "google-meet",
     name: "Google Meet",
     category: "communication",
-    description: "Conferencing links attached to the meetings Wind sets up.",
+    description: "Conferencing links attached to the meetings Navio sets up.",
     implemented: true,
     requiredEnv: ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"],
   },

@@ -127,7 +127,7 @@ export default async function WorkspaceIntegrationsPage() {
           Catalogue
         </h2>
         <p className="mt-1.5 text-[12.5px] text-[var(--color-ink-faint)]">
-          Services Navio knows how to represent. None of these is connected to this workspace yet — Wind is told
+          Services Navio knows how to represent. None of these is connected to this workspace yet — Navio is told
           exactly which tools exist, so it cannot claim to have used one.
         </p>
         <div className="mt-4">

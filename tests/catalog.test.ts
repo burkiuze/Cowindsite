@@ -91,7 +91,7 @@ describe("curated services", () => {
 });
 
 describe("the private engine layer stays private", () => {
-  it("never lists the gateway that serves Wind's specialists", () => {
+  it("never lists the gateway that serves Navio's specialists", () => {
     const forbidden = ["openrouter", "open router"];
     for (const entry of CATALOG) {
       const haystack = `${entry.slug} ${entry.name}`.toLowerCase();

@@ -16,7 +16,7 @@ export default async function TasksPage() {
     <div className="mx-auto w-full max-w-6xl px-8 py-10">
       <PageHeader
         title="Tasks"
-        description="Every run Wind has opened, with the steps it took and where each one landed."
+        description="Every run Navio has opened, with the steps it took and where each one landed."
         action={
           <Link
             href="/app/wind"
@@ -32,7 +32,7 @@ export default async function TasksPage() {
         <div className="mt-8">
           <EmptyState
             title="No runs yet"
-            description="Ask Wind for something that takes more than an answer — a review, a report, a plan — and it opens a run you can follow here."
+            description="Ask Navio for something that takes more than an answer — a review, a report, a plan — and it opens a run you can follow here."
           />
         </div>
       ) : (
