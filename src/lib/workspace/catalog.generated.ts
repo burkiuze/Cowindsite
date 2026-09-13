@@ -1,7 +1,7 @@
 // GENERATED FILE — do not edit by hand.
 // Regenerate with: node scripts/sync-integrations.mjs <path-to-open-logos>
 // Source: ComposioHQ/open-logos (one file per toolkit).
-// 771 services, logo assets in public/logos/<slug>.webp
+// 770 services, logo assets in public/logos/<slug>.webp
 
 export interface CatalogEntry {
   slug: string;
@@ -3380,13 +3380,6 @@ export const CATALOG: CatalogEntry[] = [
     "category": "other",
     "ext": "webp",
     "dark": false
-  },
-  {
-    "slug": "openrouter",
-    "name": "Openrouter",
-    "category": "other",
-    "ext": "webp",
-    "dark": true
   },
   {
     "slug": "opensea",

@@ -24,6 +24,16 @@ const SIZE = 96;
 
 const RASTER = new Set([".png", ".jpg", ".jpeg", ".webp", ".avif", ".svg"]);
 
+/**
+ * Services that must never appear in the catalogue.
+ *
+ * Cowind presents one assistant, Wind, and nothing about the private engine
+ * layer may surface anywhere in the product. A gateway that serves Wind's own
+ * specialists would name that layer just by being listed next to 770 ordinary
+ * SaaS tools, so it is excluded here — at the source, not by filtering later.
+ */
+const EXCLUDED = new Set(["openrouter"]);
+
 /** Brands whose display name does not survive naive title-casing. */
 const NAME_OVERRIDES = {
   github: "GitHub", gitlab: "GitLab", hubspot: "HubSpot", pagerduty: "PagerDuty",
@@ -126,7 +136,8 @@ function categorize(slug) {
 
 const files = readdirSync(SOURCE)
   .filter((file) => RASTER.has(extname(file).toLowerCase()))
-  .filter((file) => statSync(join(SOURCE, file)).size < 2_000_000);
+  .filter((file) => statSync(join(SOURCE, file)).size < 2_000_000)
+  .filter((file) => !EXCLUDED.has(slugify(file)));
 
 // One entry per slug; prefer the smallest source file when a brand has several.
 const bySlug = new Map();

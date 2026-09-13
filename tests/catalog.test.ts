@@ -68,3 +68,15 @@ describe("curated services", () => {
     expect(featured.every((service) => service.logo)).toBe(true);
   });
 });
+
+describe("the private engine layer stays private", () => {
+  it("never lists the gateway that serves Wind's specialists", () => {
+    const forbidden = ["openrouter", "open router"];
+    for (const entry of CATALOG) {
+      const haystack = `${entry.slug} ${entry.name}`.toLowerCase();
+      for (const name of forbidden) {
+        expect(haystack, `${entry.slug} names the private engine layer`).not.toContain(name);
+      }
+    }
+  });
+});
