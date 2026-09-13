@@ -132,6 +132,14 @@ export type WindEvent =
   | { type: "delta"; text: string }
   | { type: "approval"; approvalId: string; title: string; summary: string }
   | { type: "artifact"; id: string; title: string; kind: string }
+  | {
+      type: "action";
+      id: string;
+      integrationId: string;
+      toolId: string;
+      label: string;
+      status: "running" | "completed" | "failed";
+    }
   | { type: "notice"; level: "info" | "warn"; message: string }
   | { type: "done"; conversationId: string; messageId: string; taskId?: string }
   | { type: "error"; message: string };

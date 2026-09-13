@@ -30,6 +30,47 @@ export interface ToolDefinition {
 }
 
 export const TOOLS: ToolDefinition[] = [
+  // --- reads: what Wind may look at while it works -------------------------
+  {
+    id: "gmail.list_threads",
+    integrationId: "gmail",
+    name: "Read recent threads",
+    description: "Read recent mail threads matching a query.",
+    effect: "read",
+    requiredPermission: "integrations:use",
+    approvalDefault: false,
+    parameters: { query: "gmail search syntax", limit: "integer" },
+  },
+  {
+    id: "linkedin.read_page_activity",
+    integrationId: "linkedin",
+    name: "Read page activity",
+    description: "Read recent company page posts and their engagement.",
+    effect: "read",
+    requiredPermission: "integrations:use",
+    approvalDefault: false,
+    parameters: { period: "week | month" },
+  },
+  {
+    id: "notion.search",
+    integrationId: "notion",
+    name: "Search pages",
+    description: "Search pages and databases the workspace can see.",
+    effect: "read",
+    requiredPermission: "integrations:use",
+    approvalDefault: false,
+    parameters: { query: "string" },
+  },
+  {
+    id: "google-meet.create_link",
+    integrationId: "google-meet",
+    name: "Create a meeting link",
+    description: "Create a conferencing link for an event.",
+    effect: "write",
+    requiredPermission: "integrations:use",
+    approvalDefault: true,
+    parameters: { title: "string", start: "ISO datetime" },
+  },
   {
     id: "github.list_pull_requests",
     integrationId: "github",

@@ -11,7 +11,7 @@
  *   node scripts/record-preview.mjs http://localhost:3100
  */
 import { chromium } from "playwright";
-import { mkdirSync, renameSync, readdirSync } from "node:fs";
+import { mkdirSync, renameSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const BASE = process.argv[2] ?? "http://localhost:3100";
@@ -89,6 +89,14 @@ await context.addInitScript(CURSOR_SCRIPT);
 
 const page = await context.newPage();
 
+// Recording starts with the page. Mark the moments worth emphasising so the
+// finishing pass can zoom on them by timestamp rather than by guesswork.
+const startedAt = Date.now();
+const marks = [];
+function mark(label) {
+  marks.push({ label, at: Number(((Date.now() - startedAt) / 1000).toFixed(2)) });
+}
+
 /** Move like a hand: eased, in steps, never teleporting. */
 let at = { x: WIDTH / 2, y: HEIGHT - 120 };
 async function glide(x, y, steps = 26) {
@@ -158,12 +166,24 @@ await type(
 await page.waitForTimeout(500);
 await page.keyboard.press("Enter");
 
-// Watch the streams open and land.
-await page.waitForTimeout(900);
-await glide(900, 330, 22);
+// The tools Wind reads before it plans anything.
+await page.waitForTimeout(1600);
+mark("actions");
+await glide(900, 300, 22);
+await page.waitForTimeout(1800);
+
+// Open one card to show the individual calls behind the count.
+await click("text=Google Calendar");
+await page.waitForTimeout(2200);
+await click("text=Google Calendar");
+await page.waitForTimeout(600);
+
+// Watch the streams open and land, then the answer being written.
+await glide(900, 430, 18);
 await page.waitForTimeout(6000);
+mark("answer");
 await glide(880, 520, 18);
-await page.waitForTimeout(4800);
+await page.waitForTimeout(6500);
 
 // The action Wind prepared, and the decision that releases it.
 await click('a[href="/app/approvals"]');
@@ -171,12 +191,14 @@ await page.waitForTimeout(1600);
 await glide(900, 420, 24);
 await page.waitForTimeout(1400);
 
+mark("approval");
 await click("text=Approve");
 await page.waitForTimeout(2400);
 
 // The receipt: what actually ran, not what was claimed. The decided card moves
 // down the page, so follow it rather than assuming where it landed.
 await glideToSelector("text=Executed against");
+mark("receipt");
 await page.waitForTimeout(3400);
 
 // End on the catalogue.
@@ -191,4 +213,6 @@ await browser.close();
 const file = readdirSync(OUT_DIR).find((name) => name.endsWith(".webm"));
 if (!file) throw new Error("no recording produced");
 renameSync(join(OUT_DIR, file), join(OUT_DIR, "preview.webm"));
+writeFileSync(join(OUT_DIR, "marks.json"), JSON.stringify(marks, null, 2));
 console.log("recorded", join(OUT_DIR, "preview.webm"));
+console.log("marks", marks.map((m) => `${m.label}@${m.at}s`).join(" "));

@@ -7,6 +7,7 @@ import { WindMark } from "@/components/brand/WindMark";
 import { Icon } from "@/components/ui/Icon";
 import { Markdown } from "@/components/app/Markdown";
 import { ExecutionTrace, type TraceLane } from "@/components/app/ExecutionTrace";
+import { ActionCards, type RunAction } from "@/components/app/ActionCards";
 import { Pill } from "@/components/ui/primitives";
 
 type ChatAttachment = {
@@ -26,6 +27,7 @@ export type ChatMessage = {
   createdAt: number;
   attachments?: Array<{ id: string; name: string; kind: string; size: number }>;
   trace?: TraceLane[];
+  actions?: RunAction[];
   approvalId?: string;
   taskId?: string;
 };
@@ -57,6 +59,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
   const [streaming, setStreaming] = useState(false);
   const [phase, setPhase] = useState<string>("");
   const [lanes, setLanes] = useState<TraceLane[]>([]);
+  const [actions, setActions] = useState<RunAction[]>([]);
   const [draft, setDraft] = useState("");
   const [notice, setNotice] = useState<{ level: "info" | "warn"; message: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -75,7 +78,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
 
   useEffect(() => {
     scrollToEnd();
-  }, [messages.length, draft, lanes.length, scrollToEnd]);
+  }, [messages.length, draft, lanes.length, actions.length, scrollToEnd]);
 
   // Reset only when the conversation itself changes. A re-render of the same
   // route hands us a fresh array instance, and resetting on that would wipe an
@@ -87,6 +90,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
     activeConversation.current = conversationId;
     setMessages(initialMessages);
     setLanes([]);
+    setActions([]);
     setDraft("");
     setApproval(null);
     setError(null);
@@ -133,6 +137,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
     setNotice(null);
     setApproval(null);
     setLanes([]);
+    setActions([]);
     setDraft("");
     setInput("");
     const sentAttachments = attachments;
@@ -153,6 +158,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
     abortRef.current = controller;
     let answer = "";
     const runLanes = new Map<string, TraceLane>();
+    const runActions: RunAction[] = [];
 
     try {
       const response = await fetch("/api/wind/chat", {
@@ -209,6 +215,23 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
               setLanes([...runLanes.values()]);
               break;
             }
+            case "action": {
+              const existing = runActions.findIndex((candidate) => candidate.id === event.id);
+              const record: RunAction = {
+                id: event.id,
+                integrationId: event.integrationId,
+                integrationName: event.integrationName,
+                logo: event.logo,
+                dark: event.dark,
+                toolId: event.toolId,
+                label: event.label,
+                status: event.status,
+              };
+              if (existing >= 0) runActions[existing] = record;
+              else runActions.push(record);
+              setActions([...runActions]);
+              break;
+            }
             case "delta":
               answer += event.text;
               setDraft(answer);
@@ -233,6 +256,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
                   content: answer,
                   createdAt: Date.now(),
                   trace: [...runLanes.values()],
+                  actions: [...runActions],
                   taskId: event.taskId,
                 },
               ]);
@@ -315,6 +339,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
               {streaming || draft ? (
                 <div className="animate-rise space-y-3">
                   {lanes.length > 0 ? <ExecutionTrace lanes={lanes} phase={phase} /> : null}
+                  <ActionCards actions={actions} />
                   <div className="flex gap-3.5">
                     <WindMark size={26} state="thinking" className="mt-0.5" />
                     <div className="min-w-0 flex-1">
@@ -484,6 +509,7 @@ function MessageRow({ message, userInitials }: { message: ChatMessage; userIniti
   return (
     <div className="space-y-3">
       {message.trace && message.trace.length > 0 ? <ExecutionTrace lanes={message.trace} collapsed /> : null}
+      {message.actions && message.actions.length > 0 ? <ActionCards actions={message.actions} /> : null}
       <div className="flex gap-3.5">
         <WindMark size={26} className="mt-0.5" />
         <div className="min-w-0 flex-1">

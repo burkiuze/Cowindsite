@@ -17,7 +17,7 @@ import { LIMITS } from "../config";
  */
 
 export type ExecutionOutcome =
-  | { status: "executed"; receipt: string }
+  | { status: "executed"; receipt: string; data?: string }
   | { status: "not_wired"; receipt: string }
   | { status: "failed"; receipt: string };
 
@@ -78,13 +78,16 @@ export async function executeTool(options: {
       };
     }
 
-    // Services may answer with an id or a link; surface it verbatim when short.
-    const body = (await response.text()).trim().slice(0, 200);
+    // A write usually answers with an id or a link, short enough to show in the
+    // receipt. A read answers with the material itself, which the caller needs
+    // in full — so return it separately rather than forcing it into one line.
+    const body = (await response.text()).trim();
     const detail = body && body.length < 160 ? ` Response: ${body}.` : "";
 
     return {
       status: "executed",
       receipt: `Executed against ${label}${tool ? ` via ${tool.name.toLowerCase()}` : ""} at ${new Date().toISOString()}.${detail}`,
+      data: body.slice(0, 8_000),
     };
   } catch {
     return {

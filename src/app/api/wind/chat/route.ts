@@ -18,11 +18,11 @@ import {
   store,
   updateTask,
 } from "@/lib/workspace/store";
-import { FIRST_CLASS } from "@/lib/workspace/integrations";
+import { FIRST_CLASS, allServices } from "@/lib/workspace/integrations";
 import { TOOLS } from "@/lib/wind/tools/registry";
 import { can } from "@/lib/workspace/rbac";
 import { fail, handleRouteError, rateLimit, readJson, tooMany } from "@/lib/api";
-import type { TaskStep, TraceStep } from "@/lib/workspace/types";
+import type { MessageAction, TaskStep, TraceStep } from "@/lib/workspace/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -112,6 +112,10 @@ export async function POST(request: Request) {
 
         let taskId: string | undefined;
         const trace: TraceStep[] = [];
+        const actions: MessageAction[] = [];
+        // The client renders a service's real mark, so resolve identity here
+        // rather than making the browser look it up.
+        const services = new Map(allServices().map((service) => [service.slug, service]));
         let answer = "";
         // Deltas are scrubbed on the way out, across chunk boundaries, so a
         // vendor name split over two frames still cannot reach the browser.
@@ -246,6 +250,39 @@ export async function POST(request: Request) {
               }
             }
 
+            if (event.type === "action") {
+              actions.push({
+                id: event.id,
+                integrationId: event.integrationId,
+                toolId: event.toolId,
+                label: event.label,
+                status: event.status,
+              });
+
+              const service = services.get(event.integrationId);
+              controller.enqueue(
+                encoder.encode(
+                  `data: ${JSON.stringify({
+                    ...event,
+                    integrationName: service?.name ?? event.integrationId,
+                    logo: service?.logo ?? null,
+                    dark: service?.dark ?? false,
+                  })}\n\n`,
+                ),
+              );
+
+              logActivity({
+                kind: "action.executed",
+                actor: "Wind",
+                summary: `${event.label} — ${service?.name ?? event.integrationId}`,
+                taskId,
+                conversationId: conversation.id,
+              });
+
+              result = await generator.next();
+              continue;
+            }
+
             if (event.type === "delta") {
               const safe = guard.push(event.text);
               if (safe) {
@@ -275,6 +312,7 @@ export async function POST(request: Request) {
                 role: "assistant",
                 content: sanitizeForUser(answer),
                 trace: trace.length > 0 ? trace : undefined,
+                actions: actions.length > 0 ? actions : undefined,
                 taskId,
                 approvalId: output.approvalId,
               })

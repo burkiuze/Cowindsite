@@ -3,6 +3,7 @@ import { EventChannel } from "./channel";
 import { ExecutionBudget, LIMITS } from "./config";
 import { orchestrate } from "./orchestrator";
 import type { AvailableTool } from "./executor";
+import { asContext, gather, type GatheredAction } from "./tools/gather";
 import { route } from "./router";
 import { primaryStream } from "./adapters/primary";
 import { isConfigured } from "./adapters/endpoints";
@@ -55,6 +56,8 @@ export interface RuntimeOutput {
   text: string;
   decision: RouteDecision;
   laneResults: LaneResult[];
+  /** Read-only tool calls Wind actually made on connected integrations. */
+  actions: GatheredAction[];
   approvalId?: string;
   traceId: string;
   /** True when Wind answered without any specialist pass. */
@@ -68,6 +71,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
   let finalText = "";
   let approvalId: string | undefined;
   let laneResults: LaneResult[] = [];
+  let actions: GatheredAction[] = [];
 
   if (!isConfigured()) {
     yield { type: "error", message: userFacingError("unconfigured") };
@@ -75,6 +79,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
       text: "",
       decision: emptyDecision(),
       laneResults: [],
+      actions: [],
       traceId,
       direct: true,
     };
@@ -100,6 +105,39 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
 
   if (input.fastPathOnly) decision = { ...decision, lanes: [], synthesize: false };
 
+  // ---- LOOK ---------------------------------------------------------------
+  // Read-only lookups on connected tools, before any of the work is planned.
+  if ((input.availableTools?.length ?? 0) > 0 && decision.complexity !== "trivial") {
+    yield { type: "status", phase: "retrieving", message: "Wind is checking connected tools" };
+
+    const started = new Map<string, { integrationId: string; label: string }>();
+    try {
+      actions = await gather({
+        request: input.message,
+        intent: decision.intent,
+        available: input.availableTools!,
+        actor: input.prompt.userName,
+        traceId,
+        signal: input.signal,
+        onStart: (tool) => started.set(tool.id, { integrationId: tool.integrationId, label: tool.name }),
+      });
+    } catch (error) {
+      telemetry.error(traceId, "gather failed", { code: classifyError(error) });
+      actions = [];
+    }
+
+    for (const action of actions) {
+      yield {
+        type: "action",
+        id: action.id,
+        integrationId: action.integrationId,
+        toolId: action.toolId,
+        label: action.label,
+        status: action.status,
+      };
+    }
+  }
+
   // ---- RETRIEVE -----------------------------------------------------------
   let knowledge: string | undefined;
   if (input.services?.retrieveKnowledge && decision.complexity !== "trivial") {
@@ -121,7 +159,9 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
     }
   }
 
-  const system = windSystemPrompt({ ...input.prompt, knowledge });
+  const liveData = asContext(actions);
+  const context = [knowledge, liveData].filter(Boolean).join("\n\n") || undefined;
+  const system = windSystemPrompt({ ...input.prompt, knowledge: context });
 
   // ---- DIRECT ANSWER ------------------------------------------------------
   if (decision.lanes.length === 0) {
@@ -151,7 +191,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
       }
     }
 
-    return { text: finalText, decision, laneResults: [], traceId, direct: true };
+    return { text: finalText, decision, laneResults: [], actions, traceId, direct: true };
   }
 
   // ---- ACT ----------------------------------------------------------------
@@ -164,7 +204,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
     lanes: decision.lanes,
     userRequest: input.message,
     attachments: input.attachments,
-    knowledge,
+    knowledge: context,
     traceId,
     budget,
     signal: input.signal,
@@ -194,10 +234,10 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
         finalText += chunk;
         yield { type: "delta", text: chunk };
       }
-      return { text: finalText, decision, laneResults, traceId, direct: true };
+      return { text: finalText, decision, laneResults, actions, traceId, direct: true };
     } catch (error) {
       yield { type: "error", message: userFacingError(classifyError(error)) };
-      return { text: finalText, decision, laneResults, traceId, direct: true };
+      return { text: finalText, decision, laneResults, actions, traceId, direct: true };
     }
   }
 
@@ -255,7 +295,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
     }
   }
 
-  return { text: finalText, decision, laneResults, approvalId, traceId, direct: false };
+  return { text: finalText, decision, laneResults, actions, approvalId, traceId, direct: false };
 }
 
 /** Escalation path when the fast conversational layer itself fails. */

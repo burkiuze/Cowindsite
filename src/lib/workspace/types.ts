@@ -73,8 +73,18 @@ export interface Message {
   attachments?: StoredAttachment[];
   /** Execution trace shown under an assistant message. Safe fields only. */
   trace?: TraceStep[];
+  /** Read-only tool calls Wind made on connected services during the run. */
+  actions?: MessageAction[];
   taskId?: string;
   approvalId?: string;
+}
+
+export interface MessageAction {
+  id: string;
+  integrationId: string;
+  toolId: string;
+  label: string;
+  status: "running" | "completed" | "failed";
 }
 
 export interface TraceStep {

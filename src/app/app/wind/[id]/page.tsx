@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { WindChat, type ChatMessage } from "@/components/app/WindChat";
 import { currentSession } from "@/lib/workspace/session";
 import { messagesFor, store } from "@/lib/workspace/store";
+import { allServices } from "@/lib/workspace/integrations";
 import { isConfigured } from "@/lib/wind/adapters/endpoints";
 import { SUGGESTIONS } from "../suggestions";
 
@@ -12,6 +13,8 @@ export default async function ConversationPage({ params }: { params: Promise<{ i
   const session = await currentSession();
   const conversation = store().conversations.find((candidate) => candidate.id === id);
   if (!conversation || conversation.userId !== session.user.id) notFound();
+
+  const services = new Map(allServices().map((service) => [service.slug, service]));
 
   const messages: ChatMessage[] = messagesFor(conversation.id).map((message) => ({
     id: message.id,
@@ -26,6 +29,15 @@ export default async function ConversationPage({ params }: { params: Promise<{ i
       status: step.status,
       note: step.note,
     })),
+    actions: message.actions?.map((action) => {
+      const service = services.get(action.integrationId);
+      return {
+        ...action,
+        integrationName: service?.name ?? action.integrationId,
+        logo: service?.logo ?? null,
+        dark: service?.dark ?? false,
+      };
+    }),
     taskId: message.taskId,
     approvalId: message.approvalId,
   }));

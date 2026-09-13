@@ -18,6 +18,25 @@ browser
 The browser never speaks to an engine. It speaks to Cowind; Cowind speaks to
 Wind; Wind speaks to the private adapters.
 
+## The gather phase
+
+Before planning, Wind looks at what it is allowed to look at. The fast engine
+picks read-effect tools from the ones that are both connected and wired to an
+endpoint; they run in parallel, and what comes back becomes context for every
+later pass, alongside workspace knowledge.
+
+Three rules make this safe to leave on:
+
+- **Reads only.** A write tool is never callable here. Writes go through an
+  approval, always.
+- **Reachable only.** A tool on an integration without an endpoint is not
+  offered to the engine, so it cannot be chosen and then faked.
+- **Bounded.** At most six lookups per request, and a deterministic fallback by
+  intent so a classification hiccup does not leave Wind blind.
+
+Each call becomes a visible action in the chat, grouped by service. A failed
+call says failed; a service Wind never reached has no card at all.
+
 ## Routing
 
 Two stages, in this order:

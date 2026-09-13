@@ -122,6 +122,14 @@ export const FIRST_CLASS: IntegrationDefinition[] = [
     requiredEnv: ["NOTION_TOKEN"],
   },
   {
+    id: "google-meet",
+    name: "Google Meet",
+    category: "communication",
+    description: "Conferencing links attached to the meetings Wind sets up.",
+    implemented: true,
+    requiredEnv: ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"],
+  },
+  {
     id: "linkedin",
     name: "LinkedIn",
     category: "marketing",

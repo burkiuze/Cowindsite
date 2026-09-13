@@ -93,8 +93,9 @@ export function ProductVideo() {
       </video>
 
       <figcaption className="border-t border-[var(--color-hairline)] px-3.5 py-2.5 text-left text-[11.5px] text-[var(--color-ink-faint)]">
-        One request in Turkish: Wind reviews the sponsorship agreements, checks tomorrow&rsquo;s schedule, prepares
-        the meeting with its invitations and per-person assignments — and sends nothing until a person approves.
+        One request in Turkish. Wind reads the calendar, the mail threads and the workspace notes it is allowed to
+        read, reviews the sponsorship agreements, then prepares the meeting with its invitations and per-person
+        assignments — and sends nothing until a person approves.
       </figcaption>
     </figure>
   );

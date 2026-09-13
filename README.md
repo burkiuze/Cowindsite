@@ -32,6 +32,7 @@ anything happens.
 | Beat | What happens |
 | --- | --- |
 | **Ask** | Someone describes an outcome in their own words, in any language. |
+| **Look** | Wind runs read-only lookups on the tools that are genuinely connected — calendar, mail, notes — and feeds what comes back into the work. |
 | **Plan** | Wind classifies intent and complexity, picks specialists, and builds an execution plan with dependencies. |
 | **Act** | Independent lanes run in parallel; every lane has a fallback path; the whole run is bounded by an execution budget. |
 | **Report** | One answer in one voice, plus a task record, an audit trail, and any approval Wind is holding. |
