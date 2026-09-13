@@ -6,11 +6,16 @@ import { NavioMark } from "@/components/brand/NavioMark";
 
 type Turn = { role: "you" | "navio"; text: string };
 
+/**
+ * The openers are English because the site is. The answer is not: it comes back
+ * in whatever language the question was asked in, so a visitor who types in
+ * Turkish is answered in Turkish.
+ */
 const SUGGESTIONS = [
   "What does Navio actually do?",
   "When can we use it?",
-  "Ne zaman kullanabiliriz?",
   "Does it need our credentials?",
+  "What will it never do without us?",
 ];
 
 /**
