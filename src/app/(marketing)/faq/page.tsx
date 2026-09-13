@@ -54,7 +54,7 @@ const FAQ: Array<{ q: string; a: string }> = [
 export default function FaqPage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-16">
-      <h1 className="text-[34px] leading-tight font-semibold tracking-[-0.03em] text-[var(--color-ink)]">
+      <h1 className="display text-[44px] text-[var(--color-ink)]">
         Questions worth asking before you trust it
       </h1>
       <p className="mt-4 text-[14.5px] leading-relaxed text-[var(--color-ink-muted)]">

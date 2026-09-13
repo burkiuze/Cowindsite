@@ -22,7 +22,8 @@ export default function IntegrationsPage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-16">
       <header className="max-w-2xl">
-        <h1 className="text-[34px] leading-tight font-semibold tracking-[-0.03em] text-[var(--color-ink)]">
+        <p className="eyebrow">Integrations</p>
+        <h1 className="display mt-5 text-[44px] text-[var(--color-ink)]">
           {services.length} services, one way of working
         </h1>
         <p className="mt-4 text-[14.5px] leading-relaxed text-[var(--color-ink-muted)]">

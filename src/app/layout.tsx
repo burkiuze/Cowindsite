@@ -1,10 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+/**
+ * Display voice. A high-contrast serif for headlines only — it gives the page
+ * an editorial weight that a grotesk at 56px cannot, and it keeps Cowind from
+ * looking like every other dark developer-tool site.
+ */
+const display = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-display-serif",
   display: "swap",
 });
 
@@ -62,7 +74,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${display.variable}`}>
       <body className="min-h-dvh bg-[var(--color-void)] text-[var(--color-ink)] antialiased">{children}</body>
     </html>
   );

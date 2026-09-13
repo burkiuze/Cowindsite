@@ -27,7 +27,8 @@ export default function PlatformPage() {
       <StreamField intensity={0.6} />
 
       <section className="relative z-10 mx-auto w-full max-w-5xl px-6 pt-16 pb-14">
-        <h1 className="max-w-3xl text-[36px] leading-[1.1] font-semibold tracking-[-0.03em] text-[var(--color-ink)]">
+        <p className="eyebrow">Platform</p>
+        <h1 className="display mt-5 max-w-3xl text-[44px] text-[var(--color-ink)]">
           One assistant on the surface. A runtime underneath.
         </h1>
         <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
@@ -40,9 +41,7 @@ export default function PlatformPage() {
       {/* The path of a request */}
       <section className="relative z-10 border-t border-[var(--color-hairline)] bg-[var(--color-surface)]/60">
         <div className="mx-auto w-full max-w-5xl px-6 py-16">
-          <h2 className="text-[13px] font-semibold tracking-[0.14em] text-[var(--color-ink-faint)] uppercase">
-            The path of one request
-          </h2>
+          <p className="eyebrow">The path of one request</p>
 
           <div className="mt-8">
             <RunDemo />
@@ -92,12 +91,10 @@ export default function PlatformPage() {
       {/* Specialists */}
       <section className="relative z-10 border-t border-[var(--color-hairline)]">
         <div className="mx-auto w-full max-w-5xl px-6 py-16">
-          <h2 className="text-[13px] font-semibold tracking-[0.14em] text-[var(--color-ink-faint)] uppercase">
-            Specialists
-          </h2>
-          <p className="mt-3 max-w-2xl text-[20px] leading-snug font-semibold tracking-[-0.02em] text-[var(--color-ink)]">
+          <p className="eyebrow">Specialists</p>
+          <h2 className="display mt-4 max-w-2xl text-[34px] text-[var(--color-ink)]">
             You never pick one. Wind does, per request, and often picks several at once.
-          </p>
+          </h2>
 
           <ul className="mt-8 grid gap-3 sm:grid-cols-2">
             {SPECIALISTS.map((specialist) => (
@@ -118,12 +115,10 @@ export default function PlatformPage() {
       {/* Control */}
       <section id="control" className="relative z-10 scroll-mt-20 border-t border-[var(--color-hairline)] bg-[var(--color-surface)]/60">
         <div className="mx-auto w-full max-w-5xl px-6 py-16">
-          <h2 className="text-[13px] font-semibold tracking-[0.14em] text-[var(--color-ink-faint)] uppercase">
-            Control
-          </h2>
-          <p className="mt-3 max-w-2xl text-[20px] leading-snug font-semibold tracking-[-0.02em] text-[var(--color-ink)]">
+          <p className="eyebrow">Control</p>
+          <h2 className="display mt-4 max-w-2xl text-[34px] text-[var(--color-ink)]">
             The limits are the product. Without them, nobody would leave this running.
-          </p>
+          </h2>
 
           <dl className="mt-8 grid grid-cols-2 gap-x-8 gap-y-3 sm:grid-cols-3">
             <Limit label="Specialist calls per run" value={String(LIMITS.maxSpecialistCalls)} />

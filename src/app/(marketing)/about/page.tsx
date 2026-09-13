@@ -39,7 +39,7 @@ export default function AboutPage() {
     <div className="mx-auto w-full max-w-3xl px-6 py-16">
       <WindMark size={40} state="flow" />
 
-      <h1 className="mt-7 text-[34px] leading-tight font-semibold tracking-[-0.03em] text-[var(--color-ink)]">
+      <h1 className="display mt-7 text-[44px] text-[var(--color-ink)]">
         Most work inside a company is coordination
       </h1>
 
@@ -60,13 +60,11 @@ export default function AboutPage() {
         </p>
       </div>
 
-      <h2 className="mt-14 text-[13px] font-semibold tracking-[0.14em] text-[var(--color-ink-faint)] uppercase">
-        Principles
-      </h2>
+      <p className="eyebrow mt-14">Principles</p>
       <ul className="mt-6 space-y-3">
         {PRINCIPLES.map((principle) => (
           <li key={principle.title} className="panel px-5 py-4">
-            <h3 className="text-[14.5px] font-medium text-[var(--color-ink)]">{principle.title}</h3>
+            <h3 className="display text-[22px] text-[var(--color-ink)]">{principle.title}</h3>
             <p className="mt-2 text-[13px] leading-relaxed text-[var(--color-ink-muted)]">{principle.body}</p>
           </li>
         ))}

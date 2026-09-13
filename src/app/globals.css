@@ -28,7 +28,14 @@
   --color-stream-coral: #ff7848;
   --color-stream-lime: #6fdc8c;
 
+  /* The light half of the page. Cool porcelain, never cream. */
+  --color-porcelain: #eceef2;
+  --color-porcelain-deep: #dfe3ea;
+  --color-on-light: #0d1014;
+  --color-on-light-muted: #4a525e;
+
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-display-serif), Georgia, "Times New Roman", serif;
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", monospace;
 
   --radius-panel: 14px;
@@ -166,6 +173,43 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+
+  /* Content must never depend on an animation that will not run. */
+  .reveal {
+    opacity: 1;
+  }
+}
+
+@keyframes river {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes aurora-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(3%, -2%, 0) scale(1.08);
+    opacity: 0.8;
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* --- composed primitives ------------------------------------------------ */
@@ -197,6 +241,139 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+/* A card that reads as one plane of glass with a lit top edge. */
+.panel-lift {
+  position: relative;
+  background: linear-gradient(180deg, color-mix(in oklab, var(--color-raised) 70%, transparent), var(--color-panel));
+  border: 1px solid var(--color-hairline);
+  border-radius: 16px;
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 0.8, 0.3, 1);
+}
+.panel-lift::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  border-radius: 16px 16px 0 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-stream-cyan) 35%, transparent),
+    transparent
+  );
+  opacity: 0.7;
+}
+.panel-lift:hover {
+  border-color: #2b3d4a;
+  transform: translateY(-2px);
+}
+
+/* Gradient hairline for the one or two cards that carry the most weight. */
+.panel-accent {
+  position: relative;
+  border-radius: 16px;
+  background: var(--color-panel);
+}
+.panel-accent::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  padding: 1px;
+  background: linear-gradient(
+    140deg,
+    color-mix(in oklab, var(--color-stream-cyan) 55%, transparent),
+    transparent 45%,
+    color-mix(in oklab, var(--color-stream-violet) 40%, transparent)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Sections fade up as they arrive; inert when reduced motion is asked for. */
+.reveal {
+  opacity: 0;
+}
+.reveal.is-visible {
+  animation: reveal-in 0.6s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+
+.logo-river {
+  animation: river 60s linear infinite;
+}
+.logo-river:hover {
+  animation-play-state: paused;
+}
+
+/* Edge fade so a moving strip does not collide with the page frame. */
+.edge-fade {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* Display type: serif, optically tightened, never bolded — the weight comes
+   from the size and the contrast of the face itself. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.02;
+}
+
+/* Mono micro-label that sits above a section title. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+/* The light band. Everything inside it flips to ink-on-porcelain. */
+.band-light {
+  background: var(--color-porcelain);
+  color: var(--color-on-light);
+}
+.band-light .eyebrow {
+  color: color-mix(in oklab, var(--color-on-light) 45%, transparent);
+}
+
+/* Floating navigation shell. */
+.nav-pill {
+  background: color-mix(in oklab, var(--color-panel) 82%, transparent);
+  border: 1px solid var(--color-hairline);
+  border-radius: 999px;
+  backdrop-filter: blur(18px);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Over a porcelain band the shell inverts rather than floating as a dark slab. */
+.nav-pill[data-on-light] {
+  background: color-mix(in oklab, #ffffff 72%, transparent);
+  border-color: color-mix(in oklab, var(--color-on-light) 12%, transparent);
+  color: var(--color-on-light);
+}
+.nav-pill[data-on-light] a,
+.nav-pill[data-on-light] button,
+.nav-pill[data-on-light] span {
+  color: var(--color-on-light);
+}
+.nav-pill[data-on-light] a:not(:first-child) {
+  color: color-mix(in oklab, var(--color-on-light) 66%, transparent);
+}
+.nav-pill[data-on-light] a:not(:first-child):hover {
+  color: var(--color-on-light);
 }
 
 .focus-ring:focus-visible {

@@ -30,7 +30,7 @@ export default function AccessPage() {
     <div className="mx-auto w-full max-w-2xl px-6 py-20">
       <WindMark size={40} state="flow" />
 
-      <h1 className="mt-7 text-[32px] leading-tight font-semibold tracking-[-0.03em] text-[var(--color-ink)]">
+      <h1 className="display mt-7 text-[42px] text-[var(--color-ink)]">
         The workspace is in private access
       </h1>
 
@@ -41,7 +41,7 @@ export default function AccessPage() {
       </p>
 
       <div className="panel mt-8 px-5 py-5">
-        <h2 className="text-[14px] font-semibold text-[var(--color-ink)]">What to tell us</h2>
+        <h2 className="display text-[22px] text-[var(--color-ink)]">What to tell us</h2>
         <ul className="mt-3 space-y-2">
           {WANTS.map((want) => (
             <li key={want} className="flex items-start gap-2.5 text-[13.5px] text-[var(--color-ink-muted)]">
