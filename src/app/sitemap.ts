@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const PAGES = ["", "/platform", "/integrations", "/about", "/faq", "/access"];
+const PAGES = ["", "/platform", "/finance", "/integrations", "/about", "/faq", "/access"];
 
 function siteUrl(): string {
   const configured = (process.env.NEXT_PUBLIC_NAVIO_URL ?? process.env.NEXT_PUBLIC_COWIND_URL)?.trim();

@@ -10,8 +10,20 @@
  * it can be unit tested in isolation.
  */
 
-/** Raw engine identifiers look like `vendor/model-name:tag`. */
-const ENGINE_IDENTIFIER = /\b[a-z0-9][a-z0-9._-]{1,40}\/[a-z0-9][a-z0-9._:-]{1,60}\b/gi;
+/**
+ * Raw engine identifiers look like `vendor/model-name:tag`.
+ *
+ * The shape has to be specific, because ordinary writing is full of slashes: a
+ * burn rate in "612.000 TL/ay", "7/24", "input/output". A model name always
+ * carries a version or a tag on its right-hand side — a digit, a hyphen, a dot
+ * or a colon — and both sides are more than two characters. Requiring that
+ * keeps prose intact while still catching the identifiers that must never
+ * surface. A vendor-named pair without any of it (say `anthropic/claude`) is
+ * caught by the vendor pass immediately after.
+ */
+const ENGINE_IDENTIFIER =
+  /\b[a-z0-9][a-z0-9._-]{2,40}\/[a-z0-9][a-z0-9._:-]{2,60}\b/gi;
+const VERSIONED = /[-.:0-9]/;
 
 /** Any http(s) endpoint, plus bare API hostnames. */
 const URL_LIKE = /\bhttps?:\/\/[^\s"'<>)\]]+/gi;
@@ -95,7 +107,11 @@ function scrub(input: string): string {
   out = out.replace(SECRET_LIKE, "[redacted]");
   out = out.replace(URL_LIKE, (match) => (isSafeUrl(match) ? match : "a private service"));
   out = out.replace(API_HOST, (match) => (isSafePath(match) ? match : "a private service"));
-  out = out.replace(ENGINE_IDENTIFIER, (match) => (isSafePath(match) ? match : "a Navio specialist"));
+  out = out.replace(ENGINE_IDENTIFIER, (match) => {
+    const [, right = ""] = match.split("/");
+    if (!VERSIONED.test(right)) return match;
+    return isSafePath(match) ? match : "a Navio specialist";
+  });
   out = out.replace(VENDOR_PATTERN, "Navio");
   for (const [pattern, replacement] of TRANSPORT_NOISE) out = out.replace(pattern, replacement);
   return out;

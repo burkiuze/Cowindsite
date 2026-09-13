@@ -8,6 +8,7 @@ import { Icon } from "@/components/ui/Icon";
 
 const LINKS = [
   { href: "/platform", label: "Platform" },
+  { href: "/finance", label: "Finance" },
   { href: "/integrations", label: "Integrations" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },

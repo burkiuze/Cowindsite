@@ -10,8 +10,8 @@
  * Usage (requires the app running with a reachable engine):
  *   node scripts/record-preview.mjs http://localhost:3100 [scenario]
  *
- * Scenarios: meeting (default), engineering, social. Each records its own file
- * and its own marks, so the finishing pass can zoom on the right moments.
+ * Scenarios: meeting (default), engineering, finance, social. Each records its own
+ * file and its own marks, so the finishing pass can zoom on the right moments.
  */
 import { chromium } from "playwright";
 import { mkdirSync, renameSync, readdirSync, writeFileSync } from "node:fs";
@@ -31,6 +31,11 @@ const SCRIPTS = {
   engineering: {
     prompt:
       "Yazılım ekibiyle sürüm 2.15 için hazırlık toplantısı ayarla. Açık pull request'leri ve blocker issue'ları incele, kalan riskleri gündeme koy ve herkese davet gönder.",
+    runMs: 3200,
+  },
+  finance: {
+    prompt:
+      "Bu çeyreğin runway'ini ve yanma hızını çıkar, abonelik yenilemelerimizi gözden geçir ve yönetim kuruluna gidecek özeti hazırla.",
     runMs: 3200,
   },
   social: {

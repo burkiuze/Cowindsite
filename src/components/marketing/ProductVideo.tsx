@@ -41,6 +41,15 @@ const TAKES: Take[] = [
       "A run in the Navio workspace: Navio reads a repository and an issue tracker, prepares a release meeting around the blocking decision, and holds the invitations for approval.",
   },
   {
+    id: "finance",
+    tab: "Close the month",
+    file: "preview-finance",
+    caption:
+      "One question about the month. Navio reads the ledger and the payment tool, checks what is committed against what is used, writes the summary with the figures it used — and holds the mail to the board until someone approves it.",
+    description:
+      "A run in the Navio workspace: Navio reads accounting and payment tools, reviews vendor commitments, drafts a board summary and holds the email for approval.",
+  },
+  {
     id: "social",
     tab: "Produce and publish",
     file: "preview-social",
@@ -51,9 +60,14 @@ const TAKES: Take[] = [
   },
 ];
 
-export function ProductVideo() {
+/**
+ * `only` narrows the switcher to a single run — the finance page shows the
+ * finance take and nothing else, rather than asking a visitor to find it.
+ */
+export function ProductVideo({ only }: { only?: string } = {}) {
+  const takes = only ? TAKES.filter((take) => take.id === only) : TAKES;
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [take, setTake] = useState(TAKES[0]);
+  const [take, setTake] = useState(takes[0] ?? TAKES[0]);
   const [playing, setPlaying] = useState(true);
   const [reduced, setReduced] = useState(false);
 
@@ -126,13 +140,14 @@ export function ProductVideo() {
         </span>
       </div>
 
-      {/* Three runs, not three edits of one: each was recorded end to end. */}
+      {/* Each run was recorded end to end; the tabs switch between them. */}
       <div
         role="tablist"
         aria-label="Recorded runs"
+        hidden={takes.length < 2}
         className="flex flex-wrap gap-1 border-b border-[var(--color-hairline)] bg-[var(--color-surface)] px-2.5 py-2"
       >
-        {TAKES.map((candidate) => {
+        {takes.map((candidate) => {
           const active = candidate.id === take.id;
           return (
             <button

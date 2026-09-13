@@ -10,6 +10,10 @@ export const metadata = {
 
 const FAQ: Array<{ q: string; a: string }> = [
   {
+    q: "When can we actually use it?",
+    a: "The full version ships in February 2027. Before that, workspaces are opened one at a time in private access: the integrations that workspace needs are wired, the boundaries are agreed, and the work starts on something real rather than on a demo.",
+  },
+  {
     q: "Which model does it use?",
     a: "That is deliberately not a question you have to answer. Navio presents one assistant, Navio, and routes each request internally to the capability it needs — engineering, finance, visual, long-context, extraction — often several at once. The engine layer is private, and it is designed so that swapping a specialist is a configuration change rather than something you would notice in the product.",
   },

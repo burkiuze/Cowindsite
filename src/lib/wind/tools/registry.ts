@@ -228,6 +228,16 @@ export const TOOLS: ToolDefinition[] = [
     parameters: { database: "string", title: "string", content: "markdown" },
   },
   {
+    id: "quickbooks.read_ledger",
+    integrationId: "quickbooks",
+    name: "Read the ledger",
+    description: "Read balances, spend by category, open invoices and bills.",
+    effect: "read",
+    requiredPermission: "integrations:use",
+    approvalDefault: false,
+    parameters: { period: "month | quarter | year", scope: "string" },
+  },
+  {
     id: "stripe.read_metrics",
     integrationId: "stripe",
     name: "Read revenue metrics",

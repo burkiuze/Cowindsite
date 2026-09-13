@@ -38,7 +38,7 @@ const BY_INTENT: Partial<Record<Intent, string[]>> = {
   ACTION_REQUEST: ["google-calendar.list_events", "gmail.list_threads"],
   WORKFLOW_REQUEST: ["google-calendar.list_events"],
   CODING: ["github.list_pull_requests"],
-  FINANCE: ["stripe.read_metrics"],
+  FINANCE: ["stripe.read_metrics", "quickbooks.read_ledger"],
   RESEARCH: ["linkedin.read_page_activity", "notion.search"],
   MULTI_DOMAIN: ["github.list_pull_requests", "stripe.read_metrics", "google-calendar.list_events"],
 };

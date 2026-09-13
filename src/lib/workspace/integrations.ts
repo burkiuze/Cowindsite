@@ -181,6 +181,14 @@ export const FIRST_CLASS: IntegrationDefinition[] = [
     implemented: true,
     requiredEnv: ["STRIPE_SECRET_KEY"],
   },
+  {
+    id: "quickbooks",
+    name: "QuickBooks",
+    category: "finance",
+    description: "Ledger, invoices, bills and the figures behind them.",
+    implemented: true,
+    requiredEnv: ["QUICKBOOKS_CLIENT_ID", "QUICKBOOKS_CLIENT_SECRET"],
+  },
 ];
 
 /** Every service, with the curated detail merged in where it exists. */

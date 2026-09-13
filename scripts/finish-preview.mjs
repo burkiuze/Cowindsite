@@ -17,8 +17,11 @@ const RAW_DIR = `/tmp/preview-raw/${SCENARIO}`;
 const SOURCE = join(RAW_DIR, "preview.webm");
 const OUT_DIR = "public/video";
 const NAME = SCENARIO === "meeting" ? "preview" : `preview-${SCENARIO}`;
-const WIDTH = 1280;
-const HEIGHT = 800;
+// The page never shows these wider than ~900 CSS pixels, so 1120 is already
+// past a 2x panel and every byte beyond that is spent on nothing a visitor can
+// see. Four of them autoplay on one page: size is a feature.
+const WIDTH = 1120;
+const HEIGHT = 700;
 const FPS = 24;
 
 const ffmpeg = process.argv[3] ?? "ffmpeg";
@@ -74,10 +77,10 @@ function run(args) {
 
 console.log("pushes:", PUSHES.map((push) => `${push.start.toFixed(1)}s→${push.end.toFixed(1)}s ×${push.scale}`).join(", "));
 
-run(["-i", SOURCE, "-vf", filter, "-c:v", "libx264", "-preset", "slow", "-crf", "30",
+run(["-i", SOURCE, "-vf", filter, "-c:v", "libx264", "-preset", "slow", "-crf", "32",
   "-profile:v", "high", "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", join(OUT_DIR, `${NAME}.mp4`)]);
 
-run(["-i", SOURCE, "-vf", filter, "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "40",
+run(["-i", SOURCE, "-vf", filter, "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "42",
   "-row-mt", "1", "-an", join(OUT_DIR, `${NAME}.webm`)]);
 
 run(["-ss", String(at("actions", 20) + 2), "-i", SOURCE, "-vframes", "1",

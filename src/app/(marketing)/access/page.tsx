@@ -33,12 +33,22 @@ export default function AccessPage() {
         <h1 className="display mt-7 text-[40px] sm:text-[46px]">
           The workspace is in private access
         </h1>
+        <p className="mt-5 inline-flex items-center gap-2 rounded-full border border-[var(--color-hairline)] px-3.5 py-1.5 text-[12.5px] text-[var(--color-ink-muted)]">
+          <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-stream-cyan)]" />
+          Full version — February 2027
+        </p>
       </header>
 
       <p className="mt-5 text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
         Navio runs a company&rsquo;s work, which means it holds that company&rsquo;s knowledge and reaches its tools.
         We open it one workspace at a time, with the integrations that workspace actually needs, rather than handing
         out a login and hoping.
+      </p>
+
+      <p className="mt-4 text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
+        The full version ships in February 2027. Until then, workspaces are opened one at a time — which means the
+        integrations you actually need get wired, and the parts that must never happen without a person are agreed
+        before anything is connected.
       </p>
 
       <div className="panel mt-8 px-5 py-5">

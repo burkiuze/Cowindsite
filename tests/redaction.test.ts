@@ -40,6 +40,10 @@ describe("sanitizeForUser", () => {
 
   it("keeps ordinary product text and file paths intact", () => {
     expect(sanitizeForUser("Navio read src/lib/wind/router.ts and found the issue")).toContain("src/lib/wind/router.ts");
+
+    // Ordinary writing is full of slashes. A burn rate is not a model name.
+    expect(sanitizeForUser("Net yanma 612.000 TL/ay, yani 6,8 ay")).toContain("TL/ay");
+    expect(sanitizeForUser("7/24 destek ve input/output oranı")).toBe("7/24 destek ve input/output oranı");
     expect(sanitizeForUser("Runway is 17.9 months on 6.9M cash")).toBe("Runway is 17.9 months on 6.9M cash");
   });
 });

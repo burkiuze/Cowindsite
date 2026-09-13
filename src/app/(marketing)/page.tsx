@@ -134,7 +134,7 @@ export default function LandingPage() {
         </div>
 
         {/* The product itself, given the width it deserves. */}
-        <div className="mx-auto w-full max-w-5xl px-6 pb-16">
+        <div className="mx-auto w-full max-w-4xl px-6 pb-16">
           <Reveal delay={90}>
             <ProductVideo />
           </Reveal>
