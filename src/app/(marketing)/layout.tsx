@@ -3,6 +3,7 @@ import { NavioMark } from "@/components/brand/NavioMark";
 import { Icon } from "@/components/ui/Icon";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
 import { SupportMessenger } from "@/components/marketing/SupportMessenger";
+import { AskNavio } from "@/components/marketing/AskNavio";
 
 /**
  * Public shell. One header, one footer, and the app's own namespace kept
@@ -72,7 +73,9 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         </div>
       </footer>
 
-      {/* Public pages only: a question should be answerable where it is asked. */}
+      {/* Public pages only: a question should be answerable where it is asked —
+          instantly by Navio, and properly by a person. */}
+      <AskNavio />
       <SupportMessenger />
     </div>
   );
