@@ -18,6 +18,16 @@ import { join, extname, basename } from "node:path";
 import sharp from "sharp";
 
 const SOURCE = process.argv[2] ?? "/home/user/composiohq/open-logos";
+/**
+ * Vetted marks that win over the bulk source.
+ *
+ * The bulk set is generous but uneven — a handful of files carry the wrong
+ * brand outright, and some marks are years out of date. `fetch-logo-overrides`
+ * fills this directory with the current mark for the brands a visitor
+ * recognises on sight; anything here replaces what the bulk source offers for
+ * the same slug.
+ */
+const OVERRIDE_DIR = "assets/logo-overrides";
 const OUT_DIR = "public/logos";
 const OUT_FILE = "src/lib/workspace/catalog.generated.ts";
 const SIZE = 96;
@@ -32,7 +42,41 @@ const RASTER = new Set([".png", ".jpg", ".jpeg", ".webp", ".avif", ".svg"]);
  * specialists would name that layer just by being listed next to 770 ordinary
  * SaaS tools, so it is excluded here — at the source, not by filtering later.
  */
-const EXCLUDED = new Set(["openrouter"]);
+const EXCLUDED = new Set([
+  "openrouter",
+  // The logo set's own brand. It provides the marks; it is not a service Cowind
+  // connects to, so it has no place in a catalogue of integrations.
+  "composio",
+  "composio-dark",
+  "composio-logo",
+  "composiologo",
+  "composiopurplelogo",
+  // A second copy of Confluence under the name of the site it was exported
+  // from. The real entry is "confluence".
+  "confluence-svgrepo-com",
+]);
+
+/**
+ * Services whose mark in the bulk set belongs to a different company.
+ *
+ * The source set is generous but hand-assembled, and a few files carry another
+ * brand entirely: its `parma` file is Apple's logo, its `geocodio` file is
+ * Oracle's. Showing one company's mark under another company's name is worse
+ * than showing no mark at all, so these keep their place in the catalogue and
+ * fall back to a lettered tile. Each was confirmed by eye; remove an entry here
+ * the moment a correct mark exists for it.
+ */
+const MISLABELLED = new Set([
+  "2chat",          // Slack
+  "ai-ml-api",      // GitHub
+  "callpage",       // Tata
+  "geocodio",       // Oracle
+  "genderize",      // The Guardian
+  "nioleads",       // Microsoft
+  "parma",          // Apple
+  "propelauth",     // Letter AI
+  "tapformio",      // Alchemy
+]);
 
 /** Brands whose display name does not survive naive title-casing. */
 const NAME_OVERRIDES = {
@@ -46,6 +90,7 @@ const NAME_OVERRIDES = {
   salesforce: "Salesforce", servicenow: "ServiceNow", workday: "Workday", netsuite: "NetSuite",
   openai: "OpenAI", elevenlabs: "ElevenLabs", huggingface: "Hugging Face", deepl: "DeepL",
   tinyurl: "TinyURL", ipstack: "ipstack", ahrefs: "Ahrefs", semrush: "Semrush",
+  twitter: "X",
   "google-drive": "Google Drive", "google-docs": "Google Docs", "google-sheets": "Google Sheets",
   "google-calendar": "Google Calendar", "google-maps": "Google Maps", "google-meet": "Google Meet",
   "google-photos": "Google Photos", "google-analytics": "Google Analytics",
@@ -149,6 +194,18 @@ for (const file of files) {
   if (!current || size < current.size) bySlug.set(slug, { file, size });
 }
 
+// A vetted mark replaces the bulk one for the same service, and never adds a
+// service the catalogue does not already carry.
+let overridden = 0;
+if (existsSync(OVERRIDE_DIR)) {
+  for (const file of readdirSync(OVERRIDE_DIR)) {
+    const slug = basename(file, extname(file));
+    if (!bySlug.has(slug)) continue;
+    bySlug.set(slug, { file, size: 0, dir: OVERRIDE_DIR });
+    overridden += 1;
+  }
+}
+
 if (existsSync(OUT_DIR)) rmSync(OUT_DIR, { recursive: true });
 mkdirSync(OUT_DIR, { recursive: true });
 
@@ -194,14 +251,19 @@ function normalise(buffer) {
   return { kind: "raster", buffer };
 }
 
-for (const [slug, { file }] of [...bySlug.entries()].sort()) {
-  const source = join(SOURCE, file);
+for (const [slug, { file, dir }] of [...bySlug.entries()].sort()) {
+  const source = join(dir ?? SOURCE, file);
   const { kind, buffer } = normalise(readFileSync(source));
 
   try {
     const rendered = await sharp(buffer, { density: 300 })
       .resize(SIZE, SIZE, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .toBuffer();
+
+    if (MISLABELLED.has(slug)) {
+      entries.push({ slug, name: displayName(slug), category: categorize(slug), ext: null, dark: false });
+      continue;
+    }
 
     await sharp(rendered).webp({ quality: 88, effort: 6 }).toFile(join(OUT_DIR, `${slug}.webp`));
     entries.push({
@@ -228,15 +290,20 @@ for (const [slug, { file }] of [...bySlug.entries()].sort()) {
 
 const header = `// GENERATED FILE — do not edit by hand.
 // Regenerate with: node scripts/sync-integrations.mjs <path-to-open-logos>
-// Source: ComposioHQ/open-logos (one file per toolkit).
+// Source: ComposioHQ/open-logos (one file per toolkit), with vetted marks for
+// well-known brands from homarr-labs/dashboard-icons (assets/logo-overrides).
 // ${entries.length} services, logo assets in public/logos/<slug>.webp
 
 export interface CatalogEntry {
   slug: string;
   name: string;
   category: string;
-  /** Asset extension under /logos: "webp" for rasterised marks, "svg" for pass-through. */
-  ext: "webp" | "svg";
+  /**
+   * Asset extension under /logos: "webp" for rasterised marks, "svg" for
+   * pass-through, null when no trustworthy mark exists and the interface should
+   * fall back to a lettered tile.
+   */
+  ext: "webp" | "svg" | null;
   /** True when the mark is too dark to read on Cowind's surfaces unaided. */
   dark: boolean;
 }
@@ -245,5 +312,5 @@ export const CATALOG: CatalogEntry[] = ${JSON.stringify(entries, null, 2)};
 `;
 
 writeFileSync(OUT_FILE, header);
-console.log(`catalogued ${entries.length} services`);
+console.log(`catalogued ${entries.length} services (${overridden} marks from the vetted set)`);
 if (skipped.length > 0) console.log(`skipped (unreadable): ${skipped.join(", ")}`);

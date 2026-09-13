@@ -18,9 +18,23 @@ describe("generated catalogue", () => {
     expect(new Set(CATALOG.map((entry) => entry.slug)).size).toBe(CATALOG.length);
   });
 
-  it("ships a real logo asset for every entry", () => {
-    const missing = CATALOG.filter((entry) => !existsSync(join("public", "logos", `${entry.slug}.${entry.ext}`)));
+  it("ships a real logo asset for every entry that claims one", () => {
+    const missing = CATALOG.filter(
+      (entry) => entry.ext && !existsSync(join("public", "logos", `${entry.slug}.${entry.ext}`)),
+    );
     expect(missing.map((entry) => entry.slug)).toEqual([]);
+  });
+
+  it("carries no mark rather than another company's", () => {
+    // A handful of marks in the source set belong to a different brand. Those
+    // entries keep their place and fall back to a lettered tile — showing the
+    // wrong company's logo would be worse than showing none.
+    const unmarked = CATALOG.filter((entry) => entry.ext === null);
+    expect(unmarked.length).toBeGreaterThan(0);
+    for (const entry of unmarked) {
+      expect(existsSync(join("public", "logos", `${entry.slug}.webp`))).toBe(false);
+      expect(logoPath(entry.slug)).toBeNull();
+    }
   });
 
   it("uses only categories the UI can label and order", () => {

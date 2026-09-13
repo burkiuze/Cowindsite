@@ -1,14 +1,19 @@
 // GENERATED FILE — do not edit by hand.
 // Regenerate with: node scripts/sync-integrations.mjs <path-to-open-logos>
-// Source: ComposioHQ/open-logos (one file per toolkit).
-// 770 services, logo assets in public/logos/<slug>.webp
+// Source: ComposioHQ/open-logos (one file per toolkit), with vetted marks for
+// well-known brands from homarr-labs/dashboard-icons (assets/logo-overrides).
+// 764 services, logo assets in public/logos/<slug>.webp
 
 export interface CatalogEntry {
   slug: string;
   name: string;
   category: string;
-  /** Asset extension under /logos: "webp" for rasterised marks, "svg" for pass-through. */
-  ext: "webp" | "svg";
+  /**
+   * Asset extension under /logos: "webp" for rasterised marks, "svg" for
+   * pass-through, null when no trustworthy mark exists and the interface should
+   * fall back to a lettered tile.
+   */
+  ext: "webp" | "svg" | null;
   /** True when the mark is too dark to read on Cowind's surfaces unaided. */
   dark: boolean;
 }
@@ -25,7 +30,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "2chat",
     "name": "2chat",
     "category": "communication",
-    "ext": "webp",
+    "ext": null,
     "dark": false
   },
   {
@@ -179,15 +184,15 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "ai-ml-api",
     "name": "AI ML Api",
     "category": "development",
-    "ext": "webp",
+    "ext": null,
     "dark": false
   },
   {
     "slug": "airtable",
     "name": "Airtable",
     "category": "ai",
-    "ext": "svg",
-    "dark": true
+    "ext": "webp",
+    "dark": false
   },
   {
     "slug": "aivoov",
@@ -264,7 +269,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "Amazon",
     "category": "commerce",
     "ext": "webp",
-    "dark": false
+    "dark": true
   },
   {
     "slug": "ambee",
@@ -991,7 +996,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "callpage",
     "name": "Callpage",
     "category": "communication",
-    "ext": "webp",
+    "ext": null,
     "dark": false
   },
   {
@@ -1145,8 +1150,8 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "clickup",
     "name": "ClickUp",
     "category": "productivity",
-    "ext": "webp",
-    "dark": false
+    "ext": "svg",
+    "dark": true
   },
   {
     "slug": "close",
@@ -1226,51 +1231,9 @@ export const CATALOG: CatalogEntry[] = [
     "dark": false
   },
   {
-    "slug": "composio",
-    "name": "Composio",
-    "category": "other",
-    "ext": "webp",
-    "dark": false
-  },
-  {
-    "slug": "composio-dark",
-    "name": "Composio Dark",
-    "category": "other",
-    "ext": "webp",
-    "dark": true
-  },
-  {
-    "slug": "composio-logo",
-    "name": "Composio Logo",
-    "category": "other",
-    "ext": "webp",
-    "dark": false
-  },
-  {
-    "slug": "composiologo",
-    "name": "Composiologo",
-    "category": "other",
-    "ext": "webp",
-    "dark": true
-  },
-  {
-    "slug": "composiopurplelogo",
-    "name": "Composiopurplelogo",
-    "category": "other",
-    "ext": "webp",
-    "dark": false
-  },
-  {
     "slug": "confluence",
     "name": "Confluence",
     "category": "productivity",
-    "ext": "webp",
-    "dark": false
-  },
-  {
-    "slug": "confluence-svgrepo-com",
-    "name": "Confluence Svgrepo Com",
-    "category": "development",
     "ext": "webp",
     "dark": false
   },
@@ -1671,7 +1634,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "Epic Games",
     "category": "other",
     "ext": "webp",
-    "dark": true
+    "dark": false
   },
   {
     "slug": "espocrm",
@@ -1783,7 +1746,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "Figma",
     "category": "productivity",
     "ext": "webp",
-    "dark": true
+    "dark": false
   },
   {
     "slug": "file-manager",
@@ -2027,7 +1990,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "genderize",
     "name": "Genderize",
     "category": "other",
-    "ext": "webp",
+    "ext": null,
     "dark": false
   },
   {
@@ -2041,7 +2004,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "geocodio",
     "name": "Geocodio",
     "category": "other",
-    "ext": "webp",
+    "ext": null,
     "dark": false
   },
   {
@@ -2077,7 +2040,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "GitHub",
     "category": "development",
     "ext": "webp",
-    "dark": false
+    "dark": true
   },
   {
     "slug": "gitlab",
@@ -2805,7 +2768,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "Linear",
     "category": "development",
     "ext": "webp",
-    "dark": false
+    "dark": true
   },
   {
     "slug": "linkedin",
@@ -2903,7 +2866,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "Mailchimp",
     "category": "communication",
     "ext": "webp",
-    "dark": false
+    "dark": true
   },
   {
     "slug": "mailcoach",
@@ -3253,7 +3216,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "Nextdns",
     "category": "other",
     "ext": "webp",
-    "dark": true
+    "dark": false
   },
   {
     "slug": "ngrok",
@@ -3273,7 +3236,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "nioleads",
     "name": "Nioleads",
     "category": "crm",
-    "ext": "webp",
+    "ext": null,
     "dark": false
   },
   {
@@ -3372,7 +3335,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "OpenAI",
     "category": "ai",
     "ext": "webp",
-    "dark": false
+    "dark": true
   },
   {
     "slug": "opencage",
@@ -3448,7 +3411,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "parma",
     "name": "Parma",
     "category": "other",
-    "ext": "webp",
+    "ext": null,
     "dark": false
   },
   {
@@ -3589,7 +3552,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "Pingdom",
     "category": "other",
     "ext": "webp",
-    "dark": true
+    "dark": false
   },
   {
     "slug": "pipedrive",
@@ -3784,7 +3747,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "propelauth",
     "name": "Propelauth",
     "category": "security",
-    "ext": "webp",
+    "ext": null,
     "dark": false
   },
   {
@@ -3875,8 +3838,8 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "ramp",
     "name": "Ramp",
     "category": "finance",
-    "ext": "webp",
-    "dark": false
+    "ext": "svg",
+    "dark": true
   },
   {
     "slug": "ravenseotools",
@@ -4233,7 +4196,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "SendGrid",
     "category": "other",
     "ext": "webp",
-    "dark": true
+    "dark": false
   },
   {
     "slug": "sendlane",
@@ -4268,7 +4231,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "Sentry",
     "category": "development",
     "ext": "webp",
-    "dark": false
+    "dark": true
   },
   {
     "slug": "seqera",
@@ -4485,14 +4448,14 @@ export const CATALOG: CatalogEntry[] = [
     "name": "Soundcloud",
     "category": "other",
     "ext": "webp",
-    "dark": false
+    "dark": true
   },
   {
     "slug": "sourcegraph",
     "name": "Sourcegraph",
     "category": "other",
     "ext": "webp",
-    "dark": true
+    "dark": false
   },
   {
     "slug": "splitwise",
@@ -4715,7 +4678,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "tapformio",
     "name": "Tapformio",
     "category": "productivity",
-    "ext": "webp",
+    "ext": null,
     "dark": false
   },
   {
@@ -4750,8 +4713,8 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "telegram",
     "name": "Telegram",
     "category": "communication",
-    "ext": "svg",
-    "dark": true
+    "ext": "webp",
+    "dark": false
   },
   {
     "slug": "telnyx",
@@ -4806,7 +4769,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "tiktok",
     "name": "Tiktok",
     "category": "marketing",
-    "ext": "svg",
+    "ext": "webp",
     "dark": true
   },
   {
@@ -4891,7 +4854,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "Toggl",
     "category": "other",
     "ext": "webp",
-    "dark": false
+    "dark": true
   },
   {
     "slug": "token-metrics",
@@ -4965,10 +4928,10 @@ export const CATALOG: CatalogEntry[] = [
   },
   {
     "slug": "twitter",
-    "name": "Twitter",
+    "name": "X",
     "category": "marketing",
     "ext": "webp",
-    "dark": false
+    "dark": true
   },
   {
     "slug": "typeform",
@@ -5044,7 +5007,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "vercel",
     "name": "Vercel",
     "category": "development",
-    "ext": "svg",
+    "ext": "webp",
     "dark": true
   },
   {
@@ -5094,7 +5057,7 @@ export const CATALOG: CatalogEntry[] = [
     "name": "Wakatime",
     "category": "other",
     "ext": "webp",
-    "dark": false
+    "dark": true
   },
   {
     "slug": "wati",
