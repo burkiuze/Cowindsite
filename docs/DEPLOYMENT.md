@@ -41,8 +41,12 @@ NEXT_PUBLIC_COWIND_URL=https://your-domain
 4. Deploy, then check `/api/health`. It reports `windReady` without saying
    anything about who serves the engines.
 
-The chat route runs on the Node runtime with `maxDuration = 300`; long
-orchestrated runs need a plan that permits that duration.
+The chat route runs on the Node runtime with `maxDuration = 60`, which every
+Vercel plan accepts, and `vercel.json` enables fluid compute so a streaming run
+stays efficient inside it. A deep multi-lane run can want longer: raise the
+export in `src/app/api/wind/chat/route.ts` to what your plan allows (a value
+above the plan ceiling fails the build), and raise `WIND_TASK_TIMEOUT_MS` to
+match. Left as is, Wind's own run budget is the tighter of the two.
 
 ## After deploying
 

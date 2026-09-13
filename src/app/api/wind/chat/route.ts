@@ -25,7 +25,7 @@ import type { TaskStep, TraceStep } from "@/lib/workspace/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 300;
+export const maxDuration = 60;
 
 const attachmentSchema = z.object({
   id: z.string().max(64),

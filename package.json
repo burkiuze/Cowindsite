@@ -2,7 +2,7 @@
   "name": "cowind",
   "version": "0.1.0",
   "private": true,
-  "description": "Cowind — an AI work operating system. Wind is the unified assistant.",
+  "description": "Cowind \u2014 an AI work operating system. Wind is the unified assistant.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -28,9 +28,11 @@
     "@types/react-dom": "^19.1.7",
     "eslint": "^9.35.0",
     "eslint-config-next": "15.5.4",
-    "sharp": "^0.35.4",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20.9"
   }
 }
