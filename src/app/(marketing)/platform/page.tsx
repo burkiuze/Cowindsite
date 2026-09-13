@@ -26,12 +26,12 @@ export default function PlatformPage() {
     <div className="relative overflow-hidden">
       <StreamField intensity={0.6} />
 
-      <section className="relative z-10 mx-auto w-full max-w-5xl px-6 pt-16 pb-14">
+      <section className="relative z-10 mx-auto w-full max-w-3xl px-6 pt-20 pb-14 text-center">
         <p className="eyebrow">Platform</p>
-        <h1 className="display mt-5 max-w-3xl text-[44px] text-[var(--color-ink)]">
+        <h1 className="display mt-5 text-[42px] sm:text-[52px]">
           One assistant on the surface. A runtime underneath.
         </h1>
-        <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
+        <p className="mx-auto mt-6 max-w-2xl text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
           People do not want to choose a model, wire a chain, or babysit an agent. They want an outcome, and they want
           to know what happened. Navio is built around exactly that: Navio decides what a request needs, does the parts
           it is allowed to do, and stops in front of anything that would be hard to take back.
@@ -92,7 +92,7 @@ export default function PlatformPage() {
       <section className="relative z-10 border-t border-[var(--color-hairline)]">
         <div className="mx-auto w-full max-w-5xl px-6 py-16">
           <p className="eyebrow">Specialists</p>
-          <h2 className="display mt-4 max-w-2xl text-[34px] text-[var(--color-ink)]">
+          <h2 className="display mt-4 max-w-2xl text-[34px]">
             You never pick one. Navio does, per request, and often picks several at once.
           </h2>
 
@@ -116,7 +116,7 @@ export default function PlatformPage() {
       <section id="control" className="relative z-10 scroll-mt-20 border-t border-[var(--color-hairline)] bg-[var(--color-surface)]/60">
         <div className="mx-auto w-full max-w-5xl px-6 py-16">
           <p className="eyebrow">Control</p>
-          <h2 className="display mt-4 max-w-2xl text-[34px] text-[var(--color-ink)]">
+          <h2 className="display mt-4 max-w-2xl text-[34px]">
             The limits are the product. Without them, nobody would leave this running.
           </h2>
 

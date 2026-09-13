@@ -21,12 +21,12 @@ export default function IntegrationsPage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-16">
-      <header className="max-w-2xl">
+      <header className="mx-auto max-w-2xl text-center">
         <p className="eyebrow">Integrations</p>
-        <h1 className="display mt-5 text-[44px] text-[var(--color-ink)]">
+        <h1 className="display mt-5 text-[42px] sm:text-[50px]">
           {services.length} services, one way of working
         </h1>
-        <p className="mt-4 text-[14.5px] leading-relaxed text-[var(--color-ink-muted)]">
+        <p className="mt-5 text-[14.5px] leading-relaxed text-[var(--color-ink-muted)]">
           Navio reaches your tools through one path: permission check, then an approval check for anything that writes,
           then execution, then an audit receipt. Reads run without interrupting you. Writes wait for a person.
         </p>

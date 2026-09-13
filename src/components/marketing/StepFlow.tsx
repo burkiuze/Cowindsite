@@ -40,7 +40,7 @@ export function StepFlow({ steps }: { steps: Step[] }) {
                 >
                   /{step.n}
                 </span>
-                <span className="display text-[22px] text-[var(--color-ink)]">{step.title}</span>
+                <span className="display text-[22px]">{step.title}</span>
               </div>
 
               <div

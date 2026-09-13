@@ -3,22 +3,22 @@
 /* ---------------------------------------------------------------------------
    Navio design tokens.
 
-   The palette is sampled from the Wind mark: a cool stream (cyan → blue →
-   violet) crossing a warm stream (lime → amber → coral). Cool carries identity
-   and interaction; warm carries attention and state. Everything else is a very
-   dark, slightly blue charcoal so colour only appears where it means something.
+   The ground is the brand card: near-black, lit by soft spheres, with the name
+   set in a geometric sans. Colour is rationed — the stream hues carry state
+   (running, held, failed) and almost nothing else, so a page reads as light on
+   black rather than as a palette.
 --------------------------------------------------------------------------- */
 
 @theme {
-  --color-void: #07080a;
-  --color-surface: #0b0d10;
-  --color-panel: #101318;
-  --color-raised: #161a20;
-  --color-hairline: #1e232b;
+  --color-void: #050506;
+  --color-surface: #0a0a0c;
+  --color-panel: #0f1012;
+  --color-raised: #16171a;
+  --color-hairline: #1f2024;
 
-  --color-ink: #edf0f4;
-  --color-ink-muted: #969da8;
-  --color-ink-faint: #646c78;
+  --color-ink: #f4f5f7;
+  --color-ink-muted: #9a9ca3;
+  --color-ink-faint: #63656d;
 
   --color-stream-cyan: #22cff5;
   --color-stream-blue: #2f6bff;
@@ -35,10 +35,10 @@
   --color-on-light: #0d1014;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: var(--font-display-serif), Georgia, "Times New Roman", serif;
+  --font-display: var(--font-wordmark), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", monospace;
 
-  --radius-panel: 14px;
+  --radius-panel: 18px;
 }
 
 :root {
@@ -189,15 +189,13 @@ body {
   }
 }
 
-@keyframes aurora-drift {
+@keyframes sphere-drift {
   0%,
   100% {
     transform: translate3d(0, 0, 0) scale(1);
-    opacity: 0.55;
   }
   50% {
-    transform: translate3d(3%, -2%, 0) scale(1.08);
-    opacity: 0.8;
+    transform: translate3d(2%, -1.5%, 0) scale(1.04);
   }
 }
 
@@ -230,25 +228,12 @@ body {
   border-color: var(--color-hairline);
 }
 
-.text-gradient-stream {
-  background: linear-gradient(
-    100deg,
-    var(--color-stream-cyan),
-    var(--color-stream-blue) 42%,
-    var(--color-stream-violet) 72%,
-    var(--color-stream-pink)
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
 /* A card that reads as one plane of glass with a lit top edge. */
 .panel-lift {
   position: relative;
   background: linear-gradient(180deg, color-mix(in oklab, var(--color-raised) 70%, transparent), var(--color-panel));
   border: 1px solid var(--color-hairline);
-  border-radius: 16px;
+  border-radius: 18px;
   transition:
     border-color 0.25s ease,
     transform 0.25s cubic-bezier(0.22, 0.8, 0.3, 1);
@@ -258,17 +243,17 @@ body {
   position: absolute;
   inset: 0 0 auto;
   height: 1px;
-  border-radius: 16px 16px 0 0;
+  border-radius: 18px 18px 0 0;
   background: linear-gradient(
     90deg,
     transparent,
-    color-mix(in oklab, var(--color-stream-cyan) 35%, transparent),
+    rgba(255, 255, 255, 0.34),
     transparent
   );
   opacity: 0.7;
 }
 .panel-lift:hover {
-  border-color: #2b3d4a;
+  border-color: #33353b;
   transform: translateY(-2px);
 }
 
@@ -296,6 +281,23 @@ body {
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
+}
+
+/*
+ * The card's light, on the page.
+ *
+ * Two soft spheres with a bright rim and a dark body — the same object the
+ * brand card is built from — sitting behind the hero and the closing section.
+ * Pure CSS, so they cost nothing and scale with the viewport.
+ */
+.sphere {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.06) 38%, transparent 61%),
+    radial-gradient(circle at 50% 50%, #15171b, #050506 72%);
+  box-shadow: 0 0 140px 20px rgba(255, 255, 255, 0.035);
 }
 
 /* Sections fade up as they arrive; inert when reduced motion is asked for. */
@@ -336,30 +338,45 @@ body {
   color: transparent;
 }
 
+/*
+ * Display voice: the wordmark's own face, at headline size.
+ *
+ * The serif this replaces was editorial but unrelated to anything else the
+ * brand owns. Setting headlines in the face the name is set in makes the page
+ * and the mark one thing, and the soft top-to-bottom fade is the same light the
+ * card's spheres carry.
+ */
 .display {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.012em;
-  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: -0.032em;
+  line-height: 1.04;
+  background: linear-gradient(180deg, #ffffff 0%, #b9bcc4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 /* Mono micro-label that sits above a section title. */
+/* Micro-label above a section title, tracked wide like the card's strapline. */
 .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  letter-spacing: 0.16em;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--color-ink-faint);
 }
 
 /* Rhythm without a light slab: the band recedes instead of flipping. A deeper
    ground, a lit top edge, and the stream tint pooled at the bottom. */
+/* Rhythm without a light slab: the band recedes, lit only along its top edge. */
 .band-inset {
   position: relative;
   background:
-    radial-gradient(120% 70% at 50% 120%, color-mix(in oklab, var(--color-stream-blue) 9%, transparent), transparent 70%),
-    linear-gradient(180deg, rgba(5, 6, 8, 0), #050608 22%, #050608 100%);
-  background-color: #050608;
+    radial-gradient(90% 60% at 50% 0%, rgba(255, 255, 255, 0.045), transparent 70%),
+    linear-gradient(180deg, #050506, #000000 60%);
+  background-color: #000000;
   border-block: 1px solid var(--color-hairline);
 }
 .band-inset::before {
@@ -367,18 +384,13 @@ body {
   position: absolute;
   inset: 0 0 auto;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in oklab, var(--color-stream-cyan) 30%, transparent),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
 }
 
 /* Floating navigation shell. */
 .nav-pill {
-  background: color-mix(in oklab, var(--color-panel) 82%, transparent);
-  border: 1px solid var(--color-hairline);
+  background: rgba(12, 12, 14, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 999px;
   backdrop-filter: blur(18px);
   transition:

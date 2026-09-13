@@ -96,7 +96,7 @@ export function ProductVideo() {
   }
 
   return (
-    <figure className="panel mx-auto max-w-4xl overflow-hidden p-0">
+    <figure className="panel mx-auto w-full overflow-hidden p-0">
       {/* Frame chrome: this is the workspace, not the site you are on. */}
       <div className="flex items-center gap-2.5 border-b border-[var(--color-hairline)] bg-[var(--color-surface)] px-3.5 py-2.5">
         <span className="flex gap-1.5" aria-hidden="true">

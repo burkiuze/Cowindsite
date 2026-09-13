@@ -53,13 +53,16 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 export default function FaqPage() {
   return (
-    <div className="mx-auto w-full max-w-3xl px-6 py-16">
-      <h1 className="display text-[44px] text-[var(--color-ink)]">
-        Questions worth asking before you trust it
-      </h1>
-      <p className="mt-4 text-[14.5px] leading-relaxed text-[var(--color-ink-muted)]">
-        Short answers, no hedging. If something here is not true of the build you are running, that is a bug.
-      </p>
+    <div className="mx-auto w-full max-w-3xl px-6 py-20">
+      <header className="text-center">
+        <p className="eyebrow">FAQ</p>
+        <h1 className="display mt-5 text-[42px] sm:text-[50px]">
+          Questions worth asking before you trust it
+        </h1>
+        <p className="mt-5 text-[14.5px] leading-relaxed text-[var(--color-ink-muted)]">
+          Short answers, no hedging. If something here is not true of the build you are running, that is a bug.
+        </p>
+      </header>
 
       <dl className="mt-10 divide-y divide-[var(--color-hairline)] border-y border-[var(--color-hairline)]">
         {FAQ.map((item) => (

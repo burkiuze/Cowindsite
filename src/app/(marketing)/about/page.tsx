@@ -36,12 +36,13 @@ const PRINCIPLES = [
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto w-full max-w-3xl px-6 py-16">
-      <NavioMark size={40} state="flow" />
-
-      <h1 className="display mt-7 text-[44px] text-[var(--color-ink)]">
-        Most work inside a company is coordination
-      </h1>
+    <div className="mx-auto w-full max-w-3xl px-6 py-20">
+      <header className="text-center">
+        <NavioMark size={42} state="flow" className="mx-auto" />
+        <h1 className="display mt-7 text-[42px] sm:text-[50px]">
+          Most work inside a company is coordination
+        </h1>
+      </header>
 
       <div className="mt-6 space-y-4 text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
         <p>
@@ -64,7 +65,7 @@ export default function AboutPage() {
       <ul className="mt-6 space-y-3">
         {PRINCIPLES.map((principle) => (
           <li key={principle.title} className="panel px-5 py-4">
-            <h3 className="display text-[22px] text-[var(--color-ink)]">{principle.title}</h3>
+            <h3 className="display text-[22px]">{principle.title}</h3>
             <p className="mt-2 text-[13px] leading-relaxed text-[var(--color-ink-muted)]">{principle.body}</p>
           </li>
         ))}

@@ -28,11 +28,12 @@ export default function AccessPage() {
 
   return (
     <div className="mx-auto w-full max-w-2xl px-6 py-20">
-      <NavioMark size={40} state="flow" />
-
-      <h1 className="display mt-7 text-[42px] text-[var(--color-ink)]">
-        The workspace is in private access
-      </h1>
+      <header className="text-center">
+        <NavioMark size={42} state="flow" className="mx-auto" />
+        <h1 className="display mt-7 text-[40px] sm:text-[46px]">
+          The workspace is in private access
+        </h1>
+      </header>
 
       <p className="mt-5 text-[15px] leading-relaxed text-[var(--color-ink-muted)]">
         Navio runs a company&rsquo;s work, which means it holds that company&rsquo;s knowledge and reaches its tools.
@@ -41,7 +42,7 @@ export default function AccessPage() {
       </p>
 
       <div className="panel mt-8 px-5 py-5">
-        <h2 className="display text-[22px] text-[var(--color-ink)]">What to tell us</h2>
+        <h2 className="display text-[22px]">What to tell us</h2>
         <ul className="mt-3 space-y-2">
           {WANTS.map((want) => (
             <li key={want} className="flex items-start gap-2.5 text-[13.5px] text-[var(--color-ink-muted)]">
