@@ -1,0 +1,290 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Cowind design tokens.
+
+   The palette is sampled from the Wind mark: a cool stream (cyan → blue →
+   violet) crossing a warm stream (lime → amber → coral). Cool carries identity
+   and interaction; warm carries attention and state. Everything else is a very
+   dark, slightly blue charcoal so colour only appears where it means something.
+--------------------------------------------------------------------------- */
+
+@theme {
+  --color-void: #07080a;
+  --color-surface: #0b0d10;
+  --color-panel: #101318;
+  --color-raised: #161a20;
+  --color-hairline: #1e232b;
+
+  --color-ink: #edf0f4;
+  --color-ink-muted: #969da8;
+  --color-ink-faint: #646c78;
+
+  --color-stream-cyan: #22cff5;
+  --color-stream-blue: #2f6bff;
+  --color-stream-violet: #b06be0;
+  --color-stream-pink: #f0567f;
+  --color-stream-amber: #ffb937;
+  --color-stream-coral: #ff7848;
+  --color-stream-lime: #6fdc8c;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", monospace;
+
+  --radius-panel: 14px;
+}
+
+:root {
+  color-scheme: dark;
+  --shell-sidebar: 264px;
+}
+
+* {
+  border-color: var(--color-hairline);
+}
+
+html,
+body {
+  background: var(--color-void);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-stream-cyan) 30%, transparent);
+  color: var(--color-ink);
+}
+
+/* --- scrollbars: present, but quiet ------------------------------------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-hairline) transparent;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-hairline);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #2c333d;
+  background-clip: content-box;
+}
+
+/* --- motion: flow, not decoration --------------------------------------- */
+
+@keyframes drift {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -240;
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-1.5px);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-rise {
+  animation: rise 0.32s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+
+.stream-line {
+  stroke-dasharray: 6 14;
+  animation: drift 9s linear infinite;
+}
+
+.lane-running::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-stream-cyan) 12%, transparent),
+    transparent
+  );
+  width: 32%;
+  animation: sweep 1.9s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* --- composed primitives ------------------------------------------------ */
+
+.panel {
+  background: var(--color-panel);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-panel);
+}
+
+.panel-quiet {
+  background: color-mix(in oklab, var(--color-panel) 65%, transparent);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-panel);
+}
+
+.hairline {
+  border-color: var(--color-hairline);
+}
+
+.text-gradient-stream {
+  background: linear-gradient(
+    100deg,
+    var(--color-stream-cyan),
+    var(--color-stream-blue) 42%,
+    var(--color-stream-violet) 72%,
+    var(--color-stream-pink)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--color-stream-cyan) 70%, transparent);
+  outline-offset: 2px;
+}
+
+/* Markdown-ish rendering for Wind's answers. */
+.answer > * + * {
+  margin-top: 0.85rem;
+}
+.answer h1,
+.answer h2,
+.answer h3 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+.answer h1 {
+  font-size: 1.05rem;
+}
+.answer h2 {
+  font-size: 1rem;
+}
+.answer h3 {
+  font-size: 0.95rem;
+}
+.answer ul,
+.answer ol {
+  padding-left: 1.15rem;
+}
+.answer ul {
+  list-style: disc;
+}
+.answer ol {
+  list-style: decimal;
+}
+.answer li + li {
+  margin-top: 0.3rem;
+}
+.answer code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--color-raised);
+  border: 1px solid var(--color-hairline);
+  border-radius: 5px;
+  padding: 0.1rem 0.32rem;
+}
+.answer pre {
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+}
+.answer pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+.answer strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+.answer a {
+  color: var(--color-stream-cyan);
+  text-underline-offset: 3px;
+  text-decoration: underline;
+}
+.answer blockquote {
+  border-left: 2px solid var(--color-hairline);
+  padding-left: 0.9rem;
+  color: var(--color-ink-muted);
+}
+.answer table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+.answer th,
+.answer td {
+  border: 1px solid var(--color-hairline);
+  padding: 0.45rem 0.6rem;
+  text-align: left;
+}
+.answer th {
+  background: var(--color-raised);
+  font-weight: 600;
+}
