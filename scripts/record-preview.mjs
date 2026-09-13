@@ -8,14 +8,40 @@
  * on each click — what you see is what the run did.
  *
  * Usage (requires the app running with a reachable engine):
- *   node scripts/record-preview.mjs http://localhost:3100
+ *   node scripts/record-preview.mjs http://localhost:3100 [scenario]
+ *
+ * Scenarios: meeting (default), engineering, social. Each records its own file
+ * and its own marks, so the finishing pass can zoom on the right moments.
  */
 import { chromium } from "playwright";
 import { mkdirSync, renameSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const BASE = process.argv[2] ?? "http://localhost:3100";
-const OUT_DIR = "/tmp/preview-raw";
+const SCENARIO = process.argv[3] ?? "meeting";
+const OUT_DIR = `/tmp/preview-raw/${SCENARIO}`;
+
+/** What each recording asks for, and how long its action takes to run. */
+const SCRIPTS = {
+  meeting: {
+    prompt:
+      "Yarın saat 18:00'de ürün ve büyüme ekipleriyle toplantı ayarla, herkese davet gönder. Mevcut sponsorluk anlaşmalarımızı incele ve yarının programına göz at.",
+    runMs: 3200,
+  },
+  engineering: {
+    prompt:
+      "Yazılım ekibiyle sürüm 2.15 için hazırlık toplantısı ayarla. Açık pull request'leri ve blocker issue'ları incele, kalan riskleri gündeme koy ve herkese davet gönder.",
+    runMs: 3200,
+  },
+  social: {
+    prompt:
+      "Sosyal medyamız için onay akışımızı anlatan kısa bir video oluştur ve YouTube, LinkedIn ile X'te paylaş. Metinleri her kanala göre ayrı yaz.",
+    runMs: 13500,
+  },
+};
+
+const script = SCRIPTS[SCENARIO];
+if (!script) throw new Error(`unknown scenario: ${SCENARIO}`);
 const WIDTH = 1440;
 const HEIGHT = 900;
 
@@ -110,9 +136,9 @@ async function glide(x, y, steps = 26) {
   at = { x, y };
 }
 
-async function glideToSelector(selector, { dx = 0, dy = 0 } = {}) {
+async function glideToSelector(selector, { dx = 0, dy = 0, timeout = 15_000 } = {}) {
   const element = page.locator(selector).first();
-  await element.waitFor({ state: "visible", timeout: 15_000 });
+  await element.waitFor({ state: "visible", timeout });
 
   // A target below the fold has a bounding box outside the viewport, and a
   // mouse move there lands on nothing. Bring it into view first, exactly as a
@@ -132,6 +158,21 @@ async function click(selector, options) {
   await page.mouse.down();
   await page.waitForTimeout(70);
   await page.mouse.up();
+}
+
+/**
+ * A click on something that may legitimately not be there.
+ *
+ * Which services a run touches depends on what it asked for, so a take must not
+ * die because a particular card is absent. Returns whether the click happened.
+ */
+async function clickIfPresent(selector, options) {
+  try {
+    await click(selector, { ...options, timeout: 4_000 });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /** Type at human speed, with the cursor parked in the field. */
@@ -159,10 +200,7 @@ await page.waitForTimeout(1200);
 // Ask for an outcome.
 await click("textarea");
 await page.waitForTimeout(350);
-await type(
-  "Yarın saat 18:00'de ürün ve büyüme ekipleriyle toplantı ayarla, herkese davet gönder. Mevcut sponsorluk anlaşmalarımızı incele ve yarının programına göz at.",
-  24,
-);
+await type(script.prompt, 22);
 await page.waitForTimeout(500);
 await page.keyboard.press("Enter");
 
@@ -172,11 +210,14 @@ mark("actions");
 await glide(900, 300, 22);
 await page.waitForTimeout(1800);
 
-// Open one card to show the individual calls behind the count.
-await click("text=Google Calendar");
-await page.waitForTimeout(2200);
-await click("text=Google Calendar");
-await page.waitForTimeout(600);
+// Open one card to show the individual calls behind the count. Which service
+// leads the list is decided by the run, not by this script, so target the card
+// itself rather than a brand name.
+if (await clickIfPresent("[data-action-card]")) {
+  await page.waitForTimeout(2200);
+  await clickIfPresent("[data-action-card]");
+  await page.waitForTimeout(600);
+}
 
 // Watch the streams open and land, then the answer being written.
 await glide(900, 430, 18);
@@ -192,12 +233,15 @@ await glide(900, 420, 24);
 await page.waitForTimeout(1400);
 
 mark("approval");
-await click("text=Approve");
-await page.waitForTimeout(2400);
+// The sidebar link also reads "Approvals": target the decision control itself.
+await click('button:has-text("Approve")');
+await page.waitForTimeout(script.runMs);
 
 // The receipt: what actually ran, not what was claimed. The decided card moves
 // down the page, so follow it rather than assuming where it landed.
-await glideToSelector("text=Executed against");
+// A multi-step action runs its steps one after another, so give the receipt
+// room to arrive rather than assuming a fixed duration covered it.
+await glideToSelector("text=Executed against", { timeout: 60_000 });
 mark("receipt");
 await page.waitForTimeout(3400);
 
@@ -214,5 +258,5 @@ const file = readdirSync(OUT_DIR).find((name) => name.endsWith(".webm"));
 if (!file) throw new Error("no recording produced");
 renameSync(join(OUT_DIR, file), join(OUT_DIR, "preview.webm"));
 writeFileSync(join(OUT_DIR, "marks.json"), JSON.stringify(marks, null, 2));
-console.log("recorded", join(OUT_DIR, "preview.webm"));
+console.log("recorded", SCENARIO, join(OUT_DIR, "preview.webm"));
 console.log("marks", marks.map((m) => `${m.label}@${m.at}s`).join(" "));

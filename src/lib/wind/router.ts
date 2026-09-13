@@ -65,7 +65,12 @@ export async function route(input: RouteInput): Promise<RouteDecision> {
     intent,
     complexity,
     lanes,
-    synthesize: lanes.length > 1 || (lanes.length === 1 && complexity === "deep"),
+    // A lone lane speaks for itself, with one exception: the single lane of an
+    // action request produces the draft action, not an answer. The person still
+    // has to be told what was prepared and what it rests on.
+    synthesize:
+      lanes.length > 1 ||
+      (lanes.length === 1 && (complexity === "deep" || intent === "ACTION_REQUEST")),
     summary,
     assisted,
     confidence,

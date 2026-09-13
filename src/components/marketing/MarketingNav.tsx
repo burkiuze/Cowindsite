@@ -25,9 +25,6 @@ export function MarketingNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  // The page alternates dark and light bands. A dark pill floating over the
-  // light one is unreadable, so the shell inverts while it is over porcelain.
-  const [onLight, setOnLight] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -36,33 +33,10 @@ export function MarketingNav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    const bands = Array.from(document.querySelectorAll(".band-light"));
-    if (bands.length === 0 || typeof IntersectionObserver === "undefined") return;
-
-    // Intersecting only while a band covers the strip the shell sits in.
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const hit = entries.some((entry) => entry.isIntersecting);
-        setOnLight((current) => {
-          const others = bands.some(
-            (band) => band.getBoundingClientRect().top < 86 && band.getBoundingClientRect().bottom > 20,
-          );
-          return hit || others ? true : current && others;
-        });
-      },
-      { rootMargin: "-20px 0px -100% 0px", threshold: 0 },
-    );
-
-    for (const band of bands) observer.observe(band);
-    return () => observer.disconnect();
-  }, [pathname]);
-
   return (
     <div className="pointer-events-none sticky top-0 z-40 px-4 pt-4 sm:px-6 sm:pt-5">
       <div className="pointer-events-auto mx-auto flex w-full max-w-6xl items-center gap-3">
         <nav
-          data-on-light={onLight ? "" : undefined}
           className={`nav-pill flex min-w-0 flex-1 items-center gap-1 py-2 pr-2 pl-3.5 transition-shadow duration-300 sm:gap-2 sm:pl-5 ${
             scrolled ? "shadow-[0_18px_40px_-24px_rgba(0,0,0,0.55)]" : ""
           }`}
@@ -104,11 +78,7 @@ export function MarketingNav() {
 
         <Link
           href="/access"
-          className={`focus-ring hidden shrink-0 items-center gap-1.5 rounded-full px-4 py-2.5 text-[13.5px] font-medium transition-transform hover:-translate-y-px sm:inline-flex ${
-            onLight
-              ? "bg-[var(--color-void)] text-[var(--color-ink)]"
-              : "bg-[var(--color-porcelain)] text-[var(--color-on-light)]"
-          }`}
+          className="focus-ring hidden shrink-0 items-center gap-1.5 rounded-full bg-[var(--color-porcelain)] px-4 py-2.5 text-[13.5px] font-medium text-[var(--color-on-light)] transition-transform hover:-translate-y-px sm:inline-flex"
         >
           Request access
           <Icon name="arrow-right" size={14} strokeWidth={2} />

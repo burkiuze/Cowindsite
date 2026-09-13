@@ -246,6 +246,18 @@ export interface IntegrationConnection {
 
 export type ApprovalStatus = "pending" | "approved" | "rejected" | "expired" | "executed" | "failed";
 
+export interface ApprovalStep {
+  id: string;
+  toolId: string;
+  integrationId: string;
+  /** Product-facing description, e.g. "Publish to the company page". */
+  label: string;
+  /** Exactly what this step will send, shown to the approver. */
+  payload: string;
+  status: "pending" | "running" | "completed" | "failed";
+  receipt?: string;
+}
+
 export interface Approval {
   id: string;
   workspaceId: string;
@@ -267,6 +279,11 @@ export interface Approval {
   taskId?: string;
   /** Receipt written after execution. */
   receipt?: string;
+  /**
+   * An action can be several calls — make the video, then publish it in three
+   * places. One decision releases them all, and each carries its own receipt.
+   */
+  steps?: ApprovalStep[];
 }
 
 export interface Artifact {

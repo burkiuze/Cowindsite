@@ -244,6 +244,16 @@ export function heuristicClassify(message: string, attachments: Attachment[] = [
     if (domain) top = domain;
   }
 
+  // "Schedule the release meeting, review the open pull requests and invite the
+  // team" is an action that happens to be about code. When the request asks for
+  // something to be done at least as strongly as it names a subject, the action
+  // wins: its plan runs a pass over that subject anyway, so nothing is lost, and
+  // an action that routes as analysis silently stops short of doing the work.
+  if (top.intent !== "ACTION_REQUEST" && scores.ACTION_REQUEST > 0 && scores.ACTION_REQUEST >= top.score) {
+    top = { intent: "ACTION_REQUEST", score: scores.ACTION_REQUEST };
+    signals.push("action wins tie");
+  }
+
   const intent: Intent = top.score === 0 ? "GENERAL" : top.intent;
   const spread = top.score - (runnerUp?.score ?? 0);
   const confidence = top.score === 0 ? (isGreeting ? 0.95 : 0.45) : Math.min(0.98, 0.5 + spread * 0.09 + top.score * 0.03);

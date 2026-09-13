@@ -230,18 +230,18 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --------------------------------------------------------- light band */}
-      <section className="band-light">
+      {/* --------------------------------------------------- specialists band */}
+      <section className="band-inset">
         <div className="mx-auto w-full max-w-6xl px-6 py-20">
           <Reveal>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
                 <p className="eyebrow">One assistant</p>
-                <h2 className="display mt-4 max-w-xl text-[38px]">
+                <h2 className="display mt-4 max-w-xl text-[38px] text-[var(--color-ink)]">
                   You never pick a specialist. Wind picks several, and answers as one.
                 </h2>
               </div>
-              <p className="max-w-xs text-[13.5px] leading-relaxed text-[var(--color-on-light-muted)]">
+              <p className="max-w-xs text-[13.5px] leading-relaxed text-[var(--color-ink-muted)]">
                 Routing happens per request: intent, complexity, attachments, and what the workspace can actually
                 reach. A greeting costs nothing. A cross-domain review opens four streams at once.
               </p>
@@ -251,27 +251,24 @@ export default function LandingPage() {
           <Reveal delay={70}>
             <ul className="mt-10 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
               {SPECIALISTS.map((specialist) => (
-                <li
-                  key={specialist.name}
-                  className="rounded-2xl border border-[color-mix(in_oklab,var(--color-on-light)_12%,transparent)] bg-white/55 px-5 py-4 transition-colors hover:bg-white/80"
-                >
-                  <p className="display text-[20px] text-[var(--color-on-light)]">{specialist.name}</p>
-                  <p className="mt-1.5 text-[12.5px] text-[var(--color-on-light-muted)]">{specialist.role}</p>
+                <li key={specialist.name} className="panel-lift px-5 py-4">
+                  <p className="display text-[20px] text-[var(--color-ink)]">{specialist.name}</p>
+                  <p className="mt-1.5 text-[12.5px] text-[var(--color-ink-muted)]">{specialist.role}</p>
                 </li>
               ))}
             </ul>
           </Reveal>
 
           <Reveal delay={110}>
-            <dl className="mt-12 grid gap-6 border-t border-[color-mix(in_oklab,var(--color-on-light)_14%,transparent)] pt-8 sm:grid-cols-3">
+            <dl className="mt-12 grid gap-6 border-t border-[var(--color-hairline)] pt-8 sm:grid-cols-3">
               {[
                 { value: <CountUp to={CATALOG.length} suffix="+" />, label: "services in the catalogue, with real marks" },
                 { value: <CountUp to={LIMITS.maxParallelLanes} />, label: "streams of work running at the same time" },
                 { value: "Every write", label: "held for a named human decision" },
               ].map((stat, index) => (
                 <div key={index}>
-                  <dt className="display text-[40px] leading-none text-[var(--color-on-light)]">{stat.value}</dt>
-                  <dd className="mt-2.5 text-[13px] leading-relaxed text-[var(--color-on-light-muted)]">{stat.label}</dd>
+                  <dt className="display text-[40px] leading-none text-gradient-stream">{stat.value}</dt>
+                  <dd className="mt-2.5 text-[13px] leading-relaxed text-[var(--color-ink-muted)]">{stat.label}</dd>
                 </div>
               ))}
             </dl>

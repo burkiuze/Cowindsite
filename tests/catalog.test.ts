@@ -40,12 +40,20 @@ describe("generated catalogue", () => {
 });
 
 describe("curated services", () => {
-  it("every adapter points at a real catalogue entry", () => {
-    const slugs = new Set(CATALOG.map((entry) => entry.slug));
+  it("every adapter resolves to a service people can see", () => {
+    const services = new Map(allServices().map((service) => [service.slug, service]));
     for (const integration of FIRST_CLASS) {
-      expect(slugs.has(integration.id), `${integration.id} is not in the catalogue`).toBe(true);
-      expect(logoPath(integration.id)).not.toBeNull();
+      expect(services.has(integration.id), `${integration.id} is not in the catalogue`).toBe(true);
     }
+  });
+
+  it("only these adapters are knowingly without a brand mark", () => {
+    // A service whose mark the logo set does not carry renders as a lettered
+    // tile. That is deliberate; drawing someone else's logo ourselves is not.
+    const markless = FIRST_CLASS.filter((integration) => logoPath(integration.id) === null).map(
+      (integration) => integration.id,
+    );
+    expect(markless).toEqual(["higgsfield"]);
   });
 
   it("every adapter declares the credentials it needs", () => {

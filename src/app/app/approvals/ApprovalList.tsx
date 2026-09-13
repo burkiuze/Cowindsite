@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components/ui/Icon";
 import { Panel, Pill, relativeTime, type Tone } from "@/components/ui/primitives";
-import type { Approval } from "@/lib/workspace/types";
+import type { Approval, ApprovalStep } from "@/lib/workspace/types";
 
 const RISK_TONE: Record<Approval["risk"], Tone> = { low: "neutral", medium: "warning", high: "danger" };
 const STATUS_TONE: Record<Approval["status"], Tone> = {
@@ -72,6 +72,37 @@ export function ApprovalList({ approvals, canDecide }: { approvals: Approval[]; 
                           {approval.receipt}
                         </p>
                       ) : null}
+                      {/* A multi-step action keeps a receipt per step. They are
+                          the proof of what ran, so they stay readable after the
+                          decision rather than only while it was running. */}
+                      {approval.steps && approval.steps.length > 0 ? (
+                        <ul className="mt-2.5 space-y-1.5 border-l border-[var(--color-hairline)] pl-3">
+                          {approval.steps.map((step) => (
+                            <li key={step.id}>
+                              <p className="flex items-center gap-1.5 text-[12px] text-[var(--color-ink)]">
+                                <Icon
+                                  name={step.status === "failed" ? "close" : step.status === "completed" ? "check" : "clock"}
+                                  size={12}
+                                  strokeWidth={2}
+                                  className={
+                                    step.status === "failed"
+                                      ? "shrink-0 text-[#ff9aa8]"
+                                      : step.status === "completed"
+                                        ? "shrink-0 text-[#8ee6a4]"
+                                        : "shrink-0 text-[var(--color-ink-faint)]"
+                                  }
+                                />
+                                {step.label}
+                              </p>
+                              {step.receipt ? (
+                                <p className="mt-0.5 pl-[18px] text-[11.5px] leading-relaxed text-[var(--color-ink-muted)]">
+                                  {step.receipt}
+                                </p>
+                              ) : null}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
                     </div>
                     <Pill tone={STATUS_TONE[approval.status]}>{approval.status}</Pill>
                   </div>
@@ -92,6 +123,48 @@ function ApprovalCard({ approval, canDecide }: { approval: Approval; canDecide: 
   const [note, setNote] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  // Live state of each step while the action runs, keyed by step id.
+  const [running, setRunning] = useState<Record<string, ApprovalStep["status"]>>({});
+  const [receipts, setReceipts] = useState<Record<string, string>>({});
+  const [executing, setExecuting] = useState(false);
+
+  const steps = approval.steps ?? [];
+
+  /** Run the released steps, following the stream so progress is visible. */
+  async function execute() {
+    setExecuting(true);
+    try {
+      const response = await fetch(`/api/approvals/${approval.id}/execute`, { method: "POST" });
+      if (!response.ok || !response.body) throw new Error("could not start");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffered = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffered += decoder.decode(value, { stream: true });
+        const frames = buffered.split("\n\n");
+        buffered = frames.pop() ?? "";
+
+        for (const frame of frames) {
+          const line = frame.trim();
+          if (!line.startsWith("data:")) continue;
+          const event = JSON.parse(line.slice(5).trim());
+          if (event.type === "step") {
+            setRunning((current) => ({ ...current, [event.id]: event.status }));
+            if (event.receipt) setReceipts((current) => ({ ...current, [event.id]: event.receipt }));
+          }
+        }
+      }
+    } catch {
+      setError("The action was approved, but running it could not be started. Nothing was left half-done.");
+    } finally {
+      setExecuting(false);
+      startTransition(() => router.refresh());
+    }
+  }
 
   async function decide(decision: "approved" | "rejected") {
     setError(null);
@@ -104,6 +177,11 @@ function ApprovalCard({ approval, canDecide }: { approval: Approval; canDecide: 
     if (!response.ok) {
       const body = await response.json().catch(() => ({ error: "That decision could not be recorded." }));
       setError(body.error ?? "That decision could not be recorded.");
+      return;
+    }
+
+    if (decision === "approved" && steps.length > 0) {
+      await execute();
       return;
     }
     startTransition(() => router.refresh());
@@ -155,6 +233,59 @@ function ApprovalCard({ approval, canDecide }: { approval: Approval; canDecide: 
         )}
       </div>
 
+      {steps.length > 0 ? (
+        <ul className="divide-y divide-[var(--color-hairline)] border-t border-[var(--color-hairline)]">
+          {steps.map((step, index) => {
+            const status = running[step.id] ?? step.status;
+            const receipt = receipts[step.id] ?? step.receipt;
+            return (
+              <li key={step.id} className="flex items-start gap-3 px-5 py-3">
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center">
+                  {status === "completed" ? (
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#0e2417] text-[#8ee6a4]">
+                      <Icon name="check" size={12} strokeWidth={2.2} />
+                    </span>
+                  ) : status === "running" ? (
+                    <span
+                      className="h-2.5 w-2.5 rounded-full bg-[var(--color-stream-cyan)]"
+                      style={{ animation: "pulse-dot 1.2s ease-in-out infinite" }}
+                    />
+                  ) : status === "failed" ? (
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#2c1015] text-[#ff9aa8]">
+                      <Icon name="close" size={11} strokeWidth={2.2} />
+                    </span>
+                  ) : (
+                    <span className="font-mono text-[10.5px] text-[var(--color-ink-faint)]">{index + 1}</span>
+                  )}
+                </span>
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-[13px] text-[var(--color-ink)]">{step.label}</p>
+                  <p className="mt-0.5 font-mono text-[10.5px] text-[var(--color-ink-faint)]">{step.toolId}</p>
+                  {receipt ? (
+                    <p className="mt-1.5 text-[11.5px] leading-relaxed text-[var(--color-ink-muted)]">{receipt}</p>
+                  ) : null}
+                </div>
+
+                <span
+                  className={`shrink-0 text-[11.5px] ${
+                    status === "running"
+                      ? "text-[#7fdcff]"
+                      : status === "completed"
+                        ? "text-[#8ee6a4]"
+                        : status === "failed"
+                          ? "text-[#ff9aa8]"
+                          : "text-[var(--color-ink-faint)]"
+                  }`}
+                >
+                  {status === "pending" ? "waiting" : status}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
+
       {canDecide ? (
         <div className="flex flex-wrap items-center gap-2.5 border-t border-[var(--color-hairline)] px-5 py-3.5">
           <input
@@ -165,7 +296,7 @@ function ApprovalCard({ approval, canDecide }: { approval: Approval; canDecide: 
           />
           <button
             type="button"
-            disabled={pending}
+            disabled={pending || executing}
             onClick={() => void decide("rejected")}
             className="focus-ring rounded-lg border border-[var(--color-hairline)] px-3.5 py-2 text-[13px] text-[var(--color-ink-muted)] transition-colors hover:border-[#4d1f27] hover:text-[#ff9aa8] disabled:opacity-50"
           >
@@ -173,12 +304,12 @@ function ApprovalCard({ approval, canDecide }: { approval: Approval; canDecide: 
           </button>
           <button
             type="button"
-            disabled={pending}
+            disabled={pending || executing}
             onClick={() => void decide("approved")}
             className="focus-ring inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-br from-[#6fdc8c] to-[#3fbf6a] px-3.5 py-2 text-[13px] font-medium text-[#04140a] transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             <Icon name="check" size={14} strokeWidth={2.2} />
-            Approve
+            {executing ? "Running…" : steps.length > 0 ? `Approve & run ${steps.length} steps` : "Approve"}
           </button>
         </div>
       ) : (

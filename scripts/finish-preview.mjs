@@ -6,20 +6,22 @@
  * the recorder marked, so the eye is taken to the thing that matters instead of
  * hunting for it in a full-width screen capture.
  *
- * Usage: node scripts/finish-preview.mjs [ffmpeg-path]
+ * Usage: node scripts/finish-preview.mjs [scenario] [ffmpeg-path]
  */
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-const RAW_DIR = "/tmp/preview-raw";
+const SCENARIO = process.argv[2] ?? "meeting";
+const RAW_DIR = `/tmp/preview-raw/${SCENARIO}`;
 const SOURCE = join(RAW_DIR, "preview.webm");
 const OUT_DIR = "public/video";
+const NAME = SCENARIO === "meeting" ? "preview" : `preview-${SCENARIO}`;
 const WIDTH = 1280;
 const HEIGHT = 800;
 const FPS = 24;
 
-const ffmpeg = process.argv[2] ?? "ffmpeg";
+const ffmpeg = process.argv[3] ?? "ffmpeg";
 if (!existsSync(SOURCE)) throw new Error(`no recording at ${SOURCE} — run scripts/record-preview.mjs first`);
 
 const marks = existsSync(join(RAW_DIR, "marks.json"))
@@ -73,12 +75,12 @@ function run(args) {
 console.log("pushes:", PUSHES.map((push) => `${push.start.toFixed(1)}s→${push.end.toFixed(1)}s ×${push.scale}`).join(", "));
 
 run(["-i", SOURCE, "-vf", filter, "-c:v", "libx264", "-preset", "slow", "-crf", "30",
-  "-profile:v", "high", "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", join(OUT_DIR, "preview.mp4")]);
+  "-profile:v", "high", "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", join(OUT_DIR, `${NAME}.mp4`)]);
 
 run(["-i", SOURCE, "-vf", filter, "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "40",
-  "-row-mt", "1", "-an", join(OUT_DIR, "preview.webm")]);
+  "-row-mt", "1", "-an", join(OUT_DIR, `${NAME}.webm`)]);
 
 run(["-ss", String(at("actions", 20) + 2), "-i", SOURCE, "-vframes", "1",
-  "-vf", `scale=${WIDTH}:-2`, "-c:v", "libwebp", "-quality", "82", join(OUT_DIR, "poster.webp")]);
+  "-vf", `scale=${WIDTH}:-2`, "-c:v", "libwebp", "-quality", "82", join(OUT_DIR, `${NAME}-poster.webp`)]);
 
-console.log("wrote", OUT_DIR);
+console.log("wrote", NAME, "→", OUT_DIR);

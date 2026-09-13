@@ -6,13 +6,54 @@ import { Icon } from "@/components/ui/Icon";
 /**
  * The product, recorded.
  *
- * A real run captured in the real workspace — the cursor you see is the one
- * that drove it. It loops silently like a screenshot that moves, but it stays a
- * video: it can be paused, it never autoplays for someone who asked for reduced
- * motion, and it falls back to its own poster frame if playback is unavailable.
+ * Three real runs captured in the real workspace — the cursor you see is the
+ * one that drove them. They loop silently like screenshots that move, but they
+ * stay video: they can be paused, they never autoplay for someone who asked for
+ * reduced motion, and they fall back to their own poster frame if playback is
+ * unavailable.
  */
+
+type Take = {
+  id: string;
+  tab: string;
+  file: string;
+  caption: string;
+  description: string;
+};
+
+const TAKES: Take[] = [
+  {
+    id: "meeting",
+    tab: "Schedule a meeting",
+    file: "preview",
+    caption:
+      "One request in Turkish. Wind reads the calendar, the mail threads and the workspace notes it is allowed to read, reviews the sponsorship agreements, then prepares the meeting with its invitations and per-person assignments — and sends nothing until a person approves.",
+    description:
+      "A run in the Cowind workspace: one request fans out across specialist streams, prepares a meeting with invitations and assignments, and waits for a person to approve before anything is sent.",
+  },
+  {
+    id: "engineering",
+    tab: "Prepare a release",
+    file: "preview-engineering",
+    caption:
+      "The same request shape, a different department. Wind reads the open pull requests and the blocker issues, finds the one decision the release actually turns on, puts it at the top of the agenda and prepares the invitation — still waiting on a person.",
+    description:
+      "A run in the Cowind workspace: Wind reads a repository and an issue tracker, prepares a release meeting around the blocking decision, and holds the invitations for approval.",
+  },
+  {
+    id: "social",
+    tab: "Produce and publish",
+    file: "preview-social",
+    caption:
+      "One approval, four steps, in order. The video is generated first and the upload waits for it; the posts wait for the upload. Each step runs in front of you and leaves its own receipt — nothing is marked done before it is.",
+    description:
+      "A run in the Cowind workspace: an approved action produces a video, uploads it, then publishes to three channels one step at a time, each leaving a receipt.",
+  },
+];
+
 export function ProductVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [take, setTake] = useState(TAKES[0]);
   const [playing, setPlaying] = useState(true);
   const [reduced, setReduced] = useState(false);
 
@@ -29,6 +70,18 @@ export function ProductVideo() {
     query.addEventListener("change", apply);
     return () => query.removeEventListener("change", apply);
   }, []);
+
+  /** Swapping the source needs an explicit reload: the element keeps the old one. */
+  function choose(next: Take) {
+    if (next.id === take.id) return;
+    setTake(next);
+    const video = videoRef.current;
+    if (!video) return;
+    video.load();
+    if (!reduced) {
+      void video.play().catch(() => undefined);
+    }
+  }
 
   function toggle() {
     const video = videoRef.current;
@@ -73,10 +126,38 @@ export function ProductVideo() {
         </span>
       </div>
 
+      {/* Three runs, not three edits of one: each was recorded end to end. */}
+      <div
+        role="tablist"
+        aria-label="Recorded runs"
+        className="flex flex-wrap gap-1 border-b border-[var(--color-hairline)] bg-[var(--color-surface)] px-2.5 py-2"
+      >
+        {TAKES.map((candidate) => {
+          const active = candidate.id === take.id;
+          return (
+            <button
+              key={candidate.id}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              onClick={() => choose(candidate)}
+              className={`focus-ring rounded-full px-3 py-1.5 text-[12px] font-medium transition-colors ${
+                active
+                  ? "bg-[var(--color-raised)] text-[var(--color-ink)]"
+                  : "text-[var(--color-ink-faint)] hover:text-[var(--color-ink-muted)]"
+              }`}
+            >
+              {candidate.tab}
+            </button>
+          );
+        })}
+      </div>
+
       <video
         ref={videoRef}
+        key={take.id}
         className="block w-full bg-[var(--color-void)]"
-        poster="/video/poster.webp"
+        poster={`/video/${take.file}-poster.webp`}
         width={1280}
         height={800}
         autoPlay={!reduced}
@@ -86,16 +167,14 @@ export function ProductVideo() {
         preload="metadata"
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
-        aria-label="A run in the Cowind workspace: one request fans out across specialist streams, prepares a meeting with invitations and assignments, and waits for a person to approve before anything is sent."
+        aria-label={take.description}
       >
-        <source src="/video/preview.mp4" type="video/mp4" />
-        <source src="/video/preview.webm" type="video/webm" />
+        <source src={`/video/${take.file}.mp4`} type="video/mp4" />
+        <source src={`/video/${take.file}.webm`} type="video/webm" />
       </video>
 
       <figcaption className="border-t border-[var(--color-hairline)] px-3.5 py-2.5 text-left text-[11.5px] text-[var(--color-ink-faint)]">
-        One request in Turkish. Wind reads the calendar, the mail threads and the workspace notes it is allowed to
-        read, reviews the sponsorship agreements, then prepares the meeting with its invitations and per-person
-        assignments — and sends nothing until a person approves.
+        {take.caption}
       </figcaption>
     </figure>
   );

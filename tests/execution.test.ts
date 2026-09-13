@@ -115,3 +115,19 @@ describe("registry", () => {
     expect(findTool("github.list_pull_requests")!.approvalDefault).toBe(false);
   });
 });
+
+describe("multi-step actions", () => {
+  it("declares every publishing tool as a write that needs approval", () => {
+    for (const id of ["higgsfield.create_video", "youtube.upload_video", "twitter.post_tweet"]) {
+      const tool = findTool(id);
+      expect(tool, `${id} is missing`).toBeDefined();
+      expect(tool!.effect).toBe("write");
+      expect(tool!.approvalDefault).toBe(true);
+    }
+  });
+
+  it("keeps the new lookups read-only", () => {
+    expect(findTool("github.list_issues")!.effect).toBe("read");
+    expect(findTool("github.list_issues")!.approvalDefault).toBe(false);
+  });
+});

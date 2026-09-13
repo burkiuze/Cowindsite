@@ -66,6 +66,7 @@ function IntegrationCard({ actions }: { actions: RunAction[] }) {
         onClick={() => setOpen((value) => !value)}
         className="focus-ring flex w-full items-center gap-3 px-3.5 py-3 text-left transition-colors hover:bg-[var(--color-raised)]/40"
         aria-expanded={open}
+        data-action-card={first.integrationId}
       >
         <ServiceLogo
           slug={first.integrationId}

@@ -28,11 +28,11 @@
   --color-stream-coral: #ff7848;
   --color-stream-lime: #6fdc8c;
 
-  /* The light half of the page. Cool porcelain, never cream. */
+  /* Porcelain stays for small bright surfaces — buttons, the odd chip — but
+     never as a full band: a white slab in the middle of a dark page reads as a
+     different website, not as rhythm. */
   --color-porcelain: #eceef2;
-  --color-porcelain-deep: #dfe3ea;
   --color-on-light: #0d1014;
-  --color-on-light-muted: #4a525e;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: var(--font-display-serif), Georgia, "Times New Roman", serif;
@@ -337,13 +337,27 @@ body {
   color: var(--color-ink-faint);
 }
 
-/* The light band. Everything inside it flips to ink-on-porcelain. */
-.band-light {
-  background: var(--color-porcelain);
-  color: var(--color-on-light);
+/* Rhythm without a light slab: the band recedes instead of flipping. A deeper
+   ground, a lit top edge, and the stream tint pooled at the bottom. */
+.band-inset {
+  position: relative;
+  background:
+    radial-gradient(120% 70% at 50% 120%, color-mix(in oklab, var(--color-stream-blue) 9%, transparent), transparent 70%),
+    linear-gradient(180deg, rgba(5, 6, 8, 0), #050608 22%, #050608 100%);
+  background-color: #050608;
+  border-block: 1px solid var(--color-hairline);
 }
-.band-light .eyebrow {
-  color: color-mix(in oklab, var(--color-on-light) 45%, transparent);
+.band-inset::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-stream-cyan) 30%, transparent),
+    transparent
+  );
 }
 
 /* Floating navigation shell. */
@@ -358,23 +372,7 @@ body {
     color 0.3s ease;
 }
 
-/* Over a porcelain band the shell inverts rather than floating as a dark slab. */
-.nav-pill[data-on-light] {
-  background: color-mix(in oklab, #ffffff 72%, transparent);
-  border-color: color-mix(in oklab, var(--color-on-light) 12%, transparent);
-  color: var(--color-on-light);
-}
-.nav-pill[data-on-light] a,
-.nav-pill[data-on-light] button,
-.nav-pill[data-on-light] span {
-  color: var(--color-on-light);
-}
-.nav-pill[data-on-light] a:not(:first-child) {
-  color: color-mix(in oklab, var(--color-on-light) 66%, transparent);
-}
-.nav-pill[data-on-light] a:not(:first-child):hover {
-  color: var(--color-on-light);
-}
+
 
 .focus-ring:focus-visible {
   outline: 2px solid color-mix(in oklab, var(--color-stream-cyan) 70%, transparent);

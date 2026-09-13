@@ -52,7 +52,11 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       );
       const integration = approval.integrationId ? integrationById(approval.integrationId) : undefined;
 
-      if (approval.integrationId && connection?.status === "connected") {
+      // A multi-step action is released here and run by the execute route,
+      // which streams each step. Nothing is claimed until that has happened.
+      if (approval.steps && approval.steps.length > 0) {
+        approval.receipt = undefined;
+      } else if (approval.integrationId && connection?.status === "connected") {
         const outcome = await executeTool({
           toolId: approval.toolId,
           integrationId: approval.integrationId,
@@ -80,7 +84,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
           : "Approved and recorded. This action has no connected system behind it, so nothing was sent.";
       }
 
-      if (approval.taskId) {
+      if (approval.taskId && !(approval.steps && approval.steps.length > 0)) {
         updateTask(approval.taskId, { status: approval.status === "failed" ? "failed" : "completed" });
       }
     } else if (approval.taskId) {

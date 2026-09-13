@@ -56,6 +56,18 @@ export const CATEGORY_ORDER: string[] = [
   "other",
 ];
 
+/**
+ * Services Cowind supports that the logo set has no mark for.
+ *
+ * The catalogue is generated from brand marks, which means a service without
+ * one would otherwise be invisible even though an adapter exists. These are
+ * merged in and render as a lettered tile — the honest alternative to drawing
+ * someone else's logo ourselves.
+ */
+const EXTRA_SERVICES: Array<{ slug: string; name: string; category: string }> = [
+  { slug: "higgsfield", name: "Higgsfield", category: "ai" },
+];
+
 /** Asset path for a service's real brand mark. */
 const BY_SLUG = new Map(CATALOG.map((entry) => [entry.slug, entry]));
 const EXT_BY_SLUG = new Map(CATALOG.map((entry) => [entry.slug, entry.ext]));
@@ -138,6 +150,30 @@ export const FIRST_CLASS: IntegrationDefinition[] = [
     requiredEnv: ["LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET"],
   },
   {
+    id: "higgsfield",
+    name: "Higgsfield",
+    category: "ai",
+    description: "Generated video for social, rendered from a brief.",
+    implemented: true,
+    requiredEnv: ["HIGGSFIELD_API_KEY"],
+  },
+  {
+    id: "youtube",
+    name: "YouTube",
+    category: "marketing",
+    description: "Channel uploads, metadata and visibility.",
+    implemented: true,
+    requiredEnv: ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"],
+  },
+  {
+    id: "twitter",
+    name: "X",
+    category: "marketing",
+    description: "Posts and media on the company account.",
+    implemented: true,
+    requiredEnv: ["TWITTER_API_KEY", "TWITTER_API_SECRET"],
+  },
+  {
     id: "stripe",
     name: "Stripe",
     category: "finance",
@@ -164,7 +200,19 @@ export interface CatalogService {
 const FIRST_CLASS_BY_ID = new Map(FIRST_CLASS.map((definition) => [definition.id, definition]));
 
 export function allServices(): CatalogService[] {
-  return CATALOG.map((entry) => {
+  const generated = CATALOG.map((entry) => ({
+    slug: entry.slug,
+    name: entry.name,
+    category: entry.category,
+    dark: entry.dark,
+  }));
+
+  const extras = EXTRA_SERVICES.filter((extra) => !BY_SLUG.has(extra.slug)).map((extra) => ({
+    ...extra,
+    dark: false,
+  }));
+
+  return [...generated, ...extras].map((entry) => {
     const curated = FIRST_CLASS_BY_ID.get(entry.slug);
     return {
       slug: entry.slug,

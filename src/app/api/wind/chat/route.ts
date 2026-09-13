@@ -158,6 +158,14 @@ export async function POST(request: Request) {
                   risk: draft.risk,
                   toolId: draft.toolId,
                   integrationId: draft.integrationId,
+                  steps: draft.steps?.map((step, index) => ({
+                    id: `step_${index + 1}`,
+                    toolId: step.toolId,
+                    integrationId: step.integrationId,
+                    label: step.label,
+                    payload: step.payload,
+                    status: "pending" as const,
+                  })),
                   requestedBy: session.user.id,
                   requestedByAgent: "Wind",
                   conversationId: conversation.id,
@@ -251,13 +259,20 @@ export async function POST(request: Request) {
             }
 
             if (event.type === "action") {
-              actions.push({
+              // Each read is reported twice — starting, then landing. The stored
+              // message keeps one entry per read, at its latest status, so a
+              // reloaded conversation shows what happened rather than a list
+              // that still claims to be running.
+              const record = {
                 id: event.id,
                 integrationId: event.integrationId,
                 toolId: event.toolId,
                 label: event.label,
                 status: event.status,
-              });
+              };
+              const seen = actions.findIndex((candidate) => candidate.id === event.id);
+              if (seen >= 0) actions[seen] = record;
+              else actions.push(record);
 
               const service = services.get(event.integrationId);
               controller.enqueue(

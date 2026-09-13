@@ -28,6 +28,13 @@ export interface RuntimeServices {
   requestApproval?: (draft: ApprovalDraft) => Promise<{ id: string } | null>;
 }
 
+export interface ApprovalDraftStep {
+  toolId: string;
+  integrationId: string;
+  label: string;
+  payload: string;
+}
+
 export interface ApprovalDraft {
   title: string;
   summary: string;
@@ -37,6 +44,8 @@ export interface ApprovalDraft {
   /** The tool that would carry it out, when one was chosen from what is connected. */
   toolId?: string;
   integrationId?: string;
+  /** Several calls released by one decision, in order. */
+  steps?: ApprovalDraftStep[];
 }
 
 export interface RuntimeInput {
@@ -110,32 +119,32 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
   if ((input.availableTools?.length ?? 0) > 0 && decision.complexity !== "trivial") {
     yield { type: "status", phase: "retrieving", message: "Wind is checking connected tools" };
 
-    const started = new Map<string, { integrationId: string; label: string }>();
-    try {
-      actions = await gather({
-        request: input.message,
-        intent: decision.intent,
-        available: input.availableTools!,
-        actor: input.prompt.userName,
-        traceId,
-        signal: input.signal,
-        onStart: (tool) => started.set(tool.id, { integrationId: tool.integrationId, label: tool.name }),
-      });
-    } catch (error) {
-      telemetry.error(traceId, "gather failed", { code: classifyError(error) });
-      actions = [];
-    }
+    const reads = new EventChannel<WindEvent>();
+    const gathering = gather({
+      request: input.message,
+      intent: decision.intent,
+      available: input.availableTools!,
+      actor: input.prompt.userName,
+      traceId,
+      signal: input.signal,
+      emit: (action) =>
+        reads.push({
+          type: "action",
+          id: action.id,
+          integrationId: action.integrationId,
+          toolId: action.toolId,
+          label: action.label,
+          status: action.status,
+        }),
+    })
+      .catch((error: unknown) => {
+        telemetry.error(traceId, "gather failed", { code: classifyError(error) });
+        return [] as typeof actions;
+      })
+      .finally(() => reads.close());
 
-    for (const action of actions) {
-      yield {
-        type: "action",
-        id: action.id,
-        integrationId: action.integrationId,
-        toolId: action.toolId,
-        label: action.label,
-        status: action.status,
-      };
-    }
+    for await (const event of reads) yield event;
+    actions = await gathering;
   }
 
   // ---- RETRIEVE -----------------------------------------------------------
@@ -245,7 +254,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
   const outputs = orchestration.completed.map((lane) => ({ label: lane.label, output: lane.output }));
 
   if (!decision.synthesize && outputs.length === 1) {
-    finalText = outputs[0].output;
+    finalText = stripToolMarkers(outputs[0].output);
     for (const chunk of chunkText(finalText)) yield { type: "delta", text: chunk };
   } else {
     yield { type: "status", phase: "synthesizing", message: "Preparing final result" };
@@ -264,7 +273,9 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
     } catch (error) {
       telemetry.error(traceId, "synthesis failed, falling back to lane output", { code: classifyError(error) });
       yield { type: "notice", level: "info", message: "Wind switched to another path to finish the summary." };
-      finalText = outputs.map((lane) => `**${lane.label}**\n\n${lane.output}`).join("\n\n---\n\n");
+      finalText = outputs
+        .map((lane) => `**${lane.label}**\n\n${stripToolMarkers(lane.output)}`)
+        .join("\n\n---\n\n");
       for (const chunk of chunkText(finalText)) yield { type: "delta", text: chunk };
     }
   }
@@ -278,11 +289,12 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
       // A prepared action names itself: its first line says what it is far
       // better than the route summary ("Preparing an action") ever could.
       title: (chosen.tool ? firstLine(chosen.payload) : "") || decision.summary,
-      summary: firstLine(finalText) || "Wind prepared an action that needs your decision.",
+      summary: firstLine(stripToolMarkers(finalText)) || "Wind prepared an action that needs your decision.",
       payload: chosen.payload || finalText,
       risk: decision.complexity === "deep" ? "high" : "medium",
       toolId: chosen.tool?.id,
       integrationId: chosen.tool?.integrationId,
+      steps: chosen.steps,
     };
     try {
       const approval = await input.services.requestApproval(draft);
@@ -342,14 +354,58 @@ function* chunkText(text: string, size = 90): Generator<string> {
 }
 
 /**
- * The action-planning lane is asked to name its tool on the first line. Take it
- * only when it matches a tool the workspace can actually reach, and strip the
- * line so the approver sees the action content and nothing else.
+ * The action-planning lane declares what it would carry out, either as a single
+ * `TOOL:` line or as a JSON block naming several steps in order. Only tools the
+ * workspace can actually reach are accepted, and the declaration is stripped so
+ * the approver sees the action content and nothing else.
  */
+/** How a planning lane names the tools it wants: a step plan, or a single line. */
+const TOOL_BLOCK = /\{[\s\S]*?"steps"[\s\S]*?\}\s*\]\s*\}/;
+const TOOL_LINE = /^\s*TOOL:\s*[A-Za-z0-9_.-]+\s*$/m;
+
+/**
+ * Machine plumbing never reaches the reader.
+ *
+ * Those markers are instructions for the executor, not part of the answer, so
+ * they are cut from any text a person is shown.
+ */
+function stripToolMarkers(text: string): string {
+  return text.replace(TOOL_BLOCK, "").replace(TOOL_LINE, "").trim();
+}
+
 function extractTool(
   output: string,
   available: AvailableTool[],
-): { tool?: AvailableTool; payload: string } {
+): { tool?: AvailableTool; steps?: ApprovalDraftStep[]; payload: string } {
+  const block = output.match(TOOL_BLOCK);
+  if (block) {
+    try {
+      const parsed = JSON.parse(block[0]) as {
+        steps?: Array<{ tool?: string; label?: string; payload?: string }>;
+      };
+      const steps = (parsed.steps ?? [])
+        .map((step) => {
+          const tool = available.find((candidate) => candidate.id === step.tool);
+          if (!tool || typeof step.payload !== "string") return null;
+          return {
+            toolId: tool.id,
+            integrationId: tool.integrationId,
+            label: step.label?.slice(0, 120) || tool.name,
+            payload: step.payload.slice(0, 20_000),
+          };
+        })
+        .filter((step): step is ApprovalDraftStep => Boolean(step));
+
+      if (steps.length > 0) {
+        const payload = output.replace(block[0], "").trim();
+        const first = available.find((candidate) => candidate.id === steps[0].toolId);
+        return { tool: first, steps, payload };
+      }
+    } catch {
+      // Malformed plan: fall through to the single-tool form.
+    }
+  }
+
   const match = output.match(/^\s*TOOL:\s*([A-Za-z0-9_.-]+)\s*$/m);
   if (!match) return { payload: output.trim() };
 

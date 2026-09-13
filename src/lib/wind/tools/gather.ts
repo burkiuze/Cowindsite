@@ -25,7 +25,7 @@ export interface GatheredAction {
   toolId: string;
   /** Product-facing description of what was read. */
   label: string;
-  status: "completed" | "failed";
+  status: "running" | "completed" | "failed";
   /** What came back, already sanitised. Fed to the specialists as context. */
   result: string;
   at: number;
@@ -87,7 +87,8 @@ export async function gather(options: {
   actor: string;
   traceId: string;
   signal?: AbortSignal;
-  onStart?: (tool: ToolDefinition) => void;
+  /** Called as each lookup starts and again when it lands. */
+  emit?: (action: GatheredAction) => void;
 }): Promise<GatheredAction[]> {
   const tools = readableTools(options.available);
   if (tools.length === 0) return [];
@@ -116,10 +117,20 @@ export async function gather(options: {
 
   if (chosen.length === 0) return [];
 
-  // Reads are independent of each other: run them together.
+  // Reads are independent of each other: run them together. Each one is
+  // reported twice — once when it starts, once when it lands — so the interface
+  // can show work in flight instead of a list that appears already finished.
   const results = await Promise.all(
     chosen.slice(0, MAX_READS).map(async (tool, index): Promise<GatheredAction> => {
-      options.onStart?.(tool);
+      const base = {
+        id: `act_${index + 1}`,
+        integrationId: tool.integrationId,
+        toolId: tool.id,
+        label: tool.name,
+        at: Date.now(),
+      };
+      options.emit?.({ ...base, status: "running", result: "" });
+
       const outcome = await executeTool({
         toolId: tool.id,
         integrationId: tool.integrationId,
@@ -130,17 +141,16 @@ export async function gather(options: {
 
       telemetry.route(options.traceId, `read ${tool.id} → ${outcome.status}`);
 
-      return {
-        id: `act_${index + 1}`,
-        integrationId: tool.integrationId,
-        toolId: tool.id,
-        label: tool.name,
+      const settled: GatheredAction = {
+        ...base,
         status: outcome.status === "executed" ? "completed" : "failed",
         result: sanitizeForUser(
           outcome.status === "executed" && outcome.data ? outcome.data : outcome.receipt,
         ).slice(0, 4_000),
         at: Date.now(),
       };
+      options.emit?.(settled);
+      return settled;
     }),
   );
 
