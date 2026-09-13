@@ -52,17 +52,26 @@ await sharp(mark).resize(140, 140, { fit: "contain", background: { r: 0, g: 0, b
   .extend({ top: 20, bottom: 20, left: 20, right: 20, background: plate })
   .flatten({ background: "#08090b" }).png().toFile("src/app/apple-icon.png");
 
-// Share card. When a designed card is supplied it is used as delivered, only
-// resized to the 1200x630 that link previews expect; otherwise the mark is
-// centred on the product's own ground.
-if (existsSync(CARD)) {
-  await sharp(CARD).resize(1200, 630, { fit: "cover", position: "centre" }).png().toFile(`${OUT}/og.png`);
-} else {
-  const badge = await sharp(mark).resize(320, 320, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
-  await sharp({ create: { width: 1200, height: 630, channels: 4, background: { r: 8, g: 9, b: 11, alpha: 1 } } })
-    .composite([{ input: badge, left: 440, top: 155 }])
-    .png()
-    .toFile(`${OUT}/og.png`);
-}
+/*
+ * Share card. A designed card is used as delivered, only resized to the
+ * 1200x630 link previews expect; otherwise the mark is centred on the
+ * product's own ground.
+ *
+ * It ships as JPEG deliberately. WhatsApp and the other chat clients skip a
+ * preview image much over half a megabyte, and this artwork — gradients on
+ * near-black — is several times that as PNG while being indistinguishable at
+ * quality 82.
+ */
+const card = existsSync(CARD)
+  ? sharp(CARD).resize(1200, 630, { fit: "cover", position: "centre" })
+  : sharp({ create: { width: 1200, height: 630, channels: 4, background: { r: 8, g: 9, b: 11, alpha: 1 } } }).composite([
+      {
+        input: await sharp(mark).resize(320, 320, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer(),
+        left: 440,
+        top: 155,
+      },
+    ]);
+
+await card.flatten({ background: "#08090b" }).jpeg({ quality: 82, mozjpeg: true }).toFile(`${OUT}/og.jpg`);
 
 console.log("brand assets written from", SOURCE);

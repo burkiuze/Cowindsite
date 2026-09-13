@@ -68,9 +68,10 @@ export const metadata: Metadata = {
     siteName: "Navio",
     images: [
       {
-        url: "/brand/og.png",
+        url: "/brand/og.jpg",
         width: 1200,
         height: 630,
+        type: "image/jpeg",
         alt: "Navio — your AI workspace for what's next.",
       },
     ],
@@ -80,7 +81,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Navio — the AI work operating system",
     description: "Ask for an outcome. Navio does the work and shows its receipts.",
-    images: [{ url: "/brand/og.png", width: 1200, height: 630, alt: "Navio" }],
+    images: [{ url: "/brand/og.jpg", width: 1200, height: 630, alt: "Navio" }],
   },
   robots: { index: true, follow: true },
 };
