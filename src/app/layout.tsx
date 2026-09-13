@@ -8,8 +8,28 @@ const inter = Inter({
   display: "swap",
 });
 
+/**
+ * Absolute base for canonical URLs and social images.
+ *
+ * Prefer the configured public URL; fall back to what the host reports so a
+ * deployment without that variable still shares correctly rather than pointing
+ * every card at localhost.
+ */
+function siteUrl(): string {
+  const configured = process.env.NEXT_PUBLIC_COWIND_URL?.trim();
+  if (configured) return configured.replace(/\/+$/, "");
+
+  const production = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (production) return `https://${production}`;
+
+  const deployment = process.env.VERCEL_URL?.trim();
+  if (deployment) return `https://${deployment}`;
+
+  return "http://localhost:3000";
+}
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_COWIND_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(siteUrl()),
   title: {
     default: "Cowind — the AI work operating system",
     template: "%s · Cowind",
