@@ -14,7 +14,7 @@ import type { User, WorkspaceMember, Workspace } from "./types";
  */
 
 const COOKIE = "cowind_member";
-const DEFAULT_USER_ID = "usr_deniz";
+const DEFAULT_USER_ID = "usr_burak";
 
 export interface Session {
   user: User;

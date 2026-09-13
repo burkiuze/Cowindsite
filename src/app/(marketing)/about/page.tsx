@@ -80,10 +80,10 @@ export default function AboutPage() {
           </p>
         </div>
         <Link
-          href="/app/wind"
+          href="/access"
           className="focus-ring inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] px-4 py-2.5 text-[13.5px] font-medium text-[#04121a] transition-opacity hover:opacity-90"
         >
-          Ask Wind
+          Request access
           <Icon name="arrow-right" size={14} strokeWidth={2} />
         </Link>
       </div>

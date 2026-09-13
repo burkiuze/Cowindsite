@@ -3,6 +3,7 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 import { StreamField } from "@/components/app/StreamField";
 import { LIMITS } from "@/lib/wind/config";
 import { CATALOG } from "@/lib/workspace/integrations";
+import { RunDemo } from "@/components/marketing/RunDemo";
 
 export const metadata = {
   title: "Platform",
@@ -43,7 +44,11 @@ export default function PlatformPage() {
             The path of one request
           </h2>
 
-          <ol className="mt-8 space-y-3">
+          <div className="mt-8">
+            <RunDemo />
+          </div>
+
+          <ol className="mt-6 space-y-3">
             {[
               {
                 title: "Intent and complexity",
@@ -111,7 +116,7 @@ export default function PlatformPage() {
       </section>
 
       {/* Control */}
-      <section className="relative z-10 border-t border-[var(--color-hairline)] bg-[var(--color-surface)]/60">
+      <section id="control" className="relative z-10 scroll-mt-20 border-t border-[var(--color-hairline)] bg-[var(--color-surface)]/60">
         <div className="mx-auto w-full max-w-5xl px-6 py-16">
           <h2 className="text-[13px] font-semibold tracking-[0.14em] text-[var(--color-ink-faint)] uppercase">
             Control
@@ -153,10 +158,10 @@ export default function PlatformPage() {
           </div>
 
           <Link
-            href="/app/home"
+            href="/access"
             className="focus-ring mt-10 inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] px-5 py-2.5 text-[14px] font-medium text-[#04121a] transition-opacity hover:opacity-90"
           >
-            See it running
+            Request access
             <Icon name="arrow-right" size={15} strokeWidth={2} />
           </Link>
         </div>

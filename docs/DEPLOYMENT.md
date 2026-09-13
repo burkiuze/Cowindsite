@@ -48,6 +48,19 @@ export in `src/app/api/wind/chat/route.ts` to what your plan allows (a value
 above the plan ceiling fails the build), and raise `WIND_TASK_TIMEOUT_MS` to
 match. Left as is, Wind's own run budget is the tighter of the two.
 
+## The workspace is sealed by default
+
+Only the public site is reachable. `/app` and the routes that drive it are
+closed by middleware unless an operator opens them:
+
+| Variable | Effect |
+| --- | --- |
+| `COWIND_WORKSPACE_ENABLED=1` | Opens the workspace to everyone |
+| `COWIND_PREVIEW_KEY=<secret>` | Opens it to whoever visits `/app?preview=<secret>`, which sets an http-only cookie and drops the secret from the URL |
+
+With neither set, a workspace page redirects to `/access` and a workspace API
+returns 404. `/api/health` stays public.
+
 ## After deploying
 
 - `/settings` shows which credentials the server can see and every active guardrail.

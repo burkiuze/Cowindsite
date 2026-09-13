@@ -82,10 +82,10 @@ export default function FaqPage() {
           <Icon name="arrow-right" size={14} />
         </Link>
         <Link
-          href="/app/wind"
+          href="/access"
           className="focus-ring inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] px-4 py-2.5 text-[13.5px] font-medium text-[#04121a] transition-opacity hover:opacity-90"
         >
-          Ask Wind yourself
+          Request access
           <Icon name="arrow-right" size={14} strokeWidth={2} />
         </Link>
       </div>

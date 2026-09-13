@@ -26,7 +26,7 @@ const DAY = 24 * 60 * 60 * 1000;
 const now = Date.now();
 
 export const SEED_USERS: User[] = [
-  { id: "usr_deniz", name: "Deniz Aral", email: "deniz@meridian.co", avatarInitials: "DA", title: "Founder & CEO" },
+  { id: "usr_burak", name: "Burak Şimşek", email: "burak@meridian.co", avatarInitials: "BŞ", title: "Founder & CEO" },
   { id: "usr_sena", name: "Sena Yalçın", email: "sena@meridian.co", avatarInitials: "SY", title: "Head of Engineering" },
   { id: "usr_marco", name: "Marco Bellini", email: "marco@meridian.co", avatarInitials: "MB", title: "Finance Lead" },
   { id: "usr_ada", name: "Ada Okonjo", email: "ada@meridian.co", avatarInitials: "AO", title: "Growth Lead" },
@@ -70,7 +70,7 @@ export const SEED_WORKSPACE: Workspace = {
 };
 
 export const SEED_MEMBERS: WorkspaceMember[] = [
-  { id: "mem_1", workspaceId: "ws_meridian", userId: "usr_deniz", role: "owner", departmentIds: ["dep_operations"], joinedAt: now - 210 * DAY, status: "active" },
+  { id: "mem_1", workspaceId: "ws_meridian", userId: "usr_burak", role: "owner", departmentIds: ["dep_operations"], joinedAt: now - 210 * DAY, status: "active" },
   { id: "mem_2", workspaceId: "ws_meridian", userId: "usr_sena", role: "admin", departmentIds: ["dep_engineering"], joinedAt: now - 190 * DAY, status: "active" },
   { id: "mem_3", workspaceId: "ws_meridian", userId: "usr_marco", role: "manager", departmentIds: ["dep_finance"], joinedAt: now - 120 * DAY, status: "active" },
   { id: "mem_4", workspaceId: "ws_meridian", userId: "usr_ada", role: "member", departmentIds: ["dep_growth"], joinedAt: now - 80 * DAY, status: "active" },
@@ -215,7 +215,7 @@ export const SEED_KNOWLEDGE: KnowledgeSource[] = [
     kind: "policy",
     scope: "general",
     departmentIds: [],
-    uploadedBy: "usr_deniz",
+    uploadedBy: "usr_burak",
     updatedAt: now - 21 * DAY,
     sizeBytes: 12_200,
     content: [
@@ -338,7 +338,7 @@ export const SEED_TASKS: Task[] = [
     title: "Prepare the Q3 board pack",
     goal: "Pull the quarter's figures, the product position and the risks into one pack the board can read in ten minutes.",
     status: "needs_approval",
-    createdBy: "usr_deniz",
+    createdBy: "usr_burak",
     createdAt: now - 3 * 60 * 60 * 1000,
     updatedAt: now - 40 * 60 * 1000,
     artifactIds: ["art_board_pack"],
@@ -407,7 +407,7 @@ export const SEED_APPROVALS: Approval[] = [
     integrationId: "gmail",
     risk: "high",
     status: "pending",
-    requestedBy: "usr_deniz",
+    requestedBy: "usr_burak",
     requestedByAgent: "Wind",
     createdAt: now - 40 * 60 * 1000,
     taskId: "tsk_board_pack",
@@ -446,17 +446,17 @@ export const SEED_APPROVALS: Approval[] = [
     requestedByAgent: "Vendor Desk",
     createdAt: now - 2 * DAY,
     decidedAt: now - 2 * DAY + 90 * 60 * 1000,
-    decidedBy: "usr_deniz",
+    decidedBy: "usr_burak",
     decisionNote: "Approved — keep two spare seats for contractors.",
     receipt: "Recorded. No external system was contacted: this vendor is not connected to Cowind.",
   },
 ];
 
 export const SEED_CONVERSATIONS: Conversation[] = [
-  { id: "cnv_board", workspaceId: "ws_meridian", userId: "usr_deniz", title: "Q3 board pack", createdAt: now - 3 * 60 * 60 * 1000, updatedAt: now - 40 * 60 * 1000, pinned: true },
-  { id: "cnv_latency", workspaceId: "ws_meridian", userId: "usr_deniz", title: "03:00 latency spike", createdAt: now - 2 * DAY, updatedAt: now - 2 * DAY },
-  { id: "cnv_renewals", workspaceId: "ws_meridian", userId: "usr_deniz", title: "Vendor renewals", createdAt: now - 18 * 60 * 1000, updatedAt: now - 2 * 60 * 1000 },
-  { id: "cnv_positioning", workspaceId: "ws_meridian", userId: "usr_deniz", title: "Positioning rewrite", createdAt: now - 5 * DAY, updatedAt: now - 5 * DAY },
+  { id: "cnv_board", workspaceId: "ws_meridian", userId: "usr_burak", title: "Q3 board pack", createdAt: now - 3 * 60 * 60 * 1000, updatedAt: now - 40 * 60 * 1000, pinned: true },
+  { id: "cnv_latency", workspaceId: "ws_meridian", userId: "usr_burak", title: "03:00 latency spike", createdAt: now - 2 * DAY, updatedAt: now - 2 * DAY },
+  { id: "cnv_renewals", workspaceId: "ws_meridian", userId: "usr_burak", title: "Vendor renewals", createdAt: now - 18 * 60 * 1000, updatedAt: now - 2 * 60 * 1000 },
+  { id: "cnv_positioning", workspaceId: "ws_meridian", userId: "usr_burak", title: "Positioning rewrite", createdAt: now - 5 * DAY, updatedAt: now - 5 * DAY },
 ];
 
 export const SEED_MESSAGES: Message[] = [
@@ -491,13 +491,13 @@ export const SEED_MESSAGES: Message[] = [
 ];
 
 export const SEED_ACTIVITY: ActivityEvent[] = [
-  { id: "act_1", workspaceId: "ws_meridian", kind: "task.started", actor: "Deniz Aral", summary: "Started “Prepare the Q3 board pack”", at: now - 3 * 60 * 60 * 1000, taskId: "tsk_board_pack" },
+  { id: "act_1", workspaceId: "ws_meridian", kind: "task.started", actor: "Burak Şimşek", summary: "Started “Prepare the Q3 board pack”", at: now - 3 * 60 * 60 * 1000, taskId: "tsk_board_pack" },
   { id: "act_2", workspaceId: "ws_meridian", kind: "knowledge.searched", actor: "Wind", summary: "Searched workspace knowledge — 3 sources matched", at: now - 3 * 60 * 60 * 1000 + 20_000, taskId: "tsk_board_pack" },
   { id: "act_3", workspaceId: "ws_meridian", kind: "specialist.started", actor: "Wind Finance", summary: "Financial analysis started", at: now - 3 * 60 * 60 * 1000 + 25_000, taskId: "tsk_board_pack" },
   { id: "act_4", workspaceId: "ws_meridian", kind: "specialist.completed", actor: "Wind Finance", summary: "Financial analysis completed", at: now - 175 * 60 * 1000, taskId: "tsk_board_pack" },
   { id: "act_5", workspaceId: "ws_meridian", kind: "specialist.completed", actor: "Wind Reasoning", summary: "Risk assessment completed", at: now - 160 * 60 * 1000, taskId: "tsk_board_pack" },
   { id: "act_6", workspaceId: "ws_meridian", kind: "approval.requested", actor: "Wind", summary: "Approval requested: send the Q3 pack to the board list", at: now - 40 * 60 * 1000, approvalId: "apr_board_email", taskId: "tsk_board_pack" },
-  { id: "act_7", workspaceId: "ws_meridian", kind: "approval.decided", actor: "Deniz Aral", summary: "Approved: downgrade the support desk seat count", at: now - 2 * DAY + 90 * 60 * 1000, approvalId: "apr_downgrade" },
+  { id: "act_7", workspaceId: "ws_meridian", kind: "approval.decided", actor: "Burak Şimşek", summary: "Approved: downgrade the support desk seat count", at: now - 2 * DAY + 90 * 60 * 1000, approvalId: "apr_downgrade" },
   { id: "act_8", workspaceId: "ws_meridian", kind: "task.completed", actor: "Wind", summary: "Completed “Find the cause of the 03:00 latency spike”", at: now - 2 * DAY + 26 * 60 * 1000, taskId: "tsk_latency" },
   { id: "act_9", workspaceId: "ws_meridian", kind: "knowledge.added", actor: "İlker Demir", summary: "Added “Vendor contracts index” to workspace knowledge", at: now - 3 * DAY },
   { id: "act_10", workspaceId: "ws_meridian", kind: "flow.run", actor: "Monday finance brief", summary: "Flow run completed — brief prepared, sending held for approval", at: now - 6 * DAY },

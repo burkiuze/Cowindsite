@@ -43,16 +43,16 @@ export function MarketingNav() {
 
         <div className="ml-auto flex items-center gap-2">
           <Link
-            href="/app/wind"
+            href="/faq"
             className="focus-ring hidden rounded-lg px-3 py-2 text-[13px] text-[var(--color-ink-muted)] transition-colors hover:text-[var(--color-ink)] sm:block"
           >
-            Ask Wind
+            How it works
           </Link>
           <Link
-            href="/app/home"
+            href="/access"
             className="focus-ring inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] px-3.5 py-2 text-[13px] font-medium text-[#04121a] transition-opacity hover:opacity-90"
           >
-            Open workspace
+            Request access
             <Icon name="arrow-right" size={14} strokeWidth={2} />
           </Link>
           <button
@@ -62,7 +62,7 @@ export function MarketingNav() {
             aria-label="Menu"
             aria-expanded={open}
           >
-            <Icon name={open ? "close" : "flows"} size={18} />
+            <Icon name={open ? "close" : "menu"} size={18} />
           </button>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { StreamField } from "@/components/app/StreamField";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { ServiceLogo } from "@/components/app/ServiceLogo";
 import { CATALOG, featuredServices } from "@/lib/workspace/integrations";
-import { RunDemo } from "@/components/marketing/RunDemo";
+import { ProductVideo } from "@/components/marketing/ProductVideo";
 
 export const metadata = {
   title: "Cowind — the AI work operating system",
@@ -102,22 +102,22 @@ export default function LandingPage() {
 
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Link
-            href="/app/wind"
+            href="/access"
             className="focus-ring inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] px-5 py-2.5 text-[14px] font-medium text-[#04121a] transition-opacity hover:opacity-90"
           >
-            Start with Wind
+            Request access
             <Icon name="arrow-right" size={15} strokeWidth={2} />
           </Link>
           <Link
-            href="/app/home"
+            href="/platform"
             className="focus-ring inline-flex items-center gap-2 rounded-lg border border-[var(--color-hairline)] px-5 py-2.5 text-[14px] text-[var(--color-ink-muted)] transition-colors hover:border-[#2b3d4a] hover:text-[var(--color-ink)]"
           >
-            See a live workspace
+            See how it works
           </Link>
         </div>
 
         <div className="mt-16">
-          <RunDemo />
+          <ProductVideo />
         </div>
 
         {/* Real marks, quietly: proof the catalogue is real. */}
@@ -242,10 +242,10 @@ export default function LandingPage() {
             never needed a person.
           </p>
           <Link
-            href="/app/home"
+            href="/access"
             className="focus-ring mt-8 inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] px-5 py-2.5 text-[14px] font-medium text-[#04121a] transition-opacity hover:opacity-90"
           >
-            Open the workspace
+            Request access
             <Icon name="arrow-right" size={15} strokeWidth={2} />
           </Link>
         </div>

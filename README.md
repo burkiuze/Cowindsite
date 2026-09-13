@@ -59,6 +59,17 @@ anything happens.
 - **No private reasoning on screen.** The execution trace shows operational state
   ("Financial analysis — running"), never chain-of-thought.
 
+## What is public
+
+The site at `/` is public: home, platform, integrations, about, FAQ, access.
+The workspace at `/app` is sealed by middleware and opens only with
+`COWIND_WORKSPACE_ENABLED=1` or a `COWIND_PREVIEW_KEY` — see
+[`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
+
+The hero video is a real run recorded in that workspace by
+`scripts/record-preview.mjs`, cursor and all — not a mockup, and not a
+screenshot with motion faked on top.
+
 ## Getting started
 
 ```bash

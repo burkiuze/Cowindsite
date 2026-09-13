@@ -33,7 +33,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                 links={[
                   { href: "/platform", label: "Platform" },
                   { href: "/integrations", label: "Integrations" },
-                  { href: "/app/home", label: "Open workspace" },
+                  { href: "/access", label: "Request access" },
                 ]}
               />
               <FooterColumn
@@ -46,8 +46,8 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               <FooterColumn
                 title="System"
                 links={[
-                  { href: "/app/approvals", label: "Approvals" },
-                  { href: "/app/analytics", label: "Audit trail" },
+                  { href: "/platform#control", label: "Guardrails" },
+                  { href: "/faq", label: "FAQ" },
                   { href: "/api/health", label: "Status" },
                 ]}
               />

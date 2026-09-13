@@ -77,9 +77,15 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
     scrollToEnd();
   }, [messages.length, draft, lanes.length, scrollToEnd]);
 
+  // Reset only when the conversation itself changes. A re-render of the same
+  // route hands us a fresh array instance, and resetting on that would wipe an
+  // answer that just streamed in — which is exactly what it used to do.
+  const loadedConversation = useRef<string | undefined>(conversationId);
   useEffect(() => {
-    setMessages(initialMessages);
+    if (loadedConversation.current === conversationId) return;
+    loadedConversation.current = conversationId;
     activeConversation.current = conversationId;
+    setMessages(initialMessages);
     setLanes([]);
     setDraft("");
     setApproval(null);
@@ -232,7 +238,13 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
               ]);
               setDraft("");
               if (isNew) {
-                window.history.replaceState(null, "", `/app/wind/${event.conversationId}`);
+                // Replace rather than push: the empty /app/wind entry is not
+                // worth a back step, and the route now matches the stored
+                // conversation instead of being patched in by hand.
+                router.replace(`/app/wind/${event.conversationId}`);
+                // The sidebar lives in a shared layout that client navigation
+                // does not re-render, so ask for it explicitly. Safe now that
+                // the reset effect keys on the conversation id.
                 router.refresh();
               }
               break;
@@ -257,7 +269,6 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
       setStreaming(false);
       setPhase("");
       abortRef.current = null;
-      router.refresh();
     }
   }
 
