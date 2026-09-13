@@ -39,7 +39,7 @@ export function poolConfig(pool: Pool): PoolConfig {
       ? (clean(process.env.WIND_PRIMARY_BASE_URL) ?? clean(process.env.WIND_SPECIALIST_BASE_URL) ?? DEFAULT_BASE_URL)
       : (clean(process.env.WIND_SPECIALIST_BASE_URL) ?? clean(process.env.WIND_PRIMARY_BASE_URL) ?? DEFAULT_BASE_URL);
 
-  const referer = clean(process.env.NEXT_PUBLIC_NAVIO_URL ?? process.env.NEXT_PUBLIC_COWIND_URL) ?? "https://navio.app";
+  const referer = clean(process.env.NEXT_PUBLIC_NAVIO_URL ?? process.env.NEXT_PUBLIC_COWIND_URL) ?? "https://www.heynavio.com";
 
   return {
     baseUrl: baseUrl.replace(/\/+$/, ""),

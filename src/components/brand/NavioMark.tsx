@@ -68,7 +68,7 @@ export function NavioLockup({
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
       <NavioMark size={size} state="flow" priority={priority} />
-      <span className="text-[15px] font-semibold tracking-[-0.02em] text-[var(--color-ink)]">Navio</span>
+      <span className="wordmark text-[16px]">Navio</span>
     </span>
   );
 }

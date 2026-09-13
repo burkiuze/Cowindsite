@@ -10,10 +10,12 @@
  *   node scripts/build-brand.mjs <path-to-supplied-mark.png>
  */
 import sharp from "sharp";
-import { mkdirSync } from "node:fs";
+import { mkdirSync, existsSync } from "node:fs";
 
 const SOURCE = process.argv[2] ?? "assets/brand/navio-mark-original.png";
 const OUT = "public/brand";
+/** The designed share card, if there is one. */
+const CARD = "assets/brand/navio-share-card.png";
 mkdirSync(OUT, { recursive: true });
 
 const { data, info } = await sharp(SOURCE).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
@@ -50,11 +52,17 @@ await sharp(mark).resize(140, 140, { fit: "contain", background: { r: 0, g: 0, b
   .extend({ top: 20, bottom: 20, left: 20, right: 20, background: plate })
   .flatten({ background: "#08090b" }).png().toFile("src/app/apple-icon.png");
 
-// Share card: the mark on the product's own ground, centred.
-const badge = await sharp(mark).resize(320, 320, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
-await sharp({ create: { width: 1200, height: 630, channels: 4, background: { r: 8, g: 9, b: 11, alpha: 1 } } })
-  .composite([{ input: badge, left: 440, top: 155 }])
-  .png()
-  .toFile(`${OUT}/og.png`);
+// Share card. When a designed card is supplied it is used as delivered, only
+// resized to the 1200x630 that link previews expect; otherwise the mark is
+// centred on the product's own ground.
+if (existsSync(CARD)) {
+  await sharp(CARD).resize(1200, 630, { fit: "cover", position: "centre" }).png().toFile(`${OUT}/og.png`);
+} else {
+  const badge = await sharp(mark).resize(320, 320, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
+  await sharp({ create: { width: 1200, height: 630, channels: 4, background: { r: 8, g: 9, b: 11, alpha: 1 } } })
+    .composite([{ input: badge, left: 440, top: 155 }])
+    .png()
+    .toFile(`${OUT}/og.png`);
+}
 
 console.log("brand assets written from", SOURCE);

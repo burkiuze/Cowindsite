@@ -43,7 +43,7 @@ export function MarketingNav() {
         >
           <Link href="/" className="focus-ring flex shrink-0 items-center gap-2.5 rounded-full pr-1">
             <NavioMark size={24} state="flow" priority />
-            <span className="text-[15px] font-semibold tracking-[-0.02em]">Navio</span>
+            <span className="wordmark text-[16px]">Navio</span>
           </Link>
 
           <span className="mx-2 hidden h-4 w-px bg-[var(--color-hairline)] md:block" />

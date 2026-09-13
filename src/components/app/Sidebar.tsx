@@ -62,7 +62,7 @@ export function Sidebar(props: SidebarProps) {
         <Link href="/app/home" className="focus-ring flex items-center gap-2.5 rounded-lg">
           <NavioMark size={24} state="flow" priority />
           {!collapsed ? (
-            <span className="text-[15px] font-semibold tracking-[-0.02em] text-[var(--color-ink)]">Navio</span>
+            <span className="wordmark text-[16px]">Navio</span>
           ) : null}
         </Link>
         {!collapsed ? (

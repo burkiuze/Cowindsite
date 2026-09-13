@@ -321,6 +321,21 @@ body {
 
 /* Display type: serif, optically tightened, never bolded — the weight comes
    from the size and the contrast of the face itself. */
+/*
+ * The name, set the way the brand card sets it: a geometric sans with the same
+ * soft top-to-bottom fade, so "Navio" in the product and "Navio" on a shared
+ * link are the same wordmark rather than two typefaces with one name.
+ */
+.wordmark {
+  font-family: var(--font-wordmark), var(--font-inter), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  background: linear-gradient(180deg, #ffffff 0%, #cfd5dd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .display {
   font-family: var(--font-display);
   font-weight: 400;

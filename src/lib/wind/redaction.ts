@@ -140,8 +140,7 @@ function isSafeUrl(url: string): boolean {
     const { hostname } = new URL(url);
     return (
       hostname === "localhost" ||
-      hostname.endsWith("navio.ai") ||
-      hostname.endsWith("navio.app") ||
+      hostname.endsWith("heynavio.com") ||
       hostname === "127.0.0.1"
     );
   } catch {

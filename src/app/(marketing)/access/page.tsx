@@ -52,12 +52,25 @@ export default function AccessPage() {
         </ul>
 
         <a
-          href={`mailto:access@navio.app?subject=${subject}&body=${body}`}
+          href={`mailto:info@heynavio.com?subject=${subject}&body=${body}`}
           className="focus-ring mt-5 inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] px-4 py-2.5 text-[13.5px] font-medium text-[#04121a] transition-opacity hover:opacity-90"
         >
           Write to us
           <Icon name="arrow-up-right" size={14} strokeWidth={2} />
         </a>
+
+        {/* Spelled out as well as linked: a mail button is useless on a machine
+            with no mail client configured, and the address is worth copying. */}
+        <p className="mt-3 text-[12.5px] text-[var(--color-ink-faint)]">
+          Or write directly to{" "}
+          <a
+            href="mailto:info@heynavio.com"
+            className="focus-ring rounded text-[var(--color-ink-muted)] underline decoration-[var(--color-hairline)] underline-offset-2 transition-colors hover:text-[var(--color-ink)]"
+          >
+            info@heynavio.com
+          </a>
+          .
+        </p>
       </div>
 
       <div className="mt-8 space-y-3 text-[13.5px] leading-relaxed text-[var(--color-ink-muted)]">

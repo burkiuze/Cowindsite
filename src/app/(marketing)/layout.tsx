@@ -19,7 +19,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             <div className="max-w-xs">
               <Link href="/" className="focus-ring inline-flex items-center gap-2.5 rounded-lg">
                 <NavioMark size={22} state="flow" />
-                <span className="text-[15px] font-semibold tracking-[-0.02em]">Navio</span>
+                <span className="wordmark text-[16px]">Navio</span>
               </Link>
               <p className="mt-3 text-[12.5px] leading-relaxed text-[var(--color-ink-faint)]">
                 An AI work operating system. Ask for an outcome; Navio plans it, runs it, and holds anything
@@ -56,6 +56,12 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
 
           <div className="mt-12 flex flex-wrap items-center gap-3 border-t border-[var(--color-hairline)] pt-6 text-[12px] text-[var(--color-ink-faint)]">
             <span>© {new Date().getFullYear()} Navio</span>
+            <a
+              href="mailto:info@heynavio.com"
+              className="focus-ring rounded transition-colors hover:text-[var(--color-ink-muted)]"
+            >
+              info@heynavio.com
+            </a>
             <span className="flex items-center gap-1.5">
               <Icon name="shield" size={13} />
               Nothing consequential happens without a human decision

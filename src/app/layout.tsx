@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Instrument_Serif } from "next/font/google";
+import { Inter, Instrument_Serif, Poppins } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -17,6 +17,17 @@ const display = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-display-serif",
+  display: "swap",
+});
+
+/**
+ * The name itself. A geometric sans, matching the wordmark on the brand card,
+ * so "Navio" reads the same in the product as it does on a shared link.
+ */
+const wordmark = Poppins({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  variable: "--font-wordmark",
   display: "swap",
 });
 
@@ -55,14 +66,21 @@ export const metadata: Metadata = {
       "Ask for an outcome. Navio plans it, runs it, holds what matters for approval, and shows its receipts.",
     url: "/",
     siteName: "Navio",
-    images: ["/brand/og.png"],
+    images: [
+      {
+        url: "/brand/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Navio — your AI workspace for what's next.",
+      },
+    ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Navio — the AI work operating system",
     description: "Ask for an outcome. Navio does the work and shows its receipts.",
-    images: ["/brand/og.png"],
+    images: [{ url: "/brand/og.png", width: 1200, height: 630, alt: "Navio" }],
   },
   robots: { index: true, follow: true },
 };
@@ -74,7 +92,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${display.variable}`}>
+    <html lang="en" className={`${inter.variable} ${display.variable} ${wordmark.variable}`}>
       <body className="min-h-dvh bg-[var(--color-void)] text-[var(--color-ink)] antialiased">{children}</body>
     </html>
   );
