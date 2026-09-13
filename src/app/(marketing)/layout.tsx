@@ -2,7 +2,6 @@ import Link from "next/link";
 import { NavioMark } from "@/components/brand/NavioMark";
 import { Icon } from "@/components/ui/Icon";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
-import { SupportMessenger } from "@/components/marketing/SupportMessenger";
 import { AskNavio } from "@/components/marketing/AskNavio";
 
 /**
@@ -73,10 +72,8 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         </div>
       </footer>
 
-      {/* Public pages only: a question should be answerable where it is asked —
-          instantly by Navio, and properly by a person. */}
+      {/* Public pages only: the product answers its own questions. */}
       <AskNavio />
-      <SupportMessenger />
     </div>
   );
 }

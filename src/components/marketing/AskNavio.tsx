@@ -21,8 +21,9 @@ const SUGGESTIONS = [
  * to /api/ask, which knows about Navio and nothing else — no workspace, no
  * tools, no other visitor's words.
  *
- * It sits bottom-left so it never covers the support messenger: this answers
- * instantly, a person answers properly, and neither is in the other's way.
+ * It is the only chat on the site, so it sits bottom-right where a visitor
+ * looks for one. Anything it cannot answer it hands to a person by naming the
+ * address rather than pretending to take a message.
  */
 export function AskNavio() {
   const [open, setOpen] = useState(false);
@@ -69,26 +70,26 @@ export function AskNavio() {
         type="button"
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
-        className="focus-ring fixed bottom-5 left-5 z-50 inline-flex items-center gap-2 rounded-full border border-[var(--color-hairline)] bg-[var(--color-panel)]/90 px-4 py-2.5 text-[13px] text-[var(--color-ink)] shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur transition-transform hover:-translate-y-px"
+        className="focus-ring fixed right-5 bottom-5 z-50 inline-flex items-center gap-2 rounded-full border border-[var(--color-hairline)] bg-[var(--color-panel)]/90 px-4 py-2.5 text-[13px] text-[var(--color-ink)] shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur transition-transform hover:-translate-y-px"
       >
         <NavioMark size={17} state={pending ? "thinking" : "flow"} />
         {open ? "Close" : "Ask Navio"}
       </button>
 
       {open ? (
-        <div className="panel fixed bottom-20 left-5 z-50 flex max-h-[min(560px,75vh)] w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.6)]">
+        <div className="panel fixed right-5 bottom-20 z-50 flex max-h-[min(560px,75vh)] w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.6)]">
           <div className="flex items-center gap-2.5 border-b border-[var(--color-hairline)] px-4 py-3">
             <NavioMark size={18} state="flow" />
             <span className="text-[13.5px] font-medium text-[var(--color-ink)]">Ask Navio</span>
-            <span className="ml-auto text-[11px] text-[var(--color-ink-faint)]">Answers about Navio only</span>
+            <span className="ml-auto text-[11px] text-[var(--color-ink-faint)]">Ready</span>
           </div>
 
           <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
             {turns.length === 0 ? (
               <div>
                 <p className="text-[13px] leading-relaxed text-[var(--color-ink-muted)]">
-                  Ask anything about what Navio does, what it refuses to do, or when you can use it. For anything it
-                  cannot answer, a person picks it up from the messenger.
+                  Ask anything about what Navio does, what it refuses to do, or when you can use it. Anything it
+                  cannot answer goes to a person at info@heynavio.com.
                 </p>
                 <ul className="mt-4 space-y-2">
                   {SUGGESTIONS.map((suggestion) => (

@@ -1,5 +1,6 @@
 import "server-only";
 import type { Capability, WindRole } from "./types";
+import { usingDirectPool } from "./adapters/endpoints";
 
 /**
  * ---------------------------------------------------------------------------
@@ -45,16 +46,41 @@ const env = (name: string): string | undefined => {
 };
 
 /**
- * Default upstream identifiers. Override any of them with the matching
- * `WIND_MODEL_*` environment variable if an identifier changes upstream.
+ * Default upstream identifiers.
+ *
+ * Two sets, because the identifiers a gateway accepts are not the ones a single
+ * upstream accepts, and a deployment holding only the direct credential would
+ * otherwise ask for names that do not exist there. Either set is overridden
+ * per-engine by the matching `WIND_MODEL_*` variable, which is what to reach
+ * for when an identifier changes upstream — no code change, no deploy.
  */
+const GATEWAY_IDENTIFIERS = {
+  primary: "inclusionai/ling-3.0-flash-fin:free",
+  code: "nex-agi/nex-n2.5-pro:free",
+  finance: "inclusionai/ling-3.0-flash-fin:free",
+  reasoning: "thinkingmachines/inkling:free",
+  vision: "google/gemma-4-31b-it:free",
+  data: "liquid/lfm2.5-2.6b:free",
+} as const;
+
+const DIRECT_IDENTIFIERS = {
+  primary: "llama-3.3-70b-versatile",
+  code: "llama-3.3-70b-versatile",
+  finance: "llama-3.3-70b-versatile",
+  reasoning: "llama-3.3-70b-versatile",
+  vision: "meta-llama/llama-4-scout-17b-16e-instruct",
+  data: "llama-3.1-8b-instant",
+} as const;
+
+const DEFAULTS = usingDirectPool() ? DIRECT_IDENTIFIERS : GATEWAY_IDENTIFIERS;
+
 const IDENTIFIERS = {
-  primary: env("WIND_MODEL_PRIMARY") ?? "inclusionai/ling-3.0-flash-fin:free",
-  code: env("WIND_MODEL_CODE") ?? "nex-agi/nex-n2.5-pro:free",
-  finance: env("WIND_MODEL_FINANCE") ?? "inclusionai/ling-3.0-flash-fin:free",
-  reasoning: env("WIND_MODEL_REASONING") ?? "thinkingmachines/inkling:free",
-  vision: env("WIND_MODEL_VISION") ?? "google/gemma-4-31b-it:free",
-  data: env("WIND_MODEL_DATA") ?? "liquid/lfm2.5-2.6b:free",
+  primary: env("WIND_MODEL_PRIMARY") ?? DEFAULTS.primary,
+  code: env("WIND_MODEL_CODE") ?? DEFAULTS.code,
+  finance: env("WIND_MODEL_FINANCE") ?? DEFAULTS.finance,
+  reasoning: env("WIND_MODEL_REASONING") ?? DEFAULTS.reasoning,
+  vision: env("WIND_MODEL_VISION") ?? DEFAULTS.vision,
+  data: env("WIND_MODEL_DATA") ?? DEFAULTS.data,
 } as const;
 
 export const ENGINES: Record<string, EngineSpec> = {
