@@ -21,8 +21,13 @@ const buffer: TraceEvent[] = [];
 function push(event: TraceEvent) {
   buffer.push(event);
   if (buffer.length > MAX_EVENTS) buffer.splice(0, buffer.length - MAX_EVENTS);
-  if (process.env.WIND_DEBUG === "1") {
-    // Server console only. Never streamed.
+  // Server console only. Never streamed, never returned to a browser.
+  if (event.kind === "error") {
+    // Failures are always logged: a deployment that cannot reach its engines is
+    // the one thing an operator has to be able to see without redeploying with
+    // a debug flag set.
+    console.error(`[wind:error] ${event.traceId} ${event.message}`, event.data ?? "");
+  } else if (process.env.WIND_DEBUG === "1") {
     console.log(`[wind:${event.kind}] ${event.traceId} ${event.message}`, event.data ?? "");
   }
 }
