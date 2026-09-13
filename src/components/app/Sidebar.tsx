@@ -54,15 +54,21 @@ export function Sidebar(props: SidebarProps) {
 
   return (
     <aside
-      className="relative z-20 flex h-dvh shrink-0 flex-col border-r border-[var(--color-hairline)] bg-[var(--color-surface)] transition-[width] duration-200"
+      className="relative z-20 flex h-dvh shrink-0 flex-col border-r border-[var(--color-hairline)] bg-[var(--color-surface)]/55 backdrop-blur-xl transition-[width] duration-200"
       style={{ width: collapsed ? 68 : "var(--shell-sidebar)" }}
     >
-      {/* Brand + workspace */}
-      <div className="flex h-[60px] items-center gap-2 border-b border-[var(--color-hairline)] px-3.5">
-        <Link href="/app/home" className="focus-ring flex items-center gap-2.5 rounded-lg">
-          <NavioMark size={24} state="flow" priority />
+      {/* The company, first. Its own mark, its own name, and a switcher — the
+          product's name lives in the page, not stacked above the company's. */}
+      <div className="flex h-[60px] items-center gap-2 px-3.5">
+        <Link href="/app/home" className="focus-ring flex min-w-0 items-center gap-2.5 rounded-lg">
+          <NavioMark size={26} state="flow" priority />
           {!collapsed ? (
-            <span className="wordmark text-[16px]">Navio</span>
+            <>
+              <span className="truncate text-[14.5px] font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
+                {props.workspaceName}
+              </span>
+              <Icon name="chevron-down" size={13} className="shrink-0 text-[var(--color-ink-faint)]" />
+            </>
           ) : null}
         </Link>
         {!collapsed ? (
@@ -87,25 +93,7 @@ export function Sidebar(props: SidebarProps) {
           <Icon name="chevron-right" size={16} />
         </button>
       ) : (
-        <div className="px-3.5 pt-3.5">
-          <button
-            type="button"
-            className="focus-ring group flex w-full items-center gap-2.5 rounded-lg border border-[var(--color-hairline)] bg-[var(--color-panel)] px-2.5 py-2 text-left transition-colors hover:border-[#2b323c]"
-          >
-            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)] text-[11px] font-bold text-[#04121a]">
-              {props.workspaceName.slice(0, 1).toUpperCase()}
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block truncate text-[13px] font-medium text-[var(--color-ink)]">
-                {props.workspaceName}
-              </span>
-              <span className="block text-[11px] text-[var(--color-ink-faint)] capitalize">
-                {props.workspacePlan} workspace
-              </span>
-            </span>
-            <Icon name="chevron-down" size={14} className="text-[var(--color-ink-faint)]" />
-          </button>
-        </div>
+        <div className="h-1" />
       )}
 
       {/* Navigation */}

@@ -62,8 +62,8 @@ export const SEED_DEPARTMENTS: Department[] = [
 
 export const SEED_WORKSPACE: Workspace = {
   id: "ws_meridian",
-  name: "Meridian",
-  slug: "meridian",
+  name: "Navio Company",
+  slug: "navio-company",
   plan: "team",
   createdAt: now - 210 * DAY,
   departments: SEED_DEPARTMENTS,
@@ -182,7 +182,7 @@ export const SEED_KNOWLEDGE: KnowledgeSource[] = [
     updatedAt: now - 9 * DAY,
     sizeBytes: 18_400,
     content: [
-      "Meridian runs a Next.js front end against a Go API gateway. The gateway fans out to four services:",
+      "Navio Company runs a Next.js front end against a Go API gateway. The gateway fans out to four services:",
       "ingest (event capture), graph (entity resolution), ledger (billing events) and notify (delivery).",
       "Postgres is the system of record; Redis holds session and rate-limit state; object storage holds raw payloads.",
       "Known weak points: the graph service holds a single writer lock during nightly compaction, which is the",
