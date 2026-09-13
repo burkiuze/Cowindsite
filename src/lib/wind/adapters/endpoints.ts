@@ -87,3 +87,59 @@ export function configurationStatus() {
     specialist: Boolean(clean(process.env.WIND_SPECIALIST_API_KEY)) || direct,
   };
 }
+
+/**
+ * Ask the upstream what it actually serves.
+ *
+ * An identifier that was correct last quarter can be retired without notice,
+ * and a deployment should not go silent because of it. When a call comes back
+ * saying the model does not exist, this asks the upstream for its catalogue
+ * once and picks the most capable general-purpose entry, which is then reused
+ * for the life of the process. The result is logged server-side and never
+ * surfaces: a visitor sees an answer, not a model name.
+ */
+const discovered = new Map<Pool, string>();
+
+/** Entries that are not general-purpose chat engines. */
+const NOT_CHAT = ["whisper", "tts", "embed", "guard", "moderation", "rerank", "transcribe", "ocr"];
+
+function rank(id: string): number {
+  const lower = id.toLowerCase();
+  if (NOT_CHAT.some((fragment) => lower.includes(fragment))) return -1;
+  let score = 0;
+  if (/(120b|70b|72b|versatile|large|maverick)/.test(lower)) score += 4;
+  if (/(32b|17b|scout)/.test(lower)) score += 2;
+  if (lower.includes("instruct") || lower.includes("chat")) score += 1;
+  if (lower.includes("instant") || /\b8b\b/.test(lower)) score += 1;
+  if (lower.includes("preview") || lower.includes("deprecated")) score -= 2;
+  return score;
+}
+
+export async function discoverIdentifier(pool: Pool): Promise<string | undefined> {
+  const cached = discovered.get(pool);
+  if (cached) return cached;
+
+  const config = poolConfig(pool);
+  if (!config.apiKey) return undefined;
+
+  try {
+    const response = await fetch(`${config.baseUrl}/models`, {
+      headers: { Authorization: `Bearer ${config.apiKey}`, ...config.headers },
+      cache: "no-store",
+    });
+    if (!response.ok) return undefined;
+
+    const json = (await response.json()) as { data?: Array<{ id?: string; active?: boolean }> };
+    const best = (json.data ?? [])
+      .filter((entry) => typeof entry.id === "string" && entry.active !== false)
+      .map((entry) => ({ id: entry.id as string, score: rank(entry.id as string) }))
+      .filter((entry) => entry.score >= 0)
+      .sort((a, b) => b.score - a.score)[0];
+
+    if (!best) return undefined;
+    discovered.set(pool, best.id);
+    return best.id;
+  } catch {
+    return undefined;
+  }
+}

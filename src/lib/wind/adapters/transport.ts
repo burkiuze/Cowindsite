@@ -4,7 +4,7 @@ import { LIMITS } from "../config";
 import { WindError, classifyError } from "../redaction";
 import { telemetry } from "../telemetry";
 import type { ChatCompletionResult, WindMessage } from "../types";
-import { poolConfig } from "./endpoints";
+import { poolConfig, discoverIdentifier } from "./endpoints";
 
 /**
  * The single transport used by every Navio adapter. Chat-completions dialect,
@@ -81,14 +81,48 @@ export interface CallOptions {
   timeoutMs?: number;
 }
 
+/**
+ * An identifier the upstream no longer serves.
+ *
+ * Upstreams retire model names, and a name that is merely out of date should
+ * not read as an outage. When one is rejected, the call is retried once with
+ * whatever that upstream says it actually serves today.
+ */
+function isUnknownModel(error: unknown): boolean {
+  const text = error instanceof Error ? error.message : String(error);
+  return /model_not_found|does not exist|unknown model|no such model|model .* not found/i.test(text);
+}
+
 /** Non-streaming completion. */
 export async function complete(options: CallOptions): Promise<ChatCompletionResult> {
   const spec = engine(options.modelKey);
   const config = poolConfig(spec.pool);
   if (!config.apiKey) throw new WindError("unconfigured", "no credential for pool " + spec.pool);
 
+  try {
+    return await completeOnce(options, spec, config, spec.identifier);
+  } catch (error) {
+    if (!isUnknownModel(error)) throw error;
+
+    const replacement = await discoverIdentifier(spec.pool);
+    if (!replacement || replacement === spec.identifier) throw error;
+
+    telemetry.error(options.traceId, `identifier retired for ${spec.key}, using what the pool serves`, {
+      code: "recovered",
+      replacement,
+    });
+    return completeOnce(options, spec, config, replacement);
+  }
+}
+
+async function completeOnce(
+  options: CallOptions,
+  spec: ReturnType<typeof engine>,
+  config: ReturnType<typeof poolConfig>,
+  identifier: string,
+): Promise<ChatCompletionResult> {
   const payload: WirePayload = {
-    model: spec.identifier,
+    model: identifier,
     messages: toWireMessages(options.messages, spec.vision),
     temperature: options.temperature ?? spec.temperature,
     max_tokens: options.maxTokens ?? spec.maxOutputTokens,
@@ -151,8 +185,32 @@ export async function* stream(options: CallOptions): AsyncGenerator<string, void
   const config = poolConfig(spec.pool);
   if (!config.apiKey) throw new WindError("unconfigured", "no credential for pool " + spec.pool);
 
+  try {
+    yield* streamOnce(options, spec, config, spec.identifier);
+  } catch (error) {
+    // A retired identifier is rejected before the first byte of the stream, so
+    // retrying here cannot repeat text a reader has already seen.
+    if (!isUnknownModel(error)) throw error;
+
+    const replacement = await discoverIdentifier(spec.pool);
+    if (!replacement || replacement === spec.identifier) throw error;
+
+    telemetry.error(options.traceId, `identifier retired for ${spec.key}, using what the pool serves`, {
+      code: "recovered",
+      replacement,
+    });
+    yield* streamOnce(options, spec, config, replacement);
+  }
+}
+
+async function* streamOnce(
+  options: CallOptions,
+  spec: ReturnType<typeof engine>,
+  config: ReturnType<typeof poolConfig>,
+  identifier: string,
+): AsyncGenerator<string, void, unknown> {
   const payload: WirePayload = {
-    model: spec.identifier,
+    model: identifier,
     messages: toWireMessages(options.messages, spec.vision),
     temperature: options.temperature ?? spec.temperature,
     max_tokens: options.maxTokens ?? spec.maxOutputTokens,
