@@ -101,7 +101,12 @@ export function configurationStatus() {
 const discovered = new Map<Pool, string>();
 
 /** Entries that are not general-purpose chat engines. */
-const NOT_CHAT = ["whisper", "tts", "embed", "guard", "moderation", "rerank", "transcribe", "ocr"];
+const NOT_CHAT = [
+  "whisper", "tts", "embed", "guard", "moderation", "rerank", "transcribe", "ocr", "vision-only",
+  // Agentic systems and search products: they answer in their own shape, not as
+  // a plain assistant, and they are not what a page of copy needs.
+  "compound", "browser", "search",
+];
 
 /**
  * Reasoning-first engines spend their budget thinking before they write, so a
@@ -111,15 +116,32 @@ const NOT_CHAT = ["whisper", "tts", "embed", "guard", "moderation", "rerank", "t
  */
 const REASONING = ["gpt-oss", "reason", "think", "qwq", "-r1", "deepseek-r"];
 
+/** Families that follow an instruction well enough to speak for a product. */
+const CAPABLE = ["llama", "qwen", "mistral", "mixtral", "gemma", "kimi", "command", "phi"];
+
+/**
+ * Size, read out of the identifier.
+ *
+ * Names change every few months and a keyword list ages badly — this one aged
+ * in a week and picked a 7B model trained for another language. Parameter count
+ * is the part of the name that has stayed legible for years: take the largest
+ * one in the string, and let that carry the ranking.
+ */
+function billions(id: string): number {
+  const matches = [...id.matchAll(/(\d+(?:\.\d+)?)\s*b\b/gi)].map((match) => Number(match[1]));
+  return matches.length > 0 ? Math.max(...matches) : 0;
+}
+
 function rank(id: string): number {
   const lower = id.toLowerCase();
   if (NOT_CHAT.some((fragment) => lower.includes(fragment))) return -1;
-  let score = 0;
-  if (/(120b|70b|72b|versatile|large|maverick)/.test(lower)) score += 4;
-  if (/(32b|17b|scout)/.test(lower)) score += 2;
-  if (lower.includes("instruct") || lower.includes("chat")) score += 2;
-  if (lower.includes("instant") || /\b8b\b/.test(lower)) score += 1;
-  if (lower.includes("preview") || lower.includes("deprecated")) score -= 2;
+
+  // A known family that follows instructions is the floor; size decides between
+  // them, capped so a very large model cannot outweigh being the wrong tool.
+  let score = CAPABLE.some((family) => lower.includes(family)) ? 6 : 0;
+  score += Math.min(billions(lower), 140) / 20;
+  if (lower.includes("instruct") || lower.includes("chat") || lower.includes("versatile")) score += 2;
+  if (lower.includes("preview") || lower.includes("deprecated") || lower.includes("experimental")) score -= 2;
   if (REASONING.some((fragment) => lower.includes(fragment))) score -= 5;
   return score;
 }
@@ -139,12 +161,19 @@ export async function discoverIdentifier(pool: Pool): Promise<string | undefined
     if (!response.ok) return undefined;
 
     const json = (await response.json()) as { data?: Array<{ id?: string; active?: boolean }> };
-    const best = (json.data ?? [])
+    const ranked = (json.data ?? [])
       .filter((entry) => typeof entry.id === "string" && entry.active !== false)
       .map((entry) => ({ id: entry.id as string, score: rank(entry.id as string) }))
-      .filter((entry) => entry.score >= 0)
-      .sort((a, b) => b.score - a.score)[0];
+      .sort((a, b) => b.score - a.score);
 
+    // The catalogue, once, to the server log: an operator who wants a specific
+    // engine can then pin it with WIND_MODEL_* instead of trusting a heuristic.
+    console.error(
+      `[wind:pool] ${pool} serves`,
+      ranked.map((entry) => `${entry.id}:${entry.score.toFixed(1)}`).join(" "),
+    );
+
+    const best = ranked.find((entry) => entry.score >= 0);
     if (!best) return undefined;
     discovered.set(pool, best.id);
     return best.id;
