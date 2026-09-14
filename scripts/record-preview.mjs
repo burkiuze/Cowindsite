@@ -202,6 +202,14 @@ await page.waitForTimeout(700);
 await click('a[href="/app/wind"]');
 await page.waitForTimeout(1200);
 
+// What was already in the queue before this run added to it.
+const pendingBefore = await page.evaluate(() =>
+  fetch("/api/approvals")
+    .then((response) => response.json())
+    .then((data) => data.approvals.filter((a) => a.status === "pending").length)
+    .catch(() => 0),
+);
+
 // Ask for an outcome.
 await click("textarea");
 await page.waitForTimeout(350);
@@ -213,7 +221,9 @@ await page.keyboard.press("Enter");
 await page.waitForTimeout(1600);
 mark("actions");
 await glide(900, 300, 22);
-await page.waitForTimeout(1800);
+// The reads land one after another, so there is something to watch: stay on
+// them while they run rather than cutting away to a finished list.
+await page.waitForTimeout(4200);
 
 // Open one card to show the individual calls behind the count. Which service
 // leads the list is decided by the run, not by this script, so target the card
@@ -231,7 +241,25 @@ mark("answer");
 await glide(880, 520, 18);
 await page.waitForTimeout(6500);
 
-// The action Wind prepared, and the decision that releases it.
+// The action Navio prepared, and the decision that releases it.
+//
+// Wait for the run to actually hand it over: clicking through early lands on
+// whatever was already waiting, and the take records the wrong decision. The
+// queue itself is the signal — not a line of text that may not have scrolled
+// into the frame yet.
+await page
+  .waitForFunction(
+    (before) =>
+      fetch("/api/approvals")
+        .then((response) => response.json())
+        .then((data) => data.approvals.filter((a) => a.status === "pending").length > before)
+        .catch(() => false),
+    pendingBefore,
+    { timeout: 45_000, polling: 1000 },
+  )
+  .catch(() => undefined);
+await page.waitForTimeout(700);
+
 await click('a[href="/app/approvals"]');
 await page.waitForTimeout(1600);
 await glide(900, 420, 24);

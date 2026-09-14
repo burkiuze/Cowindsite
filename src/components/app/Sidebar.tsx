@@ -7,7 +7,7 @@ import { NavioMark } from "@/components/brand/NavioMark";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import type { Conversation } from "@/lib/workspace/types";
 
-type NavItem = { href: string; label: string; icon: IconName; badge?: number };
+type NavItem = { href: string; label: string; icon: IconName; badge?: number; mark?: boolean };
 
 export type SidebarProps = {
   workspaceName: string;
@@ -36,7 +36,7 @@ export function Sidebar(props: SidebarProps) {
 
   const work: NavItem[] = [
     { href: "/app/home", label: "Home", icon: "home" },
-    { href: "/app/wind", label: "Navio", icon: "wind" },
+    { href: "/app/wind", label: "Navio", icon: "wind", mark: true },
     { href: "/app/tasks", label: "Tasks", icon: "tasks", badge: props.runningTasks || undefined },
     { href: "/app/flows", label: "Flows", icon: "flows" },
     { href: "/app/approvals", label: "Approvals", icon: "approvals", badge: props.pendingApprovals || undefined },
@@ -203,11 +203,15 @@ function NavGroup({
               {active ? (
                 <span className="absolute top-1/2 left-0 h-4 w-[2px] -translate-y-1/2 rounded-full bg-gradient-to-b from-[var(--color-stream-cyan)] to-[var(--color-stream-blue)]" />
               ) : null}
-              <Icon
-                name={item.icon}
-                size={17}
-                className={active ? "text-[var(--color-stream-cyan)]" : "text-current"}
-              />
+              {item.mark ? (
+                <NavioMark size={17} state={active ? "flow" : "idle"} />
+              ) : (
+                <Icon
+                  name={item.icon}
+                  size={17}
+                  className={active ? "text-[var(--color-stream-cyan)]" : "text-current"}
+                />
+              )}
               {!collapsed ? (
                 <>
                   <span className="flex-1 truncate">{item.label}</span>
