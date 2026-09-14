@@ -63,13 +63,20 @@ const GATEWAY_IDENTIFIERS = {
   data: "liquid/lfm2.5-2.6b:free",
 } as const;
 
+/*
+ * Read from the pool the deployment actually holds, not from memory: these are
+ * the names that pool serves today, with the strongest general-purpose engine
+ * carrying the work and the reasoning-first one taking the passes where
+ * thinking earns its keep. Any of them can still be overridden per engine, and
+ * if a name is retired the call recovers by asking the pool what replaced it.
+ */
 const DIRECT_IDENTIFIERS = {
-  primary: "llama-3.3-70b-versatile",
-  code: "llama-3.3-70b-versatile",
-  finance: "llama-3.3-70b-versatile",
-  reasoning: "llama-3.3-70b-versatile",
-  vision: "meta-llama/llama-4-scout-17b-16e-instruct",
-  data: "llama-3.1-8b-instant",
+  primary: "qwen/qwen3.8-27b",
+  code: "qwen/qwen3.8-27b",
+  finance: "qwen/qwen3.8-27b",
+  reasoning: "openai/gpt-oss-120b",
+  vision: "qwen/qwen3.8-27b",
+  data: "qwen/qwen3.6-27b",
 } as const;
 
 const DEFAULTS = usingDirectPool() ? DIRECT_IDENTIFIERS : GATEWAY_IDENTIFIERS;

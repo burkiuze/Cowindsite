@@ -103,6 +103,7 @@ const discovered = new Map<Pool, string>();
 /** Entries that are not general-purpose chat engines. */
 const NOT_CHAT = [
   "whisper", "tts", "embed", "guard", "moderation", "rerank", "transcribe", "ocr", "vision-only",
+  "orpheus", "speech", "audio", "safeguard",
   // Agentic systems and search products: they answer in their own shape, not as
   // a plain assistant, and they are not what a page of copy needs.
   "compound", "browser", "search",
