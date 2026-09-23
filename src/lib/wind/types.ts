@@ -6,6 +6,8 @@
  * deliberately not part of the user-facing surface.
  */
 
+import type { FinanceReport } from "@/lib/workspace/types";
+
 /** Product-facing identity of a Navio capability. Users only ever see these. */
 export type WindRole =
   | "wind"
@@ -140,6 +142,7 @@ export type WindEvent =
       label: string;
       status: "running" | "completed" | "failed";
     }
+  | { type: "report"; report: FinanceReport }
   | { type: "notice"; level: "info" | "warn"; message: string }
   | { type: "done"; conversationId: string; messageId: string; taskId?: string }
   | { type: "error"; message: string };

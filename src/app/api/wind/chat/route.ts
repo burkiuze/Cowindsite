@@ -22,7 +22,8 @@ import { FIRST_CLASS, allServices } from "@/lib/workspace/integrations";
 import { TOOLS } from "@/lib/wind/tools/registry";
 import { can } from "@/lib/workspace/rbac";
 import { fail, handleRouteError, rateLimit, readJson, tooMany } from "@/lib/api";
-import type { MessageAction, TaskStep, TraceStep } from "@/lib/workspace/types";
+import type { FinanceReport, MessageAction, TaskStep, TraceStep } from "@/lib/workspace/types";
+import { decorateReport } from "@/lib/workspace/report-view";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -113,6 +114,7 @@ export async function POST(request: Request) {
         let taskId: string | undefined;
         const trace: TraceStep[] = [];
         const actions: MessageAction[] = [];
+        let report: FinanceReport | undefined;
         // The client renders a service's real mark, so resolve identity here
         // rather than making the browser look it up.
         const services = new Map(allServices().map((service) => [service.slug, service]));
@@ -258,6 +260,21 @@ export async function POST(request: Request) {
               }
             }
 
+            if (event.type === "report") {
+              // A month's figures go out as their own event so the browser can
+              // render a report rather than a paragraph of numbers. Each line is
+              // decorated with its service's real mark here, the same way reads
+              // are, and stored undecorated so a reload rebuilds it the same way.
+              report = event.report;
+              controller.enqueue(
+                encoder.encode(
+                  `data: ${JSON.stringify({ type: "report", report: decorateReport(event.report, services) })}\n\n`,
+                ),
+              );
+              result = await generator.next();
+              continue;
+            }
+
             if (event.type === "action") {
               // Each read is reported twice — starting, then landing. The stored
               // message keeps one entry per read, at its latest status, so a
@@ -328,6 +345,7 @@ export async function POST(request: Request) {
                 content: sanitizeForUser(answer),
                 trace: trace.length > 0 ? trace : undefined,
                 actions: actions.length > 0 ? actions : undefined,
+                report: output.report ?? report,
                 taskId,
                 approvalId: output.approvalId,
               })

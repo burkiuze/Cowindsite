@@ -45,9 +45,9 @@ const TAKES: Take[] = [
     tab: "Close the month",
     file: "preview-finance",
     caption:
-      "One question about the month. Navio reads the ledger and the payment tool, checks what is committed against what is used, writes the summary with the figures it used — and holds the mail to the board until someone approves it.",
+      "One question closes a month. Navio totals the revenue from the payment tool and the invoices that arrived by email, builds the expense table out of the bills, sets it against last month and reports the net profit — every line naming the tool it was read from, and the mail to the board waiting on a person.",
     description:
-      "A run in the Navio workspace: Navio reads accounting and payment tools, reviews vendor commitments, drafts a board summary and holds the email for approval.",
+      "A run in the Navio workspace: Navio reads the payment tool and the mailbox, assembles a month's revenue and expenses with a six-month chart and month-on-month comparison, then holds the board email for approval.",
   },
   {
     id: "social",

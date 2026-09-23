@@ -9,8 +9,10 @@ import { primaryStream } from "./adapters/primary";
 import { isConfigured } from "./adapters/endpoints";
 import { synthesisPrompt, windSystemPrompt, type PromptContext } from "./prompts";
 import { classifyError, sanitizeForUser, userFacingError, WindError } from "./redaction";
+import { extractReport } from "./report";
 import { newTraceId, telemetry } from "./telemetry";
 import type { Attachment, LaneResult, RouteDecision, WindEvent, WindMessage } from "./types";
+import type { FinanceReport } from "@/lib/workspace/types";
 
 /**
  * Navio runtime — ASK → PLAN → ACT → REPORT.
@@ -68,6 +70,8 @@ export interface RuntimeOutput {
   /** Read-only tool calls Navio actually made on connected integrations. */
   actions: GatheredAction[];
   approvalId?: string;
+  /** A month's figures, when a finance lane assembled one. */
+  report?: FinanceReport;
   traceId: string;
   /** True when Navio answered without any specialist pass. */
   direct: boolean;
@@ -79,6 +83,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
 
   let finalText = "";
   let approvalId: string | undefined;
+  let report: FinanceReport | undefined;
   let laneResults: LaneResult[] = [];
   let actions: GatheredAction[] = [];
 
@@ -251,7 +256,16 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
   }
 
   // ---- REPORT -------------------------------------------------------------
-  const outputs = orchestration.completed.map((lane) => ({ label: lane.label, output: lane.output }));
+  const outputs = orchestration.completed.map((lane) => {
+    // A finance lane may hand back a month's figures as well as its prose. Take
+    // the figures out here, before a word of the answer is streamed: they are
+    // rendered as a report, and the reader never sees the JSON they arrived in.
+    const found = extractReport(lane.output);
+    if (found.report && !report) report = found.report;
+    return { label: lane.label, output: found.text };
+  });
+
+  if (report) yield { type: "report", report };
 
   if (!decision.synthesize && outputs.length === 1) {
     finalText = stripToolMarkers(outputs[0].output);
@@ -307,7 +321,7 @@ export async function* runWind(input: RuntimeInput): AsyncGenerator<WindEvent, R
     }
   }
 
-  return { text: finalText, decision, laneResults, actions, approvalId, traceId, direct: false };
+  return { text: finalText, decision, laneResults, actions, approvalId, report, traceId, direct: false };
 }
 
 /** Escalation path when the fast conversational layer itself fails. */
@@ -370,7 +384,7 @@ const TOOL_LINE = /^\s*TOOL:\s*[A-Za-z0-9_.-]+\s*$/m;
  * they are cut from any text a person is shown.
  */
 function stripToolMarkers(text: string): string {
-  return text.replace(TOOL_BLOCK, "").replace(TOOL_LINE, "").trim();
+  return extractReport(text.replace(TOOL_BLOCK, "").replace(TOOL_LINE, "")).text.trim();
 }
 
 function extractTool(

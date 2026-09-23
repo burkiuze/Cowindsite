@@ -8,6 +8,8 @@ import { Icon } from "@/components/ui/Icon";
 import { Markdown } from "@/components/app/Markdown";
 import { ExecutionTrace, type TraceLane } from "@/components/app/ExecutionTrace";
 import { ActionCards, type RunAction } from "@/components/app/ActionCards";
+import { FinanceReport } from "@/components/app/FinanceReport";
+import type { FinanceReportView } from "@/lib/workspace/report-view";
 import { Pill } from "@/components/ui/primitives";
 
 type ChatAttachment = {
@@ -28,6 +30,7 @@ export type ChatMessage = {
   attachments?: Array<{ id: string; name: string; kind: string; size: number }>;
   trace?: TraceLane[];
   actions?: RunAction[];
+  report?: FinanceReportView;
   approvalId?: string;
   taskId?: string;
 };
@@ -60,6 +63,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
   const [phase, setPhase] = useState<string>("");
   const [lanes, setLanes] = useState<TraceLane[]>([]);
   const [actions, setActions] = useState<RunAction[]>([]);
+  const [report, setReport] = useState<FinanceReportView | null>(null);
   const [draft, setDraft] = useState("");
   const [notice, setNotice] = useState<{ level: "info" | "warn"; message: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -91,6 +95,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
     setMessages(initialMessages);
     setLanes([]);
     setActions([]);
+    setReport(null);
     setDraft("");
     setApproval(null);
     setError(null);
@@ -159,6 +164,8 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
     let answer = "";
     const runLanes = new Map<string, TraceLane>();
     const runActions: RunAction[] = [];
+    let runReport: FinanceReportView | undefined;
+    setReport(null);
 
     try {
       const response = await fetch("/api/wind/chat", {
@@ -232,6 +239,12 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
               setActions([...runActions]);
               break;
             }
+            case "report":
+              // A month's figures render as a report, not as a paragraph of
+              // numbers; the answer text alongside it stays prose.
+              setReport(event.report);
+              runReport = event.report;
+              break;
             case "delta":
               answer += event.text;
               setDraft(answer);
@@ -257,6 +270,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
                   createdAt: Date.now(),
                   trace: [...runLanes.values()],
                   actions: [...runActions],
+                  report: runReport,
                   taskId: event.taskId,
                 },
               ]);
@@ -340,6 +354,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
                 <div className="animate-rise space-y-3">
                   {lanes.length > 0 ? <ExecutionTrace lanes={lanes} phase={phase} /> : null}
                   <ActionCards actions={actions} />
+                  {report ? <FinanceReport report={report} /> : null}
                   <div className="flex gap-3.5">
                     <NavioMark size={26} state="thinking" className="mt-0.5" />
                     <div className="min-w-0 flex-1">
@@ -510,6 +525,7 @@ function MessageRow({ message, userInitials }: { message: ChatMessage; userIniti
     <div className="space-y-3">
       {message.trace && message.trace.length > 0 ? <ExecutionTrace lanes={message.trace} collapsed /> : null}
       {message.actions && message.actions.length > 0 ? <ActionCards actions={message.actions} /> : null}
+      {message.report ? <FinanceReport report={message.report} /> : null}
       <div className="flex gap-3.5">
         <NavioMark size={26} className="mt-0.5" />
         <div className="min-w-0 flex-1">

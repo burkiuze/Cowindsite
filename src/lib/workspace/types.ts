@@ -75,8 +75,50 @@ export interface Message {
   trace?: TraceStep[];
   /** Read-only tool calls Navio made on connected services during the run. */
   actions?: MessageAction[];
+  /** A month's figures, when the run produced one. */
+  report?: FinanceReport;
   taskId?: string;
   approvalId?: string;
+}
+
+/**
+ * A month's figures, as Navio assembled them.
+ *
+ * Every line names where it came from, because a number in a finance report is
+ * only worth as much as its provenance: a subscription total read from the
+ * payment tool and an invoice read out of a mail thread are different kinds of
+ * fact, and the report says which is which rather than blending them into one
+ * confident figure.
+ */
+export interface FinanceReport {
+  /** The month this report covers, e.g. "September 2026". */
+  month: string;
+  /** The month it is compared against. */
+  previous: string;
+  currency: string;
+  revenue: FinanceLine[];
+  expenses: FinanceLine[];
+  /** Six months of totals, oldest first, for the trend. */
+  history: FinanceMonth[];
+  /** What Navio could not reach, said plainly rather than estimated. */
+  missing?: string[];
+}
+
+export interface FinanceLine {
+  label: string;
+  /** Where the figure was read: an integration id, e.g. "stripe" or "gmail". */
+  source: string;
+  /** What the source called it — a thread subject, a product name. */
+  detail?: string;
+  amount: number;
+  /** The same line last month, when there was one. */
+  previousAmount?: number;
+}
+
+export interface FinanceMonth {
+  label: string;
+  revenue: number;
+  expenses: number;
 }
 
 export interface MessageAction {

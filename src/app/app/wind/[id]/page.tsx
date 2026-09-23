@@ -3,6 +3,7 @@ import { WindChat, type ChatMessage } from "@/components/app/WindChat";
 import { currentSession } from "@/lib/workspace/session";
 import { messagesFor, store } from "@/lib/workspace/store";
 import { allServices } from "@/lib/workspace/integrations";
+import { decorateReport } from "@/lib/workspace/report-view";
 import { isConfigured } from "@/lib/wind/adapters/endpoints";
 import { SUGGESTIONS } from "../suggestions";
 
@@ -38,6 +39,7 @@ export default async function ConversationPage({ params }: { params: Promise<{ i
         dark: service?.dark ?? false,
       };
     }),
+    report: message.report ? decorateReport(message.report, services) : undefined,
     taskId: message.taskId,
     approvalId: message.approvalId,
   }));

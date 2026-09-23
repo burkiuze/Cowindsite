@@ -34,11 +34,14 @@ const marks = existsSync(join(RAW_DIR, "marks.json"))
 const at = (label, fallback) => marks.find((mark) => mark.label === label)?.at ?? fallback;
 
 /**
- * Two pushes, each held briefly: the integrations Wind just read, and the
- * receipt that proves the approved action actually ran.
+ * Short pushes, each held briefly: the integrations Navio just read, the month's
+ * figures when the run produced them, and the receipt that proves the approved
+ * action actually ran. A run without a report simply has one push fewer.
  */
+const reportAt = marks.find((mark) => mark.label === "report")?.at;
 const PUSHES = [
   { start: at("actions", 20) + 0.8, end: at("actions", 20) + 4.2, scale: 1.22, cx: 0.58, cy: 0.42 },
+  ...(reportAt ? [{ start: reportAt + 0.8, end: reportAt + 5.4, scale: 1.2, cx: 0.58, cy: 0.38 }] : []),
   { start: at("receipt", 44) - 0.3, end: at("receipt", 44) + 3.0, scale: 1.26, cx: 0.58, cy: 0.72 },
 ];
 
@@ -83,7 +86,9 @@ run(["-i", SOURCE, "-vf", filter, "-c:v", "libx264", "-preset", "slow", "-crf", 
 run(["-i", SOURCE, "-vf", filter, "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "42",
   "-row-mt", "1", "-an", join(OUT_DIR, `${NAME}.webm`)]);
 
-run(["-ss", String(at("actions", 20) + 2), "-i", SOURCE, "-vframes", "1",
+// The poster is the still a visitor sees before pressing play, so prefer the
+// frame that says most about the run: the report, when there is one.
+run(["-ss", String(reportAt ? reportAt + 3 : at("actions", 20) + 2), "-i", SOURCE, "-vframes", "1",
   "-vf", `scale=${WIDTH}:-2`, "-c:v", "libwebp", "-quality", "82", join(OUT_DIR, `${NAME}-poster.webp`)]);
 
 console.log("wrote", NAME, "→", OUT_DIR);

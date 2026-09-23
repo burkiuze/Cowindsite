@@ -31,8 +31,8 @@ const WORK: Array<{ icon: IconName; title: string; body: string }> = [
   },
   {
     icon: "tasks",
-    title: "The board pack, assembled",
-    body: "Revenue, spend by category, the month's variances, the decisions that need making — pulled from the sources, written in one voice, and held in front of you before a single recipient is emailed.",
+    title: "The month, closed",
+    body: "Revenue totalled across the payment tool and the invoices sitting in the mailbox, an expense table built from the bills themselves, this month set against last, and the net profit at the bottom. Every line says which tool it was read from, and the mail to the board waits for you.",
   },
   {
     icon: "flows",

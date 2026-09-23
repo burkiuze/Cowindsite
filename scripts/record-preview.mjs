@@ -35,8 +35,12 @@ const SCRIPTS = {
   },
   finance: {
     prompt:
-      "Bu çeyreğin runway'ini ve yanma hızını çıkar, abonelik yenilemelerimizi gözden geçir ve yönetim kuruluna gidecek özeti hazırla.",
+      "Eylül ayını kapat: ödeme sisteminden ve maillerden gelen tüm geliri topla, maile gelen faturalardan gider tablosunu oluştur, geçen ayla karşılaştır ve net kârı göster. Aylık raporu hazırla ve yönetim kuruluna e-posta gönder.",
     runMs: 3200,
+    // This run produces a month's figures, not just prose. The take stays on
+    // the report — the headline, the six-month chart, then the two ledgers —
+    // because that table is the thing worth showing.
+    report: true,
   },
   social: {
     prompt:
@@ -237,6 +241,32 @@ if (await clickIfPresent("[data-action-card]")) {
 // Watch the streams open and land, then the answer being written.
 await glide(900, 430, 18);
 await page.waitForTimeout(6000);
+
+// A run that closes a month renders the month. Read it the way a person does:
+// the headline figures, the shape of the last six months, then the lines.
+if (script.report) {
+  try {
+    await glideToSelector("[data-finance-report]", { dy: -60, timeout: 60_000 });
+    mark("report");
+    await page.waitForTimeout(2400);
+
+    // Hovering a month brings out its two figures, so linger on two of them.
+    await glideToSelector("[data-finance-chart]", { dx: -40, dy: 30 });
+    await page.waitForTimeout(1600);
+    await glideToSelector("[data-finance-chart]", { dx: 150, dy: 30 });
+    await page.waitForTimeout(1800);
+
+    // Down through the revenue lines and the expense table built from the bills.
+    await glideToSelector("[data-finance-report] table", { dy: 40 });
+    await page.waitForTimeout(3000);
+    await glideToSelector(":nth-match([data-finance-report] table, 2)", { dy: 120 });
+    await page.waitForTimeout(2600);
+  } catch {
+    // The report is part of the run, not of this script: a take without one
+    // still records the answer and the approval.
+  }
+}
+
 mark("answer");
 await glide(880, 520, 18);
 await page.waitForTimeout(6500);
