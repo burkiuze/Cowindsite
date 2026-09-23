@@ -9,6 +9,7 @@ import type {
   IntegrationConnection,
   KnowledgeSource,
   Message,
+  SparkRun,
   Task,
   Team,
   User,
@@ -61,6 +62,7 @@ export interface WorkspaceStore {
   approvals: Approval[];
   artifacts: Artifact[];
   activity: ActivityEvent[];
+  sparkRuns: SparkRun[];
 }
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -137,6 +139,7 @@ function createStore(): WorkspaceStore {
     approvals: [...SEED_APPROVALS],
     artifacts: seedArtifacts(),
     activity: [...SEED_ACTIVITY],
+    sparkRuns: [],
   };
 }
 
@@ -239,6 +242,26 @@ export function appendMessage(message: Omit<Message, "id" | "createdAt"> & { id?
   store().messages.push(entry);
   const conversation = store().conversations.find((c) => c.id === message.conversationId);
   if (conversation) conversation.updatedAt = entry.createdAt;
+  return entry;
+}
+
+/** Change a stored message in place — how a Spark run fills in its answer. */
+export function updateMessage(messageId: string, patch: Partial<Omit<Message, "id" | "conversationId">>): Message | undefined {
+  const message = store().messages.find((candidate) => candidate.id === messageId);
+  if (!message) return undefined;
+  Object.assign(message, patch);
+  const conversation = store().conversations.find((c) => c.id === message.conversationId);
+  if (conversation) conversation.updatedAt = Date.now();
+  return message;
+}
+
+export function sparkRun(runId: string): SparkRun | undefined {
+  return store().sparkRuns.find((run) => run.id === runId);
+}
+
+export function createSparkRun(run: Omit<SparkRun, "id">): SparkRun {
+  const entry: SparkRun = { id: id("spk"), ...run };
+  store().sparkRuns.push(entry);
   return entry;
 }
 

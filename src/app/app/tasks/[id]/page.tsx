@@ -6,6 +6,7 @@ import { Icon } from "@/components/ui/Icon";
 import { Panel, Pill, SectionHeader, relativeTime } from "@/components/ui/primitives";
 import { Markdown } from "@/components/app/Markdown";
 import { ActivityTimeline } from "@/components/app/ActivityTimeline";
+import { LiveRefresh } from "@/components/app/LiveRefresh";
 import { STATUS_LABEL, STATUS_TONE } from "../status";
 
 export const dynamic = "force-dynamic";
@@ -32,6 +33,7 @@ export default async function TaskPage({ params }: { params: Promise<{ id: strin
 
   return (
     <div className="mx-auto w-full max-w-5xl px-8 py-10">
+      <LiveRefresh active={task.status === "running"} />
       <Link
         href="/app/tasks"
         className="focus-ring inline-flex items-center gap-1.5 rounded-md text-[12.5px] text-[var(--color-ink-faint)] transition-colors hover:text-[var(--color-ink)]"

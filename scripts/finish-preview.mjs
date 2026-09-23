@@ -44,11 +44,14 @@ const marks = existsSync(join(RAW_DIR, "marks.json"))
  */
 const PUSH_SPECS = [
   { label: "actions", lead: 0.8, hold: 3.4, scale: 1.22, cx: 0.58, cy: 0.42 },
+  { label: "mode", lead: 0.2, hold: 3.0, scale: 1.3, cx: 0.5, cy: 0.86 },
+  { label: "rounds", lead: 1.5, hold: 4.2, scale: 1.18, cx: 0.6, cy: 0.5 },
   { label: "position", lead: 0.6, hold: 3.6, scale: 1.18, cx: 0.55, cy: 0.3 },
   { label: "report", lead: 0.8, hold: 4.6, scale: 1.2, cx: 0.58, cy: 0.38 },
   { label: "charts", lead: 0.6, hold: 4.0, scale: 1.2, cx: 0.55, cy: 0.5 },
   { label: "receivables", lead: 0.6, hold: 3.6, scale: 1.18, cx: 0.55, cy: 0.5 },
   { label: "sources", lead: 0.6, hold: 3.6, scale: 1.2, cx: 0.62, cy: 0.55 },
+  { label: "passed", lead: 0.4, hold: 3.8, scale: 1.2, cx: 0.6, cy: 0.4 },
   { label: "receipt", lead: -0.3, hold: 3.3, scale: 1.26, cx: 0.58, cy: 0.72 },
 ];
 
@@ -101,7 +104,7 @@ run(["-i", SOURCE, "-vf", filter, "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "42
 
 // The poster is the still a visitor sees before pressing play, so prefer the
 // frame that says most about the run: the report, when there is one.
-const posterAt = marks.find((mark) => ["report", "position", "actions"].includes(mark.label))?.at;
+const posterAt = marks.find((mark) => ["report", "position", "passed", "actions"].includes(mark.label))?.at;
 run(["-ss", String((posterAt ?? 20) + 2.5), "-i", SOURCE, "-vframes", "1",
   "-vf", `scale=${WIDTH}:-2`, "-c:v", "libwebp", "-quality", "82", join(OUT_DIR, `${NAME}-poster.webp`)]);
 

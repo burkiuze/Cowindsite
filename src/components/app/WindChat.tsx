@@ -9,6 +9,7 @@ import { Markdown } from "@/components/app/Markdown";
 import { ExecutionTrace, type TraceLane } from "@/components/app/ExecutionTrace";
 import { ActionCards, type RunAction } from "@/components/app/ActionCards";
 import { FinanceReport } from "@/components/app/FinanceReport";
+import { SparkRunCard } from "@/components/app/SparkRunCard";
 import type { FinanceReportView } from "@/lib/workspace/report-view";
 import { Pill } from "@/components/ui/primitives";
 
@@ -31,6 +32,7 @@ export type ChatMessage = {
   trace?: TraceLane[];
   actions?: RunAction[];
   report?: FinanceReportView;
+  sparkRunId?: string;
   approvalId?: string;
   taskId?: string;
 };
@@ -44,6 +46,13 @@ type Props = {
 };
 
 const MAX_ATTACHMENTS = 6;
+
+type Mode = "normal" | "spark";
+const MODE_KEY = "navio:chat-mode";
+const MODES: Array<{ id: Mode; label: string; icon: "send" | "sparkle" }> = [
+  { id: "normal", label: "Normal", icon: "send" },
+  { id: "spark", label: "Spark", icon: "sparkle" },
+];
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 
 /**
@@ -64,6 +73,28 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
   const [lanes, setLanes] = useState<TraceLane[]>([]);
   const [actions, setActions] = useState<RunAction[]>([]);
   const [report, setReport] = useState<FinanceReportView | null>(null);
+  const [mode, setMode] = useState<Mode>("normal");
+  const [starting, setStarting] = useState(false);
+
+  // The mode is a per-person preference, not state anyone else needs: keep it
+  // in this browser, and never let a blocked storage stop the chat working.
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(MODE_KEY);
+      if (saved === "spark" || saved === "normal") setMode(saved);
+    } catch {
+      // Storage unavailable: normal mode it is.
+    }
+  }, []);
+
+  function chooseMode(next: Mode) {
+    setMode(next);
+    try {
+      window.localStorage.setItem(MODE_KEY, next);
+    } catch {
+      // Not remembered, still applied.
+    }
+  }
   const [draft, setDraft] = useState("");
   const [notice, setNotice] = useState<{ level: "info" | "warn"; message: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -102,8 +133,12 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
   }, [conversationId, initialMessages]);
 
   const canSend = useMemo(
-    () => windReady && !streaming && (input.trim().length > 0 || attachments.length > 0),
-    [windReady, streaming, input, attachments.length],
+    () =>
+      windReady &&
+      !streaming &&
+      !starting &&
+      (mode === "spark" ? input.trim().length > 0 : input.trim().length > 0 || attachments.length > 0),
+    [windReady, streaming, starting, mode, input, attachments.length],
   );
 
   async function handleFiles(fileList: FileList | null) {
@@ -134,6 +169,7 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
   }
 
   async function send(promptOverride?: string) {
+    if (mode === "spark") return spark(promptOverride);
     const message = (promptOverride ?? input).trim();
     if (!message && attachments.length === 0) return;
     if (streaming) return;
@@ -310,6 +346,68 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
     }
   }
 
+  /**
+   * Hand the request to Spark.
+   *
+   * The server answers at once with where the run lives and keeps working after
+   * the response; this only places the run in the conversation. The composer is
+   * free again straight away — Spark does not hold the chat hostage.
+   */
+  async function spark(promptOverride?: string) {
+    const message = (promptOverride ?? input).trim();
+    if (!message || starting) return;
+
+    setError(null);
+    setNotice(null);
+    setInput("");
+    setStarting(true);
+
+    try {
+      const response = await fetch("/api/spark", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ conversationId: activeConversation.current, message }),
+      });
+      const data = (await response.json()) as {
+        runId?: string;
+        conversationId?: string;
+        userMessageId?: string;
+        messageId?: string;
+        taskId?: string;
+        error?: string;
+      };
+      if (!response.ok || !data.runId || !data.conversationId || !data.messageId) {
+        setError(data.error ?? "Spark could not start that run. Nothing was changed — try again.");
+        setInput(message);
+        return;
+      }
+
+      const isNew = !activeConversation.current;
+      activeConversation.current = data.conversationId;
+      setMessages((current) => [
+        ...current,
+        { id: data.userMessageId ?? `local_${Date.now()}`, role: "user", content: message, createdAt: Date.now() },
+        {
+          id: data.messageId!,
+          role: "assistant",
+          content: "",
+          createdAt: Date.now(),
+          sparkRunId: data.runId,
+          taskId: data.taskId,
+        },
+      ]);
+      if (isNew) {
+        router.replace(`/app/wind/${data.conversationId}`);
+        router.refresh();
+      }
+    } catch {
+      setError("Spark could not start that run. Nothing was changed — try again.");
+      setInput(message);
+    } finally {
+      setStarting(false);
+    }
+  }
+
   function stop() {
     abortRef.current?.abort();
     setStreaming(false);
@@ -459,7 +557,13 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
                   if (canSend) void send();
                 }
               }}
-              placeholder={windReady ? "Ask Navio for an outcome…" : "Connect Navio's engines in Settings to start"}
+              placeholder={
+                !windReady
+                  ? "Connect Navio's engines in Settings to start"
+                  : mode === "spark"
+                    ? "Give Spark a task to work on until it is right…"
+                    : "Ask Navio for an outcome…"
+              }
               className="max-h-[200px] flex-1 resize-none bg-transparent py-2 text-[14px] leading-6 text-[var(--color-ink)] placeholder:text-[var(--color-ink-faint)] focus:outline-none disabled:cursor-not-allowed"
             />
 
@@ -485,9 +589,42 @@ export function WindChat({ conversationId, initialMessages, userInitials, windRe
             )}
           </div>
 
-          <p className="mt-2 text-center text-[11px] text-[var(--color-ink-faint)]">
-            Navio holds anything consequential for your approval before it acts.
-          </p>
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            <div
+              role="radiogroup"
+              aria-label="How Navio works on this request"
+              className="flex rounded-lg border border-[var(--color-hairline)] bg-[var(--color-panel)] p-0.5"
+            >
+              {MODES.map((option) => {
+                const active = mode === option.id;
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    data-mode={option.id}
+                    onClick={() => chooseMode(option.id)}
+                    className={`focus-ring flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[12px] font-medium transition-colors ${
+                      active
+                        ? option.id === "spark"
+                          ? "bg-gradient-to-br from-[#ffb937] to-[#f0567f] text-[#1a0d05]"
+                          : "bg-[var(--color-raised)] text-[var(--color-ink)]"
+                        : "text-[var(--color-ink-faint)] hover:text-[var(--color-ink-muted)]"
+                    }`}
+                  >
+                    <Icon name={option.icon} size={13} strokeWidth={option.id === "spark" ? 2 : 1.6} />
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="min-w-0 flex-1 text-[11px] leading-snug text-[var(--color-ink-faint)]">
+              {mode === "spark"
+                ? "Spark works in the background — draft, review, revise — until every check it set passes. You can leave this page."
+                : "Navio holds anything consequential for your approval before it acts."}
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -517,6 +654,17 @@ function MessageRow({ message, userInitials }: { message: ChatMessage; userIniti
         <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-hairline)] bg-[var(--color-raised)] text-[11px] font-semibold">
           {userInitials}
         </span>
+      </div>
+    );
+  }
+
+  if (message.sparkRunId) {
+    return (
+      <div className="flex gap-3.5">
+        <NavioMark size={26} className="mt-0.5" />
+        <div className="min-w-0 flex-1">
+          <SparkRunCard runId={message.sparkRunId} fallback={message.content} />
+        </div>
       </div>
     );
   }

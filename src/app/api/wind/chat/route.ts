@@ -10,7 +10,6 @@ import { currentSession } from "@/lib/workspace/session";
 import { retrieve } from "@/lib/workspace/knowledge";
 import {
   appendMessage,
-  createApproval,
   createConversation,
   createTask,
   logActivity,
@@ -18,8 +17,8 @@ import {
   store,
   updateTask,
 } from "@/lib/workspace/store";
-import { FIRST_CLASS, allServices } from "@/lib/workspace/integrations";
-import { TOOLS } from "@/lib/wind/tools/registry";
+import { allServices } from "@/lib/workspace/integrations";
+import { approvalRequester, reachableTools, titleFrom } from "@/lib/workspace/run-context";
 import { can } from "@/lib/workspace/rbac";
 import { fail, handleRouteError, rateLimit, readJson, tooMany } from "@/lib/api";
 import type { FinanceReport, MessageAction, TaskStep, TraceStep } from "@/lib/workspace/types";
@@ -83,23 +82,8 @@ export async function POST(request: Request) {
     // The current turn is passed separately.
     history.pop();
 
-    const connectedIds = new Set(
-      store()
-        .connections.filter((connection) => connection.status === "connected")
-        .map((connection) => connection.integrationId),
-    );
-
-    const connectedTools = FIRST_CLASS.filter((integration) => connectedIds.has(integration.id)).map(
-      (integration) => integration.name,
-    );
-
     // Navio may only choose a tool that is genuinely reachable from here.
-    const availableTools = TOOLS.filter((tool) => connectedIds.has(tool.integrationId)).map((tool) => ({
-      id: tool.id,
-      name: tool.name,
-      integrationId: tool.integrationId,
-      effect: tool.effect,
-    }));
+    const { connectedTools, availableTools } = reachableTools();
 
     const encoder = new TextEncoder();
     const abort = new AbortController();
@@ -151,38 +135,10 @@ export async function POST(request: Request) {
                 }
                 return result.sources.length > 0 ? { text: result.text, sources: result.sources } : null;
               },
-              requestApproval: async (draft) => {
-                const approval = createApproval({
-                  workspaceId: session.workspace.id,
-                  title: draft.title,
-                  summary: draft.summary,
-                  payload: draft.payload,
-                  risk: draft.risk,
-                  toolId: draft.toolId,
-                  integrationId: draft.integrationId,
-                  steps: draft.steps?.map((step, index) => ({
-                    id: `step_${index + 1}`,
-                    toolId: step.toolId,
-                    integrationId: step.integrationId,
-                    label: step.label,
-                    payload: step.payload,
-                    status: "pending" as const,
-                  })),
-                  requestedBy: session.user.id,
-                  requestedByAgent: "Navio",
-                  conversationId: conversation.id,
-                  taskId,
-                });
-                logActivity({
-                  kind: "approval.requested",
-                  actor: "Navio",
-                  summary: `Approval requested: ${draft.title}`,
-                  approvalId: approval.id,
-                  conversationId: conversation.id,
-                  taskId,
-                });
-                return { id: approval.id };
-              },
+              requestApproval: approvalRequester(session, {
+                conversationId: conversation.id,
+                taskId: () => taskId,
+              }),
             },
           });
 
@@ -397,10 +353,4 @@ export async function POST(request: Request) {
 
 function roleLabel(role: WindRole): string {
   return ROLE_LABEL[role] ?? "Navio";
-}
-
-function titleFrom(message: string): string {
-  const firstLine = message.trim().split("\n")[0]?.trim() ?? "New conversation";
-  const clipped = firstLine.length > 56 ? `${firstLine.slice(0, 53).trimEnd()}…` : firstLine;
-  return clipped || "New conversation";
 }

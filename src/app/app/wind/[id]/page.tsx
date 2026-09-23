@@ -40,6 +40,7 @@ export default async function ConversationPage({ params }: { params: Promise<{ i
       };
     }),
     report: message.report ? decorateReport(message.report, services) : undefined,
+    sparkRunId: message.sparkRunId,
     taskId: message.taskId,
     approvalId: message.approvalId,
   }));

@@ -383,11 +383,11 @@ const TOOL_LINE = /^\s*TOOL:\s*[A-Za-z0-9_.-]+\s*$/m;
  * Those markers are instructions for the executor, not part of the answer, so
  * they are cut from any text a person is shown.
  */
-function stripToolMarkers(text: string): string {
+export function stripToolMarkers(text: string): string {
   return extractReport(text.replace(TOOL_BLOCK, "").replace(TOOL_LINE, "")).text.trim();
 }
 
-function extractTool(
+export function extractTool(
   output: string,
   available: AvailableTool[],
 ): { tool?: AvailableTool; steps?: ApprovalDraftStep[]; payload: string } {

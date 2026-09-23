@@ -33,6 +33,15 @@ const SCRIPTS = {
       "Yazılım ekibiyle sürüm 2.15 için hazırlık toplantısı ayarla. Açık pull request'leri ve blocker issue'ları incele, kalan riskleri gündeme koy ve herkese davet gönder.",
     runMs: 3200,
   },
+  // Spark is handed a task and left to it: the take switches modes, gives it
+  // the sponsorship package, walks away to Tasks while it works, and comes back
+  // to a version that passed every check it set for itself.
+  spark: {
+    spark: true,
+    prompt:
+      "2027 sponsorluk teklif paketimizi hazırla: mevcut sponsorluk anlaşmalarını ve geçen yılın sonuçlarını incele, üç kademeli paket oluştur, fiyatları verilerle gerekçelendir ve potansiyel sponsorlara gidecek e-postayı hazırla.",
+    runMs: 3200,
+  },
   // Finance is not asked, it is read: this take walks the finance surface
   // itself rather than typing a request, because the month is already on the
   // page before anyone opens it.
@@ -296,6 +305,104 @@ async function tour() {
   await page.waitForTimeout(1600);
 }
 
+
+/**
+ * The Spark take.
+ *
+ * Normal mode is watched; Spark is left to work. So the take does exactly
+ * that: switch the mode, hand over the task, watch the first review come back,
+ * then leave — to the run's own task, where the rounds keep landing — and come
+ * back to the conversation for the version that cleared the bar, and the email
+ * it prepared from it, still waiting on a person.
+ */
+async function sparkTake() {
+  await page.goto(`${BASE}/app/home`, { waitUntil: "networkidle" });
+  await page.waitForTimeout(1200);
+  await glide(820, 320, 20);
+  await page.waitForTimeout(400);
+
+  await click('a[href="/app/wind"]');
+  await page.waitForTimeout(1300);
+
+  const pendingBefore = await page.evaluate(() =>
+    fetch("/api/approvals")
+      .then((response) => response.json())
+      .then((data) => data.approvals.filter((a) => a.status === "pending").length)
+      .catch(() => 0),
+  );
+
+  // Normal, then Spark.
+  mark("mode");
+  await glideToSelector('[data-mode="normal"]');
+  await page.waitForTimeout(500);
+  await click('[data-mode="spark"]');
+  await page.waitForTimeout(1200);
+
+  await click("textarea");
+  await page.waitForTimeout(300);
+  await type(script.prompt, 20);
+  await page.waitForTimeout(500);
+  await page.keyboard.press("Enter");
+
+  // The reads, the bar, the first draft and its review.
+  await page.waitForSelector("[data-spark-run]", { timeout: 20_000 });
+  await page.waitForTimeout(900);
+  mark("rounds");
+  await glide(1000, 420, 22);
+  await page.waitForSelector('[data-spark-rounds="2"]', { timeout: 60_000 });
+  await page.waitForTimeout(1600);
+  await glideToSelector("[data-spark-rounds] li", { dy: 20 });
+  await page.waitForTimeout(1800);
+
+  // Leave. The run does not need the page.
+  const conversationUrl = new URL(page.url()).pathname;
+  mark("background");
+  await click("[data-spark-task]");
+  await page.waitForTimeout(2600);
+  await glide(900, 460, 22);
+  await page.waitForTimeout(4200);
+
+  // Back to the conversation, by the sidebar, like a person would.
+  await click(`a[href="${conversationUrl}"]`);
+  await page.waitForSelector('[data-spark-run="completed"]', { timeout: 60_000 });
+  await page.waitForTimeout(600);
+  await focusOn("[data-spark-run]", "start");
+  mark("passed");
+  await glide(1000, 300, 20);
+  await page.waitForTimeout(2600);
+  await glideToSelector("text=Quality bar", { dy: 80 });
+  await page.waitForTimeout(2400);
+
+  // The version that passed, and what it prepared.
+  await focusOn("[data-spark-run] table", "center");
+  await glideToSelector("[data-spark-run] table", { dy: 20 });
+  await page.waitForTimeout(3000);
+
+  await page
+    .waitForFunction(
+      (before) =>
+        fetch("/api/approvals")
+          .then((response) => response.json())
+          .then((data) => data.approvals.filter((a) => a.status === "pending").length > before)
+          .catch(() => false),
+      pendingBefore,
+      { timeout: 30_000, polling: 800 },
+    )
+    .catch(() => undefined);
+
+  await click("[data-spark-approval]");
+  await page.waitForTimeout(1800);
+  await glide(900, 420, 22);
+  await page.waitForTimeout(1600);
+
+  mark("approval");
+  await click('button:has-text("Approve")');
+  await page.waitForTimeout(script.runMs);
+  await glideToSelector("text=Executed against", { timeout: 60_000 });
+  mark("receipt");
+  await page.waitForTimeout(3200);
+}
+
 async function conversation() {
   // --- the run ---------------------------------------------------------------
   await page.goto(`${BASE}/app/home`, { waitUntil: "networkidle" });
@@ -420,7 +527,7 @@ async function conversation() {
   await page.waitForTimeout(1400);
 }
 
-await (script.tour ? tour() : conversation());
+await (script.tour ? tour() : script.spark ? sparkTake() : conversation());
 
 await context.close();
 await browser.close();

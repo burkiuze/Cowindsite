@@ -32,6 +32,15 @@ const TAKES: Take[] = [
       "A run in the Navio workspace: one request fans out across specialist streams, prepares a meeting with invitations and assignments, and waits for a person to approve before anything is sent.",
   },
   {
+    id: "spark",
+    tab: "Spark: until it is right",
+    file: "preview-spark",
+    caption:
+      "Spark mode, on a sponsorship package. Navio reads the agreements, the mail and last year's reach, sets itself six checks the package must pass, then drafts, reviews and revises on its own — 2 of 6, then 5 of 6, then all six — while the person who asked is somewhere else entirely. The email it prepares from the final version still waits for their approval.",
+    description:
+      "A Spark run in the Navio workspace: a sponsorship package is drafted, reviewed against six self-set checks and revised in the background until every check passes, then its email is held for approval.",
+  },
+  {
     id: "engineering",
     tab: "Prepare a release",
     file: "preview-engineering",

@@ -77,8 +77,70 @@ export interface Message {
   actions?: MessageAction[];
   /** A month's figures, when the run produced one. */
   report?: FinanceReport;
+  /** Set when this answer is the product of a Spark run rather than one pass. */
+  sparkRunId?: string;
   taskId?: string;
   approvalId?: string;
+}
+
+/**
+ * A Spark run.
+ *
+ * Normal mode answers in one pass while you watch. Spark takes the request
+ * away and works it on the server: it reads what it is allowed to read, sets
+ * its own quality bar for the result, drafts, reviews the draft against that
+ * bar, revises what fell short, and repeats until every check passes or it runs
+ * out of rounds — whichever comes first, and it says which. Leaving the page
+ * does not stop it; the result lands in the conversation when it is ready.
+ *
+ * Spark polishes work, it does not widen what Navio may do: anything that
+ * sends, pays, publishes or changes a record is still prepared and held for a
+ * person, exactly as in normal mode.
+ */
+export interface SparkRun {
+  id: string;
+  workspaceId: string;
+  conversationId: string;
+  /** The assistant message this run fills in when it finishes. */
+  messageId: string;
+  taskId?: string;
+  request: string;
+  createdBy: string;
+  status: "running" | "completed" | "stopped" | "failed";
+  phase: SparkPhase;
+  reads: Array<{ id: string; integrationId: string; label: string; status: "running" | "completed" | "failed" }>;
+  /** The bar the result is held to, set by Navio before the first draft. */
+  criteria: string[];
+  rounds: SparkRound[];
+  maxRounds: number;
+  /** The latest draft, markers stripped: what a person would read right now. */
+  draft?: string;
+  /** Why the run stopped iterating: every check passed, or the round limit. */
+  outcome?: "passed" | "limit";
+  approvalId?: string;
+  error?: string;
+  stopRequested?: boolean;
+  startedAt: number;
+  finishedAt?: number;
+}
+
+export type SparkPhase = "reading" | "criteria" | "drafting" | "reviewing" | "revising" | "preparing" | "done";
+
+export interface SparkRound {
+  n: number;
+  kind: "draft" | "revision";
+  startedAt: number;
+  finishedAt?: number;
+  /** The review of this round's draft, one entry per criterion. */
+  checks: SparkCheck[];
+  passed?: boolean;
+}
+
+export interface SparkCheck {
+  criterion: string;
+  ok: boolean;
+  /** What fell short, in one line. Present only when `ok` is false. */
+  issue?: string;
 }
 
 /**

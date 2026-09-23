@@ -35,6 +35,15 @@ run at the same time across specialists (Navio Code, Navio Finance, Navio
 Reasoning, Navio Research, Navio Vision, Navio Data), and answers in one voice.
 Nobody picks a model or a tool.
 
+Two modes in the chat. Normal answers in one pass while you watch. Spark takes
+the task away and works it in the background: it reads what it may read, sets
+its own checklist of 4 to 7 concrete checks for the result, then drafts,
+reviews against every check and revises — round after round, up to four — until
+every check passes or it runs out of rounds, and it says which. You can leave
+the page; the result lands in the conversation and the run shows in Tasks.
+Anything Spark prepares that would send or change something still waits for a
+person's approval.
+
 How a run goes: Ask, then Look (it reads what it is allowed to read on connected
 tools), then Act (independent work runs in parallel; anything consequential
 stops), then Report (one answer plus the trail of what ran and what it touched).
