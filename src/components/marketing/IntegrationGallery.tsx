@@ -1,9 +1,12 @@
 "use client";
 
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { ServiceLogo } from "@/components/app/ServiceLogo";
 import { Pill } from "@/components/ui/primitives";
+
+/** Where the floating navigation ends; the search bar sticks just under it. */
+const STICKY_TOP = 62;
 
 export type GalleryService = {
   slug: string;
@@ -32,6 +35,21 @@ export function IntegrationGallery({
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("all");
   const deferredQuery = useDeferredValue(query);
+  const sentinel = useRef<HTMLDivElement>(null);
+  const [stuck, setStuck] = useState(false);
+
+  // The search bar sticks under the navigation. Once it has, the whole strip
+  // above and beside it is painted solid, so cards scrolling up never show
+  // through around the floating nav or between the nav and the filters.
+  useEffect(() => {
+    const node = sentinel.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(([entry]) => setStuck(!entry.isIntersecting), {
+      rootMargin: `-${STICKY_TOP + 1}px 0px 0px 0px`,
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
   const visible = useMemo(() => {
     const needle = deferredQuery.trim().toLowerCase();
@@ -44,7 +62,21 @@ export function IntegrationGallery({
 
   return (
     <div>
-      <div className="sticky top-[62px] z-20 -mx-6 bg-[var(--color-void)]/90 px-6 py-4 backdrop-blur-xl">
+      <div ref={sentinel} aria-hidden="true" />
+      <div
+        className="sticky z-20 -mx-6 bg-[var(--color-void)] px-6 py-4 transition-[border-color]"
+        style={{
+          top: STICKY_TOP,
+          // Inline on purpose: the site's base border colour is unlayered CSS,
+          // which outranks a utility class, so a class cannot make this clear.
+          borderBottom: `1px solid ${stuck ? "var(--color-hairline)" : "transparent"}`,
+          // Full-bleed and upward, clipped at the bar's own bottom edge: a
+          // solid backdrop from the top of the window to below the filters.
+          ...(stuck
+            ? { boxShadow: "0 0 0 100vmax var(--color-void)", clipPath: "inset(-100vmax -100vmax 0 -100vmax)" }
+            : null),
+        }}
+      >
         <div className="panel flex items-center gap-2.5 px-3.5 py-2.5 focus-within:border-[#2b3d4a]">
           <Icon name="search" size={17} className="text-[var(--color-ink-faint)]" />
           <input
@@ -67,7 +99,9 @@ export function IntegrationGallery({
           ) : null}
         </div>
 
-        <div className="mt-3 flex flex-wrap gap-1.5">
+        {/* One scrolling row on a phone, so the filters never take half the
+            screen once they stick; they wrap on anything wider. */}
+        <div className="-mx-6 mt-3 flex gap-1.5 overflow-x-auto px-6 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
           <CategoryChip active={category === "all"} onClick={() => setCategory("all")} label="All" count={services.length} />
           {categories.map((entry) => (
             <CategoryChip
@@ -134,7 +168,7 @@ function CategoryChip({
     <button
       type="button"
       onClick={onClick}
-      className={`focus-ring rounded-full border px-3 py-1.5 text-[12.5px] transition-colors ${
+      className={`focus-ring shrink-0 rounded-full border px-3 py-1.5 text-[12.5px] whitespace-nowrap transition-colors ${
         active
           ? "border-[var(--color-stream-cyan)]/40 bg-[var(--color-stream-cyan)]/10 text-[var(--color-stream-cyan)]"
           : "border-[var(--color-hairline)] text-[var(--color-ink-muted)] hover:border-[#2b3d4a] hover:text-[var(--color-ink)]"

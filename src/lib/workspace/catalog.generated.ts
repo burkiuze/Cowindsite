@@ -18,6 +18,14 @@ export interface CatalogEntry {
   file: string | null;
   /** True when the mark is too dark to read on Navio's surfaces unaided. */
   dark: boolean;
+  /**
+   * The source mark was the brand's name set in type with no icon to cut out:
+   * far too wide to read in a small square. `file` is then a lettered tile
+   * in `tint`, generated here, rather than a smudge of shrunken letters.
+   */
+  wordmark?: boolean;
+  /** The brand's strongest colour, measured from its own artwork. */
+  tint?: string | null;
 }
 
 export const CATALOG: CatalogEntry[] = [
@@ -53,8 +61,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "abyssale",
     "name": "Abyssale",
     "category": "other",
-    "file": "abyssale-40a288df.webp",
-    "dark": false
+    "file": "abyssale-7c50a29b.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#68ffad"
   },
   {
     "slug": "accelo",
@@ -67,7 +77,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "accredible-certificates",
     "name": "Accredible Certificates",
     "category": "other",
-    "file": "accredible-certificates-6f40503b.webp",
+    "file": "accredible-certificates-4419e7bb.webp",
     "dark": false
   },
   {
@@ -88,8 +98,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "addresszen",
     "name": "Addresszen",
     "category": "other",
-    "file": "addresszen-acddf9ea.webp",
-    "dark": false
+    "file": "addresszen-696ffedb.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "adobe",
@@ -109,8 +121,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "adyntel",
     "name": "Adyntel",
     "category": "other",
-    "file": "adyntel-945134fc.webp",
-    "dark": false
+    "file": "adyntel-d17584b2.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#b2ff49"
   },
   {
     "slug": "aero-workflow",
@@ -130,8 +144,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "affinda",
     "name": "Affinda",
     "category": "other",
-    "file": "affinda-9c2c96c9.webp",
-    "dark": false
+    "file": "affinda-7202d073.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#0096ff"
   },
   {
     "slug": "affinity",
@@ -165,14 +181,16 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "agiled",
     "name": "Agiled",
     "category": "other",
-    "file": "agiled-fb6713e3.webp",
-    "dark": false
+    "file": "agiled-8ac929c5.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#0062ff"
   },
   {
     "slug": "agility-cms",
     "name": "Agility Cms",
     "category": "other",
-    "file": "agility-cms-23eba283.webp",
+    "file": "agility-cms-126680e9.webp",
     "dark": false
   },
   {
@@ -200,22 +218,28 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "aivoov",
     "name": "Aivoov",
     "category": "ai",
-    "file": "aivoov-d6c23fb1.webp",
-    "dark": true
+    "file": "aivoov-b3357a74.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#0d64a6"
   },
   {
     "slug": "alchemy",
     "name": "Alchemy",
     "category": "other",
-    "file": "alchemy-12abcf22.webp",
-    "dark": false
+    "file": "alchemy-aecbc613.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#363ff9"
   },
   {
     "slug": "algodocs",
     "name": "Algodocs",
     "category": "productivity",
-    "file": "algodocs-23395b7c.webp",
-    "dark": false
+    "file": "algodocs-696ffedb.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "algolia",
@@ -263,8 +287,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "amara",
     "name": "Amara",
     "category": "other",
-    "file": "amara-5e70725c.webp",
-    "dark": false
+    "file": "amara-4345dc6a.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#5a2747"
   },
   {
     "slug": "amazon",
@@ -277,8 +303,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "ambee",
     "name": "Ambee",
     "category": "other",
-    "file": "ambee-27e485cf.webp",
-    "dark": false
+    "file": "ambee-239ce6ca.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#96d4eb"
   },
   {
     "slug": "amcards",
@@ -319,8 +347,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "apex-27",
     "name": "Apex 27",
     "category": "other",
-    "file": "apex-27-0b489d49.webp",
-    "dark": false
+    "file": "apex-27-696ffedb.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "api-bible",
@@ -340,7 +370,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "api-ninjas",
     "name": "Api Ninjas",
     "category": "development",
-    "file": "api-ninjas-9ecd3389.webp",
+    "file": "api-ninjas-6290175c.webp",
     "dark": false
   },
   {
@@ -354,8 +384,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "api2pdf",
     "name": "Api2pdf",
     "category": "development",
-    "file": "api2pdf-95a1ac60.webp",
-    "dark": false
+    "file": "api2pdf-ba9714e2.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#1ea7d7"
   },
   {
     "slug": "apify",
@@ -382,8 +414,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "apitemplate-io",
     "name": "Apitemplate IO",
     "category": "development",
-    "file": "apitemplate-io-dfa97541.webp",
-    "dark": false
+    "file": "apitemplate-io-6b7f859d.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#8ec7f5"
   },
   {
     "slug": "apiverve",
@@ -403,7 +437,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "appcircle",
     "name": "Appcircle",
     "category": "other",
-    "file": "appcircle-e690dd86.webp",
+    "file": "appcircle-0591c965.webp",
     "dark": false
   },
   {
@@ -417,7 +451,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "appointo",
     "name": "Appointo",
     "category": "other",
-    "file": "appointo-435bc1dc.webp",
+    "file": "appointo-c418456a.webp",
     "dark": false
   },
   {
@@ -438,8 +472,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "aryn",
     "name": "Aryn",
     "category": "other",
-    "file": "aryn-22283143.webp",
-    "dark": false
+    "file": "aryn-664cfa23.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#417586"
   },
   {
     "slug": "asana",
@@ -452,7 +488,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "ascora",
     "name": "Ascora",
     "category": "other",
-    "file": "ascora-94fd36db.webp",
+    "file": "ascora-6b6b65fc.webp",
     "dark": false
   },
   {
@@ -515,8 +551,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "ayrshare",
     "name": "Ayrshare",
     "category": "other",
-    "file": "ayrshare-3fb8e569.webp",
-    "dark": false
+    "file": "ayrshare-85cc5cdf.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#be2327"
   },
   {
     "slug": "backendless",
@@ -585,14 +623,14 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "beaconstac",
     "name": "Beaconstac",
     "category": "other",
-    "file": "beaconstac-4537c67c.webp",
+    "file": "beaconstac-cf0da04e.webp",
     "dark": true
   },
   {
     "slug": "beamer",
     "name": "Beamer",
     "category": "other",
-    "file": "beamer-5aa95658.webp",
+    "file": "beamer-bf89971a.webp",
     "dark": true
   },
   {
@@ -627,7 +665,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "better-stack",
     "name": "Better Stack",
     "category": "other",
-    "file": "better-stack-4044d997.webp",
+    "file": "better-stack-96755218.webp",
     "dark": false
   },
   {
@@ -641,8 +679,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "big-data-cloud",
     "name": "Big Data Cloud",
     "category": "data",
-    "file": "big-data-cloud-8b7b932d.webp",
-    "dark": false
+    "file": "big-data-cloud-337740e6.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "bigmailer",
@@ -697,7 +737,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "bitquery",
     "name": "Bitquery",
     "category": "other",
-    "file": "bitquery-de68149a.webp",
+    "file": "bitquery-ab23aba6.webp",
     "dark": false
   },
   {
@@ -753,15 +793,17 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "boloforms",
     "name": "Boloforms",
     "category": "productivity",
-    "file": "boloforms-1ac86c53.webp",
+    "file": "boloforms-8e42c632.webp",
     "dark": false
   },
   {
     "slug": "bolt-iot",
     "name": "Bolt Iot",
     "category": "other",
-    "file": "bolt-iot-36810c16.webp",
-    "dark": false
+    "file": "bolt-iot-67f3dba4.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#9bdf46"
   },
   {
     "slug": "bookingmood",
@@ -774,8 +816,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "booqable",
     "name": "Booqable",
     "category": "other",
-    "file": "booqable-fdce98a6.webp",
-    "dark": true
+    "file": "booqable-337740e6.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "borneo",
@@ -795,28 +839,30 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "botpress",
     "name": "Botpress",
     "category": "ai",
-    "file": "botpress-36948780.webp",
-    "dark": false
+    "file": "botpress-337740e6.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "botsonic",
     "name": "Botsonic",
     "category": "other",
-    "file": "botsonic-497f4f67.webp",
+    "file": "botsonic-013372c9.webp",
     "dark": false
   },
   {
     "slug": "botstar",
     "name": "Botstar",
     "category": "other",
-    "file": "botstar-4008fa84.webp",
+    "file": "botstar-8380d325.webp",
     "dark": false
   },
   {
     "slug": "bouncer",
     "name": "Bouncer",
     "category": "other",
-    "file": "bouncer-87064f63.webp",
+    "file": "bouncer-ede7efb4.webp",
     "dark": false
   },
   {
@@ -928,8 +974,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "bugherd",
     "name": "Bugherd",
     "category": "development",
-    "file": "bugherd-c4313bc7.webp",
-    "dark": true
+    "file": "bugherd-6f256e4c.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#86bad3"
   },
   {
     "slug": "buildkite",
@@ -949,22 +997,26 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "bunnycdn",
     "name": "Bunnycdn",
     "category": "storage",
-    "file": "bunnycdn-a8da31d7.webp",
-    "dark": false
+    "file": "bunnycdn-5d0b34ca.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#f36e24"
   },
   {
     "slug": "byteforms",
     "name": "Byteforms",
     "category": "productivity",
-    "file": "byteforms-2938a615.webp",
+    "file": "byteforms-fee844e7.webp",
     "dark": false
   },
   {
     "slug": "cabinpanda",
     "name": "Cabinpanda",
     "category": "other",
-    "file": "cabinpanda-f51d4aab.webp",
-    "dark": true
+    "file": "cabinpanda-9d01d842.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "cal",
@@ -977,8 +1029,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "calendarhero",
     "name": "Calendarhero",
     "category": "productivity",
-    "file": "calendarhero-e6c0bef3.webp",
-    "dark": false
+    "file": "calendarhero-063594ce.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#f7cd56"
   },
   {
     "slug": "calendly",
@@ -991,8 +1045,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "callingly",
     "name": "Callingly",
     "category": "communication",
-    "file": "callingly-93288385.webp",
-    "dark": false
+    "file": "callingly-4112d76b.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#033b4c"
   },
   {
     "slug": "callpage",
@@ -1005,8 +1061,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "campaign-cleaner",
     "name": "Campaign Cleaner",
     "category": "marketing",
-    "file": "campaign-cleaner-f3aec880.webp",
-    "dark": true
+    "file": "campaign-cleaner-9d01d842.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "campayn",
@@ -1019,8 +1077,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "canny",
     "name": "Canny",
     "category": "other",
-    "file": "canny-81e705e6.webp",
-    "dark": false
+    "file": "canny-ce4a3ec1.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#525df9"
   },
   {
     "slug": "canva",
@@ -1047,36 +1107,44 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "carbone",
     "name": "Carbone",
     "category": "other",
-    "file": "carbone-8a704339.webp",
+    "file": "carbone-96c9c455.webp",
     "dark": false
   },
   {
     "slug": "cardly",
     "name": "Cardly",
     "category": "other",
-    "file": "cardly-18da8bfd.webp",
-    "dark": false
+    "file": "cardly-ce18ad5f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#6bd9de"
   },
   {
     "slug": "cats",
     "name": "Cats",
     "category": "other",
-    "file": "cats-e4596a7e.webp",
-    "dark": false
+    "file": "cats-899bc1ae.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#ff6841"
   },
   {
     "slug": "census-bureau",
     "name": "Census Bureau",
     "category": "other",
-    "file": "census-bureau-1c2db10b.webp",
-    "dark": true
+    "file": "census-bureau-9d01d842.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "centralstationcrm",
     "name": "Centralstationcrm",
     "category": "crm",
-    "file": "centralstationcrm-c168dfb4.webp",
-    "dark": false
+    "file": "centralstationcrm-1b2d0774.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#363e64"
   },
   {
     "slug": "certifier",
@@ -1117,8 +1185,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "cincopa",
     "name": "Cincopa",
     "category": "other",
-    "file": "cincopa-b7a073b0.webp",
-    "dark": false
+    "file": "cincopa-e595135c.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#0076ba"
   },
   {
     "slug": "circleci",
@@ -1145,8 +1215,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "clickmeeting",
     "name": "Clickmeeting",
     "category": "communication",
-    "file": "clickmeeting-7a6d0349.webp",
-    "dark": false
+    "file": "clickmeeting-021e869f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#6ebe3b"
   },
   {
     "slug": "clickup",
@@ -1166,7 +1238,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "cloudcart",
     "name": "Cloudcart",
     "category": "other",
-    "file": "cloudcart-e628a801.webp",
+    "file": "cloudcart-f3f10c28.webp",
     "dark": false
   },
   {
@@ -1180,8 +1252,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "cloudinary",
     "name": "Cloudinary",
     "category": "storage",
-    "file": "cloudinary-acdfef11.webp",
-    "dark": false
+    "file": "cloudinary-042589b1.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#3448c5"
   },
   {
     "slug": "cloudlayer",
@@ -1194,8 +1268,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "cloudpress",
     "name": "Cloudpress",
     "category": "other",
-    "file": "cloudpress-82b91e83.webp",
-    "dark": true
+    "file": "cloudpress-9d01d842.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "coda",
@@ -1208,7 +1284,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "codacy",
     "name": "Codacy",
     "category": "development",
-    "file": "codacy-73f1b1ad.webp",
+    "file": "codacy-7b07d135.webp",
     "dark": false
   },
   {
@@ -1264,15 +1340,17 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "convertapi",
     "name": "Convertapi",
     "category": "development",
-    "file": "convertapi-d3652f8a.webp",
+    "file": "convertapi-47c55a8f.webp",
     "dark": false
   },
   {
     "slug": "convolo-ai",
     "name": "Convolo AI",
     "category": "ai",
-    "file": "convolo-ai-c4f0c003.webp",
-    "dark": false
+    "file": "convolo-ai-0eba459a.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#0074ff"
   },
   {
     "slug": "crustdata",
@@ -1313,15 +1391,19 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "d2lbrightspace",
     "name": "D2lbrightspace",
     "category": "other",
-    "file": "d2lbrightspace-b397dd76.webp",
-    "dark": false
+    "file": "d2lbrightspace-669db82b.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#ff832f"
   },
   {
     "slug": "daffy",
     "name": "Daffy",
     "category": "other",
-    "file": "daffy-2566aaeb.webp",
-    "dark": false
+    "file": "daffy-f8d9e11e.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "dailybot",
@@ -1355,8 +1437,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "deadline-funnel",
     "name": "Deadline Funnel",
     "category": "other",
-    "file": "deadline-funnel-24569e95.webp",
-    "dark": true
+    "file": "deadline-funnel-f8d9e11e.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "deel",
@@ -1369,8 +1453,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "deepgram",
     "name": "Deepgram",
     "category": "ai",
-    "file": "deepgram-47e278f0.webp",
-    "dark": false
+    "file": "deepgram-f8d9e11e.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "demio",
@@ -1383,8 +1469,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "detrack",
     "name": "Detrack",
     "category": "other",
-    "file": "detrack-3d919a0d.webp",
-    "dark": false
+    "file": "detrack-acb80004.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#ec1f27"
   },
   {
     "slug": "dialpad",
@@ -1397,7 +1485,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "diffbot",
     "name": "Diffbot",
     "category": "other",
-    "file": "diffbot-0469b28a.webp",
+    "file": "diffbot-24724b74.webp",
     "dark": false
   },
   {
@@ -1432,8 +1520,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "docsbot-ai",
     "name": "Docsbot AI",
     "category": "ai",
-    "file": "docsbot-ai-2eff32d3.webp",
-    "dark": false
+    "file": "docsbot-ai-513e115f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#11afa9"
   },
   {
     "slug": "docsumo",
@@ -1453,14 +1543,14 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "docupilot",
     "name": "Docupilot",
     "category": "productivity",
-    "file": "docupilot-105766f2.webp",
+    "file": "docupilot-f1be5014.webp",
     "dark": false
   },
   {
     "slug": "docupost",
     "name": "Docupost",
     "category": "productivity",
-    "file": "docupost-88e00423.webp",
+    "file": "docupost-2753bd5b.webp",
     "dark": false
   },
   {
@@ -1474,8 +1564,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "doppler-marketing-automation",
     "name": "Doppler Marketing Automation",
     "category": "marketing",
-    "file": "doppler-marketing-automation-929ebf69.webp",
-    "dark": false
+    "file": "doppler-marketing-automation-9dd16ed0.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#fab221"
   },
   {
     "slug": "dpd2",
@@ -1488,21 +1580,21 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "draftable",
     "name": "Draftable",
     "category": "other",
-    "file": "draftable-78e15aaf.webp",
+    "file": "draftable-5edf2ac8.webp",
     "dark": false
   },
   {
     "slug": "dripcel",
     "name": "Dripcel",
     "category": "other",
-    "file": "dripcel-b0de418b.webp",
+    "file": "dripcel-c3e7698e.webp",
     "dark": false
   },
   {
     "slug": "dripjobs",
     "name": "Dripjobs",
     "category": "other",
-    "file": "dripjobs-372d47a0.webp",
+    "file": "dripjobs-fc5d6421.webp",
     "dark": false
   },
   {
@@ -1516,7 +1608,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "dropcontact",
     "name": "Dropcontact",
     "category": "crm",
-    "file": "dropcontact-5080ffdf.webp",
+    "file": "dropcontact-3024e18b.webp",
     "dark": false
   },
   {
@@ -1565,14 +1657,16 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "elorus",
     "name": "Elorus",
     "category": "other",
-    "file": "elorus-247878c1.webp",
-    "dark": false
+    "file": "elorus-72648574.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "emailable",
     "name": "Emailable",
     "category": "communication",
-    "file": "emailable-f131e5a3.webp",
+    "file": "emailable-e897795a.webp",
     "dark": false
   },
   {
@@ -1600,14 +1694,14 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "endorsal",
     "name": "Endorsal",
     "category": "other",
-    "file": "endorsal-f08698de.webp",
+    "file": "endorsal-7c395394.webp",
     "dark": false
   },
   {
     "slug": "enginemailer",
     "name": "Enginemailer",
     "category": "communication",
-    "file": "enginemailer-bc02eac4.webp",
+    "file": "enginemailer-2d2a7034.webp",
     "dark": false
   },
   {
@@ -1628,8 +1722,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "eodhd-apis",
     "name": "Eodhd Apis",
     "category": "development",
-    "file": "eodhd-apis-5d8d3adf.webp",
-    "dark": false
+    "file": "eodhd-apis-72648574.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "epic-games",
@@ -1649,8 +1745,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "evenium",
     "name": "Evenium",
     "category": "other",
-    "file": "evenium-b6caa597.webp",
-    "dark": false
+    "file": "evenium-72648574.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "eventbrite",
@@ -1663,22 +1761,28 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "eventee",
     "name": "Eventee",
     "category": "other",
-    "file": "eventee-e1fa5646.webp",
-    "dark": false
+    "file": "eventee-9bdaf126.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#62c1ab"
   },
   {
     "slug": "eventzilla",
     "name": "Eventzilla",
     "category": "other",
-    "file": "eventzilla-714146a5.webp",
-    "dark": false
+    "file": "eventzilla-6593290a.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#16c0de"
   },
   {
     "slug": "eversign",
     "name": "Eversign",
     "category": "productivity",
-    "file": "eversign-b77e7ef9.webp",
-    "dark": false
+    "file": "eversign-72648574.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "exa",
@@ -1705,15 +1809,17 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "expofp",
     "name": "Expofp",
     "category": "other",
-    "file": "expofp-f5983a5c.webp",
+    "file": "expofp-b7c539f4.webp",
     "dark": false
   },
   {
     "slug": "extracta-ai",
     "name": "Extracta AI",
     "category": "ai",
-    "file": "extracta-ai-0cfd773b.webp",
-    "dark": false
+    "file": "extracta-ai-72648574.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "facebook",
@@ -1782,15 +1888,17 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "findymail",
     "name": "Findymail",
     "category": "communication",
-    "file": "findymail-5738f4ec.webp",
-    "dark": false
+    "file": "findymail-ae76c6ba.webp",
+    "dark": true
   },
   {
     "slug": "fireberry",
     "name": "Fireberry",
     "category": "other",
-    "file": "fireberry-2471f8c0.webp",
-    "dark": true
+    "file": "fireberry-037e73a3.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "firecrawl",
@@ -1817,7 +1925,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "fixer",
     "name": "Fixer",
     "category": "other",
-    "file": "fixer-4c8caf5e.webp",
+    "file": "fixer-a50ac154.webp",
     "dark": false
   },
   {
@@ -1831,14 +1939,16 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "flexisign",
     "name": "Flexisign",
     "category": "productivity",
-    "file": "flexisign-8346cc72.webp",
-    "dark": true
+    "file": "flexisign-c01671c5.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#376be5"
   },
   {
     "slug": "flowiseai",
     "name": "Flowiseai",
     "category": "finance",
-    "file": "flowiseai-00f2c421.webp",
+    "file": "flowiseai-553a7120.webp",
     "dark": false
   },
   {
@@ -1852,7 +1962,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "fluxguard",
     "name": "Fluxguard",
     "category": "other",
-    "file": "fluxguard-c25c1a02.webp",
+    "file": "fluxguard-175ed164.webp",
     "dark": false
   },
   {
@@ -1880,8 +1990,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "formdesk",
     "name": "Formdesk",
     "category": "support",
-    "file": "formdesk-b2a88418.webp",
-    "dark": false
+    "file": "formdesk-4132f730.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#612e7f"
   },
   {
     "slug": "formsite",
@@ -1936,8 +2048,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "ftrack",
     "name": "Ftrack",
     "category": "other",
-    "file": "ftrack-651f6c4b.webp",
-    "dark": true
+    "file": "ftrack-037e73a3.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "gagelist",
@@ -1950,22 +2064,28 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "gamma",
     "name": "Gamma",
     "category": "other",
-    "file": "gamma-ec48d161.webp",
-    "dark": false
+    "file": "gamma-b2a22d4f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "gan-ai",
     "name": "Gan AI",
     "category": "ai",
-    "file": "gan-ai-a29fb4ad.webp",
-    "dark": true
+    "file": "gan-ai-a1f1cca9.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#623ef4"
   },
   {
     "slug": "gatherup",
     "name": "Gatherup",
     "category": "other",
-    "file": "gatherup-1f54f87d.webp",
-    "dark": false
+    "file": "gatherup-886772b2.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#0396a6"
   },
   {
     "slug": "gemini",
@@ -1978,15 +2098,17 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "gender-api",
     "name": "Gender Api",
     "category": "development",
-    "file": "gender-api-a961d7d9.webp",
+    "file": "gender-api-a73d6569.webp",
     "dark": false
   },
   {
     "slug": "genderapi-io",
     "name": "Genderapi IO",
     "category": "development",
-    "file": "genderapi-io-6349b7bf.webp",
-    "dark": false
+    "file": "genderapi-io-b2a22d4f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "genderize",
@@ -2013,8 +2135,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "geokeo",
     "name": "Geokeo",
     "category": "other",
-    "file": "geokeo-e5e6b515.webp",
-    "dark": false
+    "file": "geokeo-d928ba1f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#33a1df"
   },
   {
     "slug": "getdrip",
@@ -2027,14 +2151,14 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "getform",
     "name": "Getform",
     "category": "productivity",
-    "file": "getform-9199193d.webp",
+    "file": "getform-4f9ecac5.webp",
     "dark": false
   },
   {
     "slug": "gigasheet",
     "name": "Gigasheet",
     "category": "productivity",
-    "file": "gigasheet-664336c3.webp",
+    "file": "gigasheet-7683a8a8.webp",
     "dark": false
   },
   {
@@ -2076,7 +2200,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "goodbits",
     "name": "Goodbits",
     "category": "other",
-    "file": "goodbits-8f18c87c.webp",
+    "file": "goodbits-a44e3bdb.webp",
     "dark": false
   },
   {
@@ -2244,8 +2368,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "groqcloud",
     "name": "Groqcloud",
     "category": "other",
-    "file": "groqcloud-785ead75.webp",
-    "dark": true
+    "file": "groqcloud-b2a22d4f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "gumroad",
@@ -2265,8 +2391,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "gusto",
     "name": "Gusto",
     "category": "finance",
-    "file": "gusto-92c318d0.webp",
-    "dark": false
+    "file": "gusto-01c163fa.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#f45d48"
   },
   {
     "slug": "habitica",
@@ -2300,7 +2428,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "hashnode",
     "name": "Hashnode",
     "category": "other",
-    "file": "hashnode-4ca57301.webp",
+    "file": "hashnode-96610938.webp",
     "dark": false
   },
   {
@@ -2342,15 +2470,17 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "heyreach",
     "name": "Heyreach",
     "category": "other",
-    "file": "heyreach-f21dbd9d.webp",
-    "dark": false
+    "file": "heyreach-9c45e2f6.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#91d0ff"
   },
   {
     "slug": "heyzine",
     "name": "Heyzine",
     "category": "other",
-    "file": "heyzine-e567f385.webp",
-    "dark": true
+    "file": "heyzine-4a867999.webp",
+    "dark": false
   },
   {
     "slug": "highlevel",
@@ -2363,14 +2493,16 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "honeybadger",
     "name": "Honeybadger",
     "category": "other",
-    "file": "honeybadger-8dd696fb.webp",
-    "dark": true
+    "file": "honeybadger-bbdbd5d4.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "honeyhive",
     "name": "Honeyhive",
     "category": "other",
-    "file": "honeyhive-4fa39d8c.webp",
+    "file": "honeyhive-f88c4b83.webp",
     "dark": false
   },
   {
@@ -2440,7 +2572,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "icypeas",
     "name": "Icypeas",
     "category": "other",
-    "file": "icypeas-0b0ac42c.webp",
+    "file": "icypeas-7a784aab.webp",
     "dark": false
   },
   {
@@ -2454,15 +2586,19 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "identitycheck",
     "name": "Identitycheck",
     "category": "security",
-    "file": "identitycheck-64a984ef.webp",
-    "dark": true
+    "file": "identitycheck-35b79f6c.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#0038cf"
   },
   {
     "slug": "imagior",
     "name": "Imagior",
     "category": "other",
-    "file": "imagior-257c0bc4.webp",
-    "dark": false
+    "file": "imagior-38e11a6d.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#297fff"
   },
   {
     "slug": "imejis-io",
@@ -2510,15 +2646,17 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "instantly",
     "name": "Instantly",
     "category": "other",
-    "file": "instantly-aff8807a.webp",
+    "file": "instantly-3262d4da.webp",
     "dark": false
   },
   {
     "slug": "intelliprint",
     "name": "Intelliprint",
     "category": "other",
-    "file": "intelliprint-e2f70957.webp",
-    "dark": false
+    "file": "intelliprint-a35a2a37.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#ef7d00"
   },
   {
     "slug": "intercom",
@@ -2545,21 +2683,25 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "ip2proxy",
     "name": "Ip2proxy",
     "category": "search",
-    "file": "ip2proxy-d064437c.webp",
-    "dark": false
+    "file": "ip2proxy-f4ab7b68.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#084e8f"
   },
   {
     "slug": "ip2whois",
     "name": "Ip2whois",
     "category": "other",
-    "file": "ip2whois-5eccbec6.webp",
-    "dark": false
+    "file": "ip2whois-47bf5f1a.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#0dabc6"
   },
   {
     "slug": "ipdata-co",
     "name": "Ipdata CO",
     "category": "data",
-    "file": "ipdata-co-107f77f5.webp",
+    "file": "ipdata-co-a9084345.webp",
     "dark": true
   },
   {
@@ -2573,14 +2715,14 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "iqair-airvisual",
     "name": "Iqair Airvisual",
     "category": "ai",
-    "file": "iqair-airvisual-189ba9e8.webp",
+    "file": "iqair-airvisual-65669401.webp",
     "dark": false
   },
   {
     "slug": "jigsawstack",
     "name": "Jigsawstack",
     "category": "other",
-    "file": "jigsawstack-03265138.webp",
+    "file": "jigsawstack-9e3cd6c8.webp",
     "dark": false
   },
   {
@@ -2615,14 +2757,16 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "kadoa",
     "name": "Kadoa",
     "category": "other",
-    "file": "kadoa-aa48967d.webp",
-    "dark": true
+    "file": "kadoa-4d094e07.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#fd7412"
   },
   {
     "slug": "kaleido",
     "name": "Kaleido",
     "category": "other",
-    "file": "kaleido-8182756f.webp",
+    "file": "kaleido-34d5b584.webp",
     "dark": false
   },
   {
@@ -2643,8 +2787,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "kickbox",
     "name": "Kickbox",
     "category": "storage",
-    "file": "kickbox-1ef2c73c.webp",
-    "dark": false
+    "file": "kickbox-072fa233.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "kit",
@@ -2727,7 +2873,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "leiga",
     "name": "Leiga",
     "category": "other",
-    "file": "leiga-c4553b2b.webp",
+    "file": "leiga-f5d4ade2.webp",
     "dark": false
   },
   {
@@ -2748,7 +2894,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "lessonspace",
     "name": "Lessonspace",
     "category": "security",
-    "file": "lessonspace-60e986f8.webp",
+    "file": "lessonspace-8e13c30a.webp",
     "dark": false
   },
   {
@@ -2804,8 +2950,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "livesession",
     "name": "Livesession",
     "category": "other",
-    "file": "livesession-efbd2658.webp",
-    "dark": false
+    "file": "livesession-b56e157a.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#196cff"
   },
   {
     "slug": "lmnt",
@@ -2818,35 +2966,41 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "lodgify",
     "name": "Lodgify",
     "category": "other",
-    "file": "lodgify-997f4ba3.webp",
+    "file": "lodgify-3cbdcd77.webp",
     "dark": false
   },
   {
     "slug": "logo-dev",
     "name": "Logo Dev",
     "category": "other",
-    "file": "logo-dev-e2ff4b33.webp",
-    "dark": false
+    "file": "logo-dev-9aa7c645.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "loomio",
     "name": "Loomio",
     "category": "other",
-    "file": "loomio-37ef6591.webp",
-    "dark": false
+    "file": "loomio-61a2135f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#dca034"
   },
   {
     "slug": "loyverse",
     "name": "Loyverse",
     "category": "other",
-    "file": "loyverse-30a1d9c1.webp",
-    "dark": false
+    "file": "loyverse-d4f24fc3.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#f6833c"
   },
   {
     "slug": "magnetic",
     "name": "Magnetic",
     "category": "other",
-    "file": "magnetic-ada43f58.webp",
+    "file": "magnetic-0768991c.webp",
     "dark": false
   },
   {
@@ -2888,8 +3042,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "mails-so",
     "name": "Mails SO",
     "category": "communication",
-    "file": "mails-so-56ec1403.webp",
-    "dark": false
+    "file": "mails-so-2eaf4182.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "maintainx",
@@ -2909,7 +3065,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "mapbox",
     "name": "Mapbox",
     "category": "storage",
-    "file": "mapbox-cb0aee22.webp",
+    "file": "mapbox-164b9520.webp",
     "dark": false
   },
   {
@@ -2937,8 +3093,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "memberspot",
     "name": "Memberspot",
     "category": "other",
-    "file": "memberspot-df608d84.webp",
-    "dark": true
+    "file": "memberspot-2eaf4182.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "memberstack",
@@ -2951,8 +3109,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "membervault",
     "name": "Membervault",
     "category": "security",
-    "file": "membervault-bb0b8daf.webp",
-    "dark": false
+    "file": "membervault-9cb69f5f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#3cba6c"
   },
   {
     "slug": "meta",
@@ -3021,8 +3181,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "missive",
     "name": "Missive",
     "category": "other",
-    "file": "missive-e1b3e8e2.webp",
-    "dark": true
+    "file": "missive-2eaf4182.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "mistral-ai",
@@ -3056,7 +3218,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "modelry",
     "name": "Modelry",
     "category": "other",
-    "file": "modelry-c66256c4.webp",
+    "file": "modelry-6da9474f.webp",
     "dark": false
   },
   {
@@ -3084,8 +3246,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "moosend",
     "name": "Moosend",
     "category": "other",
-    "file": "moosend-77404640.webp",
-    "dark": false
+    "file": "moosend-0f0e2d11.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#e2011a"
   },
   {
     "slug": "mopinion",
@@ -3147,8 +3311,8 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "nango",
     "name": "Nango",
     "category": "other",
-    "file": "nango-509fe506.webp",
-    "dark": true
+    "file": "nango-b122204b.webp",
+    "dark": false
   },
   {
     "slug": "nano-nets",
@@ -3203,14 +3367,14 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "neuronwriter",
     "name": "Neuronwriter",
     "category": "other",
-    "file": "neuronwriter-d2231497.webp",
+    "file": "neuronwriter-4bfcae12.webp",
     "dark": false
   },
   {
     "slug": "neverbounce",
     "name": "Neverbounce",
     "category": "other",
-    "file": "neverbounce-1726acff.webp",
+    "file": "neverbounce-1c8e94fc.webp",
     "dark": false
   },
   {
@@ -3231,8 +3395,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "ninox",
     "name": "Ninox",
     "category": "other",
-    "file": "ninox-8584406e.webp",
-    "dark": true
+    "file": "ninox-79f89a30.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#262f4d"
   },
   {
     "slug": "nioleads",
@@ -3259,8 +3425,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "ocrspace",
     "name": "Ocrspace",
     "category": "other",
-    "file": "ocrspace-679df35e.webp",
-    "dark": false
+    "file": "ocrspace-66270732.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#053664"
   },
   {
     "slug": "oksign",
@@ -3280,7 +3448,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "omnisend",
     "name": "Omnisend",
     "category": "other",
-    "file": "omnisend-3f3545a0.webp",
+    "file": "omnisend-0875eb93.webp",
     "dark": false
   },
   {
@@ -3301,8 +3469,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "onedesk",
     "name": "Onedesk",
     "category": "support",
-    "file": "onedesk-b9bb3c9f.webp",
-    "dark": false
+    "file": "onedesk-45bf9db7.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#3486aa"
   },
   {
     "slug": "onedrive",
@@ -3343,8 +3513,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "opencage",
     "name": "Opencage",
     "category": "other",
-    "file": "opencage-73166674.webp",
-    "dark": false
+    "file": "opencage-141bbc84.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#029d47"
   },
   {
     "slug": "opensea",
@@ -3357,8 +3529,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "optimoroute",
     "name": "Optimoroute",
     "category": "other",
-    "file": "optimoroute-b10fa639.webp",
-    "dark": true
+    "file": "optimoroute-71469a05.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "osu",
@@ -3385,7 +3559,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "owl-protocol",
     "name": "Owl Protocol",
     "category": "other",
-    "file": "owl-protocol-968b36c6.webp",
+    "file": "owl-protocol-e083e584.webp",
     "dark": false
   },
   {
@@ -3434,8 +3608,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "passcreator",
     "name": "Passcreator",
     "category": "other",
-    "file": "passcreator-bfcbd799.webp",
-    "dark": false
+    "file": "passcreator-4a517e6c.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#cf4500"
   },
   {
     "slug": "passslot",
@@ -3462,7 +3638,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "pdf-co",
     "name": "Pdf CO",
     "category": "productivity",
-    "file": "pdf-co-53f698a6.webp",
+    "file": "pdf-co-c0a22b54.webp",
     "dark": false
   },
   {
@@ -3476,8 +3652,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "pdfless",
     "name": "Pdfless",
     "category": "productivity",
-    "file": "pdfless-346c0a62.webp",
-    "dark": false
+    "file": "pdfless-222bfd42.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#1d6864"
   },
   {
     "slug": "pdl",
@@ -3504,8 +3682,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "pexels",
     "name": "Pexels",
     "category": "other",
-    "file": "pexels-b47ade4b.webp",
-    "dark": false
+    "file": "pexels-d4c08ba3.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "phantombuster",
@@ -3525,8 +3705,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "piloterr",
     "name": "Piloterr",
     "category": "other",
-    "file": "piloterr-210c492c.webp",
-    "dark": true
+    "file": "piloterr-d4c08ba3.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "pilvio",
@@ -3539,15 +3721,17 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "pinecone",
     "name": "Pinecone",
     "category": "ai",
-    "file": "pinecone-c3e735b4.webp",
+    "file": "pinecone-8cb17987.webp",
     "dark": false
   },
   {
     "slug": "pingbell",
     "name": "Pingbell",
     "category": "other",
-    "file": "pingbell-dd261825.webp",
-    "dark": true
+    "file": "pingbell-288767d2.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#201e52"
   },
   {
     "slug": "pingdom",
@@ -3567,7 +3751,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "pipeline-crm",
     "name": "Pipeline Crm",
     "category": "crm",
-    "file": "pipeline-crm-44e8ebfb.webp",
+    "file": "pipeline-crm-5c3ad4e8.webp",
     "dark": false
   },
   {
@@ -3581,7 +3765,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "placid",
     "name": "Placid",
     "category": "other",
-    "file": "placid-15c68a09.webp",
+    "file": "placid-09c21a29.webp",
     "dark": false
   },
   {
@@ -3602,15 +3786,19 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "plasmic",
     "name": "Plasmic",
     "category": "other",
-    "file": "plasmic-a3381509.webp",
-    "dark": false
+    "file": "plasmic-d2ca2107.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#ad4ff9"
   },
   {
     "slug": "platerecognizer",
     "name": "Platerecognizer",
     "category": "other",
-    "file": "platerecognizer-1eadf8ca.webp",
-    "dark": false
+    "file": "platerecognizer-db78c70a.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#1677f0"
   },
   {
     "slug": "plisio",
@@ -3623,15 +3811,19 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "polygon",
     "name": "Polygon",
     "category": "finance",
-    "file": "polygon-2bc6c194.webp",
-    "dark": false
+    "file": "polygon-2a4450fb.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#5f5cff"
   },
   {
     "slug": "polygon-io",
     "name": "Polygon IO",
     "category": "other",
-    "file": "polygon-io-2bc6c194.webp",
-    "dark": false
+    "file": "polygon-io-2a4450fb.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#5f5cff"
   },
   {
     "slug": "poptin",
@@ -3679,7 +3871,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "prerender",
     "name": "Prerender",
     "category": "other",
-    "file": "prerender-7266f8d3.webp",
+    "file": "prerender-623d809a.webp",
     "dark": false
   },
   {
@@ -3693,7 +3885,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "prisma",
     "name": "Prisma",
     "category": "other",
-    "file": "prisma-6a8d0a46.webp",
+    "file": "prisma-daee69d9.webp",
     "dark": false
   },
   {
@@ -3721,7 +3913,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "productlane",
     "name": "Productlane",
     "category": "commerce",
-    "file": "productlane-2721073b.webp",
+    "file": "productlane-f5430fec.webp",
     "dark": false
   },
   {
@@ -3735,15 +3927,19 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "promptmate-io",
     "name": "Promptmate IO",
     "category": "other",
-    "file": "promptmate-io-66ed8443.webp",
-    "dark": true
+    "file": "promptmate-io-f3193076.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#3f9380"
   },
   {
     "slug": "proofly",
     "name": "Proofly",
     "category": "other",
-    "file": "proofly-3998aed6.webp",
-    "dark": true
+    "file": "proofly-949cee8a.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#0f71ff"
   },
   {
     "slug": "propelauth",
@@ -3756,21 +3952,21 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "proxiedmail",
     "name": "Proxiedmail",
     "category": "communication",
-    "file": "proxiedmail-e79a68dc.webp",
+    "file": "proxiedmail-99f01334.webp",
     "dark": false
   },
   {
     "slug": "push-by-techulus",
     "name": "Push BY Techulus",
     "category": "other",
-    "file": "push-by-techulus-bee5c58c.webp",
+    "file": "push-by-techulus-8a53e8e2.webp",
     "dark": false
   },
   {
     "slug": "pushbullet",
     "name": "Pushbullet",
     "category": "other",
-    "file": "pushbullet-8e6c6eb0.webp",
+    "file": "pushbullet-fb5be748.webp",
     "dark": false
   },
   {
@@ -3812,7 +4008,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "radar",
     "name": "Radar",
     "category": "other",
-    "file": "radar-61699c4b.webp",
+    "file": "radar-68691c79.webp",
     "dark": false
   },
   {
@@ -3868,7 +4064,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "recall",
     "name": "Recall",
     "category": "communication",
-    "file": "recall-5455ba81.webp",
+    "file": "recall-23a79174.webp",
     "dark": false
   },
   {
@@ -3896,8 +4092,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "remote-retrieval",
     "name": "Remote Retrieval",
     "category": "other",
-    "file": "remote-retrieval-445de07b.webp",
-    "dark": false
+    "file": "remote-retrieval-f16f32c9.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#00b7f0"
   },
   {
     "slug": "render",
@@ -3917,8 +4115,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "repairshopr",
     "name": "Repairshopr",
     "category": "commerce",
-    "file": "repairshopr-ca568483.webp",
-    "dark": true
+    "file": "repairshopr-f7242651.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#427db7"
   },
   {
     "slug": "replicate",
@@ -3973,7 +4173,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "rev-ai",
     "name": "Rev AI",
     "category": "ai",
-    "file": "rev-ai-02bcb31c.webp",
+    "file": "rev-ai-aa702eda.webp",
     "dark": false
   },
   {
@@ -4001,8 +4201,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "ring-central",
     "name": "Ring Central",
     "category": "other",
-    "file": "ring-central-4fe162e6.webp",
-    "dark": false
+    "file": "ring-central-46d759f2.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#ff7a00"
   },
   {
     "slug": "rippiling",
@@ -4022,8 +4224,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "rkvst",
     "name": "Rkvst",
     "category": "other",
-    "file": "rkvst-92b1a355.webp",
-    "dark": false
+    "file": "rkvst-26e1d926.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#00458d"
   },
   {
     "slug": "rocketlane",
@@ -4092,7 +4296,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "satismeter",
     "name": "Satismeter",
     "category": "other",
-    "file": "satismeter-ceb13d17.webp",
+    "file": "satismeter-2e62a04f.webp",
     "dark": false
   },
   {
@@ -4127,15 +4331,17 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "scrapingbee",
     "name": "Scrapingbee",
     "category": "development",
-    "file": "scrapingbee-997fede5.webp",
-    "dark": true
+    "file": "scrapingbee-e2295e2a.webp",
+    "dark": false
   },
   {
     "slug": "screendesk",
     "name": "Screendesk",
     "category": "support",
-    "file": "screendesk-37d8cd1d.webp",
-    "dark": false
+    "file": "screendesk-d997f6a7.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#fa9393"
   },
   {
     "slug": "screenshot-fyi",
@@ -4155,7 +4361,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "segmetrics",
     "name": "Segmetrics",
     "category": "other",
-    "file": "segmetrics-477616c4.webp",
+    "file": "segmetrics-5de39276.webp",
     "dark": false
   },
   {
@@ -4176,15 +4382,19 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "sendbird",
     "name": "Sendbird",
     "category": "other",
-    "file": "sendbird-bbff34f3.webp",
-    "dark": true
+    "file": "sendbird-bfd5d648.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "sendbird-ai-chabot",
     "name": "Sendbird AI Chabot",
     "category": "ai",
-    "file": "sendbird-ai-chabot-bbff34f3.webp",
-    "dark": true
+    "file": "sendbird-ai-chabot-bfd5d648.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "sendfox",
@@ -4211,21 +4421,23 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "sendloop",
     "name": "Sendloop",
     "category": "other",
-    "file": "sendloop-1efcf18b.webp",
-    "dark": false
+    "file": "sendloop-ce0c805b.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#c93327"
   },
   {
     "slug": "sendspark",
     "name": "Sendspark",
     "category": "other",
-    "file": "sendspark-edc69f13.webp",
-    "dark": true
+    "file": "sendspark-4eab4ca2.webp",
+    "dark": false
   },
   {
     "slug": "sensibo",
     "name": "Sensibo",
     "category": "other",
-    "file": "sensibo-5fc66b2a.webp",
+    "file": "sensibo-6f6e09d8.webp",
     "dark": false
   },
   {
@@ -4239,8 +4451,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "seqera",
     "name": "Seqera",
     "category": "other",
-    "file": "seqera-cc628fe4.webp",
-    "dark": false
+    "file": "seqera-6119d217.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#3d95fd"
   },
   {
     "slug": "serpapi",
@@ -4281,7 +4495,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "sevdesk",
     "name": "Sevdesk",
     "category": "support",
-    "file": "sevdesk-0222722c.webp",
+    "file": "sevdesk-b42aa249.webp",
     "dark": false
   },
   {
@@ -4295,7 +4509,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "shipengine",
     "name": "Shipengine",
     "category": "other",
-    "file": "shipengine-78ec45f3.webp",
+    "file": "shipengine-d01d8547.webp",
     "dark": true
   },
   {
@@ -4323,8 +4537,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "shorten-rest",
     "name": "Shorten Rest",
     "category": "other",
-    "file": "shorten-rest-44efa7c1.webp",
-    "dark": true
+    "file": "shorten-rest-bfd5d648.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "shortio",
@@ -4337,42 +4553,46 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "shortpixel",
     "name": "Shortpixel",
     "category": "other",
-    "file": "shortpixel-14424a25.webp",
+    "file": "shortpixel-812b95f2.webp",
     "dark": false
   },
   {
     "slug": "shotstack",
     "name": "Shotstack",
     "category": "other",
-    "file": "shotstack-1482fcfd.webp",
-    "dark": false
+    "file": "shotstack-ecac67cb.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#25d3d0"
   },
   {
     "slug": "sidetracker",
     "name": "Sidetracker",
     "category": "other",
-    "file": "sidetracker-42019eea.webp",
-    "dark": true
+    "file": "sidetracker-d35bcc85.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#c41212"
   },
   {
     "slug": "signaturely",
     "name": "Signaturely",
     "category": "productivity",
-    "file": "signaturely-f7b5149b.webp",
+    "file": "signaturely-ef13202b.webp",
     "dark": false
   },
   {
     "slug": "signpath",
     "name": "Signpath",
     "category": "productivity",
-    "file": "signpath-1b874c1b.webp",
+    "file": "signpath-6220d308.webp",
     "dark": false
   },
   {
     "slug": "simla-com",
     "name": "Simla Com",
     "category": "other",
-    "file": "simla-com-15127dc6.webp",
+    "file": "simla-com-0dd78bfa.webp",
     "dark": false
   },
   {
@@ -4393,14 +4613,16 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "sitespeakai",
     "name": "Sitespeakai",
     "category": "ai",
-    "file": "sitespeakai-5bd7327b.webp",
-    "dark": true
+    "file": "sitespeakai-bfd5d648.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "skyfire",
     "name": "Skyfire",
     "category": "other",
-    "file": "skyfire-77e2e327.webp",
+    "file": "skyfire-f65ff135.webp",
     "dark": true
   },
   {
@@ -4470,15 +4692,19 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "spoki",
     "name": "Spoki",
     "category": "other",
-    "file": "spoki-7deb9d08.webp",
-    "dark": false
+    "file": "spoki-bfd5d648.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "spondyr",
     "name": "Spondyr",
     "category": "other",
-    "file": "spondyr-6cf67c81.webp",
-    "dark": false
+    "file": "spondyr-bb740a72.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#ef4b49"
   },
   {
     "slug": "spotify",
@@ -4491,8 +4717,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "spotlightr",
     "name": "Spotlightr",
     "category": "other",
-    "file": "spotlightr-d59f0268.webp",
-    "dark": false
+    "file": "spotlightr-a9d08171.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#ef4e22"
   },
   {
     "slug": "squareup",
@@ -4519,7 +4747,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "stannp",
     "name": "Stannp",
     "category": "other",
-    "file": "stannp-e94aba90.webp",
+    "file": "stannp-c56667a4.webp",
     "dark": false
   },
   {
@@ -4540,7 +4768,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "statuscake",
     "name": "Statuscake",
     "category": "other",
-    "file": "statuscake-2682b645.webp",
+    "file": "statuscake-e105f6fb.webp",
     "dark": false
   },
   {
@@ -4554,14 +4782,14 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "storerocket",
     "name": "Storerocket",
     "category": "commerce",
-    "file": "storerocket-73afbee2.webp",
+    "file": "storerocket-5c4c5647.webp",
     "dark": false
   },
   {
     "slug": "stormglass-io",
     "name": "Stormglass IO",
     "category": "other",
-    "file": "stormglass-io-dd39ab5b.webp",
+    "file": "stormglass-io-56648796.webp",
     "dark": false
   },
   {
@@ -4589,8 +4817,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "stripe",
     "name": "Stripe",
     "category": "finance",
-    "file": "stripe-7bb687f3.webp",
-    "dark": false
+    "file": "stripe-d549379f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#635bff"
   },
   {
     "slug": "supabase",
@@ -4610,15 +4840,19 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "supportbee",
     "name": "Supportbee",
     "category": "support",
-    "file": "supportbee-193b1c5d.webp",
-    "dark": true
+    "file": "supportbee-bfd5d648.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "supportivekoala",
     "name": "Supportivekoala",
     "category": "support",
-    "file": "supportivekoala-1a5a5b34.webp",
-    "dark": false
+    "file": "supportivekoala-6666ff10.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#e3a484"
   },
   {
     "slug": "survey-monkey",
@@ -4638,8 +4872,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "svix",
     "name": "Svix",
     "category": "other",
-    "file": "svix-6fa79145.webp",
-    "dark": false
+    "file": "svix-b996ef90.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#2c70ff"
   },
   {
     "slug": "sympla",
@@ -4659,7 +4895,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "taggun",
     "name": "Taggun",
     "category": "other",
-    "file": "taggun-b771d809.webp",
+    "file": "taggun-bd7d4e03.webp",
     "dark": false
   },
   {
@@ -4701,8 +4937,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "taxjar",
     "name": "Taxjar",
     "category": "finance",
-    "file": "taxjar-e252524a.webp",
-    "dark": true
+    "file": "taxjar-56440906.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "teamcamp",
@@ -4722,14 +4960,16 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "telnyx",
     "name": "Telnyx",
     "category": "other",
-    "file": "telnyx-fc90c3bf.webp",
-    "dark": false
+    "file": "telnyx-56440906.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "teltel",
     "name": "Teltel",
     "category": "other",
-    "file": "teltel-7067752f.webp",
+    "file": "teltel-7f4403a0.webp",
     "dark": false
   },
   {
@@ -4743,8 +4983,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "textit",
     "name": "Textit",
     "category": "other",
-    "file": "textit-8a3b57c8.webp",
-    "dark": false
+    "file": "textit-56440906.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": null
   },
   {
     "slug": "textrazor",
@@ -4757,15 +4999,19 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "thanks-io",
     "name": "Thanks IO",
     "category": "other",
-    "file": "thanks-io-a322cb59.webp",
-    "dark": false
+    "file": "thanks-io-87f44633.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#cf422a"
   },
   {
     "slug": "the-odds-api",
     "name": "The Odds Api",
     "category": "development",
-    "file": "the-odds-api-fda1b935.webp",
-    "dark": true
+    "file": "the-odds-api-88546dbc.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#4a86e8"
   },
   {
     "slug": "tiktok",
@@ -4806,8 +5052,8 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "timelink",
     "name": "Timelink",
     "category": "other",
-    "file": "timelink-17cd5056.webp",
-    "dark": true
+    "file": "timelink-4f41610d.webp",
+    "dark": false
   },
   {
     "slug": "timely",
@@ -4904,14 +5150,14 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "turbot-pipes",
     "name": "Turbot Pipes",
     "category": "other",
-    "file": "turbot-pipes-103c67db.webp",
-    "dark": true
+    "file": "turbot-pipes-e79ed275.webp",
+    "dark": false
   },
   {
     "slug": "turso",
     "name": "Turso",
     "category": "other",
-    "file": "turso-5bdf8f31.webp",
+    "file": "turso-a0b756a7.webp",
     "dark": false
   },
   {
@@ -4974,8 +5220,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "unione",
     "name": "Unione",
     "category": "other",
-    "file": "unione-27b9b0f1.webp",
-    "dark": false
+    "file": "unione-69eca269.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#ff9c24"
   },
   {
     "slug": "uptimerobot",
@@ -5016,8 +5264,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "verifiedemail",
     "name": "Verifiedemail",
     "category": "communication",
-    "file": "verifiedemail-211b5562.webp",
-    "dark": false
+    "file": "verifiedemail-bd0f676f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#f9bb30"
   },
   {
     "slug": "vero",
@@ -5030,7 +5280,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "virustotal",
     "name": "Virustotal",
     "category": "other",
-    "file": "virustotal-73b5310a.webp",
+    "file": "virustotal-d9a73dde.webp",
     "dark": false
   },
   {
@@ -5051,8 +5301,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "waiverfile",
     "name": "Waiverfile",
     "category": "ai",
-    "file": "waiverfile-1be47992.webp",
-    "dark": false
+    "file": "waiverfile-d60d8729.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#005dac"
   },
   {
     "slug": "wakatime",
@@ -5121,15 +5373,19 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "whautomate",
     "name": "Whautomate",
     "category": "other",
-    "file": "whautomate-a4086b14.webp",
-    "dark": false
+    "file": "whautomate-f980594f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#02006d"
   },
   {
     "slug": "winston-ai",
     "name": "Winston AI",
     "category": "ai",
-    "file": "winston-ai-758f16ed.webp",
-    "dark": true
+    "file": "winston-ai-f8659193.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#3452fe"
   },
   {
     "slug": "withmoxie",
@@ -5191,8 +5447,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "wrike",
     "name": "Wrike",
     "category": "productivity",
-    "file": "wrike-53fef83f.webp",
-    "dark": false
+    "file": "wrike-f7ae571c.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#08cf65"
   },
   {
     "slug": "xero",
@@ -5233,8 +5491,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "you",
     "name": "You",
     "category": "other",
-    "file": "you-052adb54.webp",
-    "dark": false
+    "file": "you-18d3e73f.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#0771fd"
   },
   {
     "slug": "youtube",
@@ -5247,8 +5507,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "zapier-nla",
     "name": "Zapier Nla",
     "category": "development",
-    "file": "zapier-nla-7e1731ae.webp",
-    "dark": false
+    "file": "zapier-nla-8d6a20bb.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#ff4f00"
   },
   {
     "slug": "zendesk",
@@ -5261,8 +5523,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "zenefits",
     "name": "Zenefits",
     "category": "other",
-    "file": "zenefits-c7a2055e.webp",
-    "dark": false
+    "file": "zenefits-1d981e29.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#e14700"
   },
   {
     "slug": "zenrows",
@@ -5282,7 +5546,7 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "zeplin",
     "name": "Zeplin",
     "category": "other",
-    "file": "zeplin-1d4620b5.webp",
+    "file": "zeplin-9fa0902f.webp",
     "dark": false
   },
   {
@@ -5296,8 +5560,10 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "zoho",
     "name": "Zoho",
     "category": "crm",
-    "file": "zoho-4277b331.webp",
-    "dark": false
+    "file": "zoho-e276ca98.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#cd2232"
   },
   {
     "slug": "zoho-bigin",
@@ -5359,14 +5625,16 @@ export const CATALOG: CatalogEntry[] = [
     "slug": "zylvie",
     "name": "Zylvie",
     "category": "other",
-    "file": "zylvie-fca4aef0.webp",
+    "file": "zylvie-fa2a31e7.webp",
     "dark": false
   },
   {
     "slug": "zyte-api",
     "name": "Zyte Api",
     "category": "development",
-    "file": "zyte-api-202a07db.webp",
-    "dark": false
+    "file": "zyte-api-00a7bf8d.svg",
+    "dark": false,
+    "wordmark": true,
+    "tint": "#b02cce"
   }
 ];

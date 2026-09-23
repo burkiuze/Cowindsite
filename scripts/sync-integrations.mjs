@@ -17,6 +17,7 @@ import { readdirSync, statSync, mkdirSync, writeFileSync, rmSync, existsSync, re
 import { createHash } from "node:crypto";
 import { join, extname, basename } from "node:path";
 import sharp from "sharp";
+import { squareMark } from "./lib/wordmark.mjs";
 
 const SOURCE = process.argv[2] ?? "/home/user/composiohq/open-logos";
 /**
@@ -284,6 +285,26 @@ function fingerprint(buffer) {
   return createHash("sha256").update(buffer).digest("hex").slice(0, 8);
 }
 
+/**
+ * A square the size of a logo, in the brand's colour, carrying its initial.
+ *
+ * The letter takes whichever ink reads on the tint; a brand with no measurable
+ * colour gets Navio's raised surface instead of an invented one.
+ */
+function letteredTile(name, tint) {
+  const letter = (name.match(/[A-Za-z0-9]/)?.[0] ?? "?").toUpperCase();
+  const background = tint ?? "#1f232a";
+  const [r, g, b] = [1, 3, 5].map((index) => parseInt(background.slice(index, index + 2), 16) / 255);
+  const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  const ink = tint && luminance > 0.55 ? "#0d1014" : "#f4f5f7";
+  return [
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">',
+    `<rect width="96" height="96" rx="22" fill="${background}"/>`,
+    `<text x="48" y="50" text-anchor="middle" dominant-baseline="central" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif" font-size="52" font-weight="650" fill="${ink}">${letter}</text>`,
+    "</svg>",
+  ].join("");
+}
+
 function normalise(buffer) {
   const head = buffer.subarray(0, 400).toString("utf8").trimStart().toLowerCase();
   if (head.startsWith("<svg") || head.startsWith("<?xml")) return { kind: "svg", buffer };
@@ -296,17 +317,60 @@ function normalise(buffer) {
   return { kind: "raster", buffer };
 }
 
+let iconsCut = 0;
+let wordmarks = 0;
+
 for (const [slug, { file, dir }] of [...bySlug.entries()].sort()) {
   const source = join(dir ?? SOURCE, file);
   const { kind, buffer } = normalise(readFileSync(source));
+  // What the placeholder check compares: the artwork as supplied, not what
+  // this script made of it — two brands' generated tiles may well match.
+  const sourceHash = fingerprint(buffer);
 
   try {
-    const rendered = await sharp(buffer, { density: 300 })
+    // Vetted and supplied marks are already square. A bulk mark may be a
+    // wordmark: cut its icon out when it has one, and say so when it does not,
+    // so the interface can draw a lettered tile instead of a grey smudge.
+    let artwork = buffer;
+    let shape = { kind: "square" };
+    if (!dir && !MISLABELLED.has(slug)) {
+      shape = await squareMark(buffer).catch(() => ({ kind: "square" }));
+      if (shape.kind === "icon") {
+        artwork = shape.buffer;
+        iconsCut += 1;
+      } else if (shape.kind === "wordmark") {
+        wordmarks += 1;
+      }
+    }
+
+    const rendered = await sharp(artwork, { density: 300 })
       .resize(SIZE, SIZE, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .toBuffer();
 
     if (MISLABELLED.has(slug)) {
       entries.push({ slug, name: displayName(slug), category: categorize(slug), file: null, dark: false });
+      continue;
+    }
+
+    // A wordmark with no icon to cut out becomes a lettered tile in the
+    // brand's own colour, drawn once here so every surface that shows the
+    // mark gets the same readable square without knowing why.
+    if (shape.kind === "wordmark") {
+      const svg = Buffer.from(letteredTile(displayName(slug), shape.tint));
+      const hash = fingerprint(svg);
+      const name = `${slug}-${hash}.svg`;
+      writeFileSync(join(OUT_DIR, name), svg);
+      entries.push({
+        slug,
+        name: displayName(slug),
+        category: categorize(slug),
+        file: name,
+        dark: false,
+        hash,
+        sourceHash,
+        wordmark: true,
+        tint: shape.tint,
+      });
       continue;
     }
 
@@ -321,6 +385,7 @@ for (const [slug, { file, dir }] of [...bySlug.entries()].sort()) {
       file,
       dark: await isDarkMark(rendered),
       hash,
+      sourceHash,
     });
   } catch {
     // Some SVGs use features the rasteriser refuses. They are already small and
@@ -332,7 +397,7 @@ for (const [slug, { file, dir }] of [...bySlug.entries()].sort()) {
       writeFileSync(join(OUT_DIR, name), buffer);
       // An unrasterisable SVG cannot be measured; assume it needs the plate,
       // which is the safe direction — a light plate never hides a mark.
-      entries.push({ slug, name: displayName(slug), category: categorize(slug), file: name, dark: true, hash });
+      entries.push({ slug, name: displayName(slug), category: categorize(slug), file: name, dark: true, hash, sourceHash });
     } else {
       skipped.push(file);
     }
@@ -350,9 +415,9 @@ for (const [slug, { file, dir }] of [...bySlug.entries()].sort()) {
 const byImage = new Map();
 for (const entry of entries) {
   if (!entry.file) continue;
-  const shared = byImage.get(entry.hash) ?? [];
+  const shared = byImage.get(entry.sourceHash) ?? [];
   shared.push(entry);
-  byImage.set(entry.hash, shared);
+  byImage.set(entry.sourceHash, shared);
 }
 let placeholders = 0;
 for (const shared of byImage.values()) {
@@ -361,12 +426,17 @@ for (const shared of byImage.values()) {
     rmSync(join(OUT_DIR, entry.file), { force: true });
     entry.file = null;
     entry.dark = false;
+    delete entry.wordmark;
+    delete entry.tint;
     placeholders += 1;
   }
 }
 
 // The hash did its job in the filename; it is not part of the catalogue.
-for (const entry of entries) delete entry.hash;
+for (const entry of entries) {
+  delete entry.hash;
+  delete entry.sourceHash;
+}
 
 const header = `// GENERATED FILE — do not edit by hand.
 // Regenerate with: node scripts/sync-integrations.mjs <path-to-open-logos>
@@ -388,6 +458,14 @@ export interface CatalogEntry {
   file: string | null;
   /** True when the mark is too dark to read on Navio's surfaces unaided. */
   dark: boolean;
+  /**
+   * The source mark was the brand's name set in type with no icon to cut out:
+   * far too wide to read in a small square. \`file\` is then a lettered tile
+   * in \`tint\`, generated here, rather than a smudge of shrunken letters.
+   */
+  wordmark?: boolean;
+  /** The brand's strongest colour, measured from its own artwork. */
+  tint?: string | null;
 }
 
 export const CATALOG: CatalogEntry[] = ${JSON.stringify(entries, null, 2)};
@@ -397,4 +475,5 @@ writeFileSync(OUT_FILE, header);
 console.log(
   `catalogued ${entries.length} services (${overridden} vetted marks, ${supplied} supplied, ${placeholders} placeholders dropped)`,
 );
+console.log(`wordmarks: ${iconsCut} icons cut out, ${wordmarks} drawn as lettered tiles`);
 if (skipped.length > 0) console.log(`skipped (unreadable): ${skipped.join(", ")}`);
