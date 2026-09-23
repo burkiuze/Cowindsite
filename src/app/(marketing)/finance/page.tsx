@@ -46,6 +46,42 @@ const WORK: Array<{ icon: IconName; title: string; body: string }> = [
   },
 ];
 
+/** What the finance surface itself shows, in the order it shows it. */
+const SURFACE = [
+  {
+    title: "Position",
+    body: "Cash on hand, net profit against last month, runway with the division it came from, and what is still collectible.",
+  },
+  {
+    title: "Needs attention",
+    body: "The notice window that closes first, the invoice owed longest, the biggest recoverable leak — each one a decision, none of them taken for you.",
+  },
+  {
+    title: "Six months, side by side",
+    body: "Revenue against expenses, month by month, with the net under each one. Hover a month and it reads itself out.",
+  },
+  {
+    title: "Cash, month by month",
+    body: "The line the board asks about, from the accounts Navio can actually read — with the move since last month.",
+  },
+  {
+    title: "Both ledgers, line by line",
+    body: "Every revenue and expense line with its share, its move since last month, and the mark of the tool it was read from.",
+  },
+  {
+    title: "Who owes us",
+    body: "Open invoices by age: not due, late, at risk. Customer, reference, due date and where each one was found.",
+  },
+  {
+    title: "What we are committed to",
+    body: "Vendor contracts against actual usage, with the renewal date, the last day to give notice, and what the numbers suggest doing.",
+  },
+  {
+    title: "Where the figures came from",
+    body: "Every tool that was read and when — and, in the same list, whatever could not be reached and was therefore left out of the totals.",
+  },
+];
+
 /** The line a finance team needs to hear before it hands anything over. */
 const RULES = [
   {
@@ -82,9 +118,10 @@ export default function FinancePage() {
               wanted to do on a Friday.
             </h1>
             <p className="mx-auto mt-7 max-w-xl text-[15.5px] leading-relaxed text-[var(--color-ink-muted)]">
-              Navio Finance is not a separate product. It is the same assistant, pointed at the ledger: it reads the
-              accounting and payment tools it is allowed to read, answers runway and burn in plain language, prepares
-              the review, the pack and the payment — and never sends one of them without you.
+              You do not ask Navio Finance for the month. It reads the payment tool, the mailbox and the ledger on its
+              own schedule, and the surface is already the report: position, what needs deciding, both ledgers line by
+              line, who owes what, and every figure naming the tool it came from. Ask it something and it answers — but
+              you should not have to.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
@@ -110,6 +147,29 @@ export default function FinancePage() {
           <Reveal delay={90}>
             <ProductVideo only="finance" />
           </Reveal>
+        </div>
+      </section>
+
+      {/* --------------------------------------------------------- the surface */}
+      <section className="border-y border-[var(--color-hairline)] bg-[var(--color-surface)]/40">
+        <div className="mx-auto w-full max-w-6xl px-6 py-20">
+          <Reveal>
+            <p className="eyebrow">On the page, before you ask</p>
+            <h2 className="display mt-4 max-w-2xl text-[34px] sm:text-[40px]">
+              Eight blocks, read from your own tools.
+            </h2>
+          </Reveal>
+
+          <ul className="mt-10 grid gap-x-10 gap-y-7 sm:grid-cols-2 lg:grid-cols-4">
+            {SURFACE.map((block, index) => (
+              <li key={block.title}>
+                <Reveal delay={index * 45}>
+                  <h3 className="text-[14px] font-medium text-[var(--color-ink)]">{block.title}</h3>
+                  <p className="mt-2 text-[13px] leading-relaxed text-[var(--color-ink-muted)]">{block.body}</p>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

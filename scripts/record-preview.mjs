@@ -33,7 +33,11 @@ const SCRIPTS = {
       "Yazılım ekibiyle sürüm 2.15 için hazırlık toplantısı ayarla. Açık pull request'leri ve blocker issue'ları incele, kalan riskleri gündeme koy ve herkese davet gönder.",
     runMs: 3200,
   },
-  finance: {
+  // Finance is not asked, it is read: this take walks the finance surface
+  // itself rather than typing a request, because the month is already on the
+  // page before anyone opens it.
+  finance: { tour: true },
+  "finance-run": {
     prompt:
       "Eylül ayını kapat: ödeme sisteminden ve maillerden gelen tüm geliri topla, maile gelen faturalardan gider tablosunu oluştur, geçen ayla karşılaştır ve net kârı göster. Aylık raporu hazırla ve yönetim kuruluna e-posta gönder.",
     runMs: 3200,
@@ -184,6 +188,20 @@ async function clickIfPresent(selector, options) {
   }
 }
 
+/**
+ * Put a section in the middle of the frame before reading it.
+ *
+ * `scrollIntoViewIfNeeded` does nothing when an element is already an inch
+ * inside the viewport, which is exactly how a chart ends up half off the bottom
+ * of the recording while the cursor hovers it.
+ */
+async function focusOn(selector, block = "center") {
+  const element = page.locator(selector).first();
+  await element.waitFor({ state: "visible", timeout: 15_000 });
+  await element.evaluate((node, where) => node.scrollIntoView({ block: where, behavior: "smooth" }), block);
+  await page.waitForTimeout(800);
+}
+
 /** Type at human speed, with the cursor parked in the field. */
 async function type(text, perKey = 34) {
   for (const character of text) {
@@ -192,127 +210,217 @@ async function type(text, perKey = 34) {
   }
 }
 
-// --- the run ---------------------------------------------------------------
-await page.goto(`${BASE}/app/home`, { waitUntil: "networkidle" });
-await page.waitForTimeout(1400);
 
-// Look around the dashboard.
-await glide(880, 300);
-await page.waitForTimeout(500);
-await glide(640, 520, 20);
-await page.waitForTimeout(700);
+/**
+ * The finance tour.
+ *
+ * Navio Finance is not a conversation: the month is already read and laid out,
+ * so this take never types a word. It walks the page the way a finance lead
+ * does — position first, then what needs deciding, then the charts, the two
+ * ledgers, who owes us, what we are committed to, and finally where every
+ * figure was read from.
+ */
+async function tour() {
+  await page.goto(`${BASE}/app/home`, { waitUntil: "networkidle" });
+  await page.waitForTimeout(1200);
+  await glide(820, 320, 20);
+  await page.waitForTimeout(500);
 
-// Into Wind.
-await click('a[href="/app/wind"]');
-await page.waitForTimeout(1200);
+  await click('a[href="/app/finance"]');
+  await page.waitForTimeout(1800);
 
-// What was already in the queue before this run added to it.
-const pendingBefore = await page.evaluate(() =>
-  fetch("/api/approvals")
-    .then((response) => response.json())
-    .then((data) => data.approvals.filter((a) => a.status === "pending").length)
-    .catch(() => 0),
-);
+  // The position: cash, net profit, runway, what is still owed.
+  mark("position");
+  await glide(700, 330, 22);
+  await page.waitForTimeout(1500);
+  await glide(1180, 330, 20);
+  await page.waitForTimeout(1500);
+  await glide(700, 520, 18);
+  await page.waitForTimeout(1800);
 
-// Ask for an outcome.
-await click("textarea");
-await page.waitForTimeout(350);
-await type(script.prompt, 22);
-await page.waitForTimeout(500);
-await page.keyboard.press("Enter");
+  // What the figures say is waiting on a person.
+  await focusOn("text=Needs attention", "center");
+  mark("attention");
+  await glideToSelector("text=Needs attention", { dy: 90 });
+  await page.waitForTimeout(2600);
 
-// The tools Wind reads before it plans anything.
-await page.waitForTimeout(1600);
-mark("actions");
-await glide(900, 300, 22);
-// The reads land one after another, so there is something to watch: stay on
-// them while they run rather than cutting away to a finished list.
-await page.waitForTimeout(4200);
+  // The charts answer in months, so read two of them.
+  await focusOn("[data-finance-chart]");
+  mark("charts");
+  await glideToSelector("[data-finance-chart]", { dx: -110, dy: 20 });
+  await page.waitForTimeout(1500);
+  await glideToSelector("[data-finance-chart]", { dx: 60, dy: 20 });
+  await page.waitForTimeout(1600);
+  await glideToSelector("[data-cash-chart]", { dx: -60, dy: 10 });
+  await page.waitForTimeout(1400);
+  await glideToSelector("[data-cash-chart]", { dx: 160, dy: 10 });
+  await page.waitForTimeout(1600);
 
-// Open one card to show the individual calls behind the count. Which service
-// leads the list is decided by the run, not by this script, so target the card
-// itself rather than a brand name.
-if (await clickIfPresent("[data-action-card]")) {
+  // Where the money came from, and where it went.
+  await focusOn("text=Read from the payment tool", "start");
+  mark("ledgers");
+  await glideToSelector("text=Read from the payment tool", { dy: 120 });
+  await page.waitForTimeout(2600);
+  await glideToSelector("text=Built from the bills", { dy: 220 });
+  await page.waitForTimeout(2800);
+
+  // Who owes us, oldest debt first.
+  await focusOn("text=Who owes us", "start");
+  mark("receivables");
+  await glideToSelector("text=Who owes us", { dy: 150 });
+  await page.waitForTimeout(2600);
+  await glideToSelector("text=Mavi Tarım");
+  await page.waitForTimeout(2000);
+
+  // What we are committed to, and the notice window that closes first.
+  await focusOn("text=What we are committed to", "start");
+  mark("commitments");
+  await glideToSelector("text=What we are committed to", { dy: 120 });
+  await page.waitForTimeout(2600);
+  await glideToSelector("text=Nesne depolama", { dy: 40 });
   await page.waitForTimeout(2200);
-  await clickIfPresent("[data-action-card]");
-  await page.waitForTimeout(600);
+
+  // And the part that makes the rest trustworthy: what was read, and what
+  // could not be.
+  await focusOn("text=Where these figures came from", "start");
+  mark("sources");
+  await glideToSelector("text=Where these figures came from", { dy: 140 });
+  await page.waitForTimeout(3200);
+  await glideToSelector("text=Wise");
+  await page.waitForTimeout(2600);
+
+  // End where every consequential step ends: a person's decision.
+  await click('a[href="/app/approvals"]');
+  await page.waitForTimeout(2200);
+  await glide(900, 420, 22);
+  await page.waitForTimeout(1600);
 }
 
-// Watch the streams open and land, then the answer being written.
-await glide(900, 430, 18);
-await page.waitForTimeout(6000);
+async function conversation() {
+  // --- the run ---------------------------------------------------------------
+  await page.goto(`${BASE}/app/home`, { waitUntil: "networkidle" });
+  await page.waitForTimeout(1400);
 
-// A run that closes a month renders the month. Read it the way a person does:
-// the headline figures, the shape of the last six months, then the lines.
-if (script.report) {
-  try {
-    await glideToSelector("[data-finance-report]", { dy: -60, timeout: 60_000 });
-    mark("report");
-    await page.waitForTimeout(2400);
+  // Look around the dashboard.
+  await glide(880, 300);
+  await page.waitForTimeout(500);
+  await glide(640, 520, 20);
+  await page.waitForTimeout(700);
 
-    // Hovering a month brings out its two figures, so linger on two of them.
-    await glideToSelector("[data-finance-chart]", { dx: -40, dy: 30 });
-    await page.waitForTimeout(1600);
-    await glideToSelector("[data-finance-chart]", { dx: 150, dy: 30 });
-    await page.waitForTimeout(1800);
+  // Into Wind.
+  await click('a[href="/app/wind"]');
+  await page.waitForTimeout(1200);
 
-    // Down through the revenue lines and the expense table built from the bills.
-    await glideToSelector("[data-finance-report] table", { dy: 40 });
-    await page.waitForTimeout(3000);
-    await glideToSelector(":nth-match([data-finance-report] table, 2)", { dy: 120 });
-    await page.waitForTimeout(2600);
-  } catch {
-    // The report is part of the run, not of this script: a take without one
-    // still records the answer and the approval.
+  // What was already in the queue before this run added to it.
+  const pendingBefore = await page.evaluate(() =>
+    fetch("/api/approvals")
+      .then((response) => response.json())
+      .then((data) => data.approvals.filter((a) => a.status === "pending").length)
+      .catch(() => 0),
+  );
+
+  // Ask for an outcome.
+  await click("textarea");
+  await page.waitForTimeout(350);
+  await type(script.prompt, 22);
+  await page.waitForTimeout(500);
+  await page.keyboard.press("Enter");
+
+  // The tools Wind reads before it plans anything.
+  await page.waitForTimeout(1600);
+  mark("actions");
+  await glide(900, 300, 22);
+  // The reads land one after another, so there is something to watch: stay on
+  // them while they run rather than cutting away to a finished list.
+  await page.waitForTimeout(4200);
+
+  // Open one card to show the individual calls behind the count. Which service
+  // leads the list is decided by the run, not by this script, so target the card
+  // itself rather than a brand name.
+  if (await clickIfPresent("[data-action-card]")) {
+    await page.waitForTimeout(2200);
+    await clickIfPresent("[data-action-card]");
+    await page.waitForTimeout(600);
   }
+
+  // Watch the streams open and land, then the answer being written.
+  await glide(900, 430, 18);
+  await page.waitForTimeout(6000);
+
+  // A run that closes a month renders the month. Read it the way a person does:
+  // the headline figures, the shape of the last six months, then the lines.
+  if (script.report) {
+    try {
+      await glideToSelector("[data-finance-report]", { dy: -60, timeout: 60_000 });
+      mark("report");
+      await page.waitForTimeout(2400);
+
+      // Hovering a month brings out its two figures, so linger on two of them.
+      await glideToSelector("[data-finance-chart]", { dx: -40, dy: 30 });
+      await page.waitForTimeout(1600);
+      await glideToSelector("[data-finance-chart]", { dx: 150, dy: 30 });
+      await page.waitForTimeout(1800);
+
+      // Down through the revenue lines and the expense table built from the bills.
+      await glideToSelector("[data-finance-report] table", { dy: 40 });
+      await page.waitForTimeout(3000);
+      await glideToSelector(":nth-match([data-finance-report] table, 2)", { dy: 120 });
+      await page.waitForTimeout(2600);
+    } catch {
+      // The report is part of the run, not of this script: a take without one
+      // still records the answer and the approval.
+    }
+  }
+
+  mark("answer");
+  await glide(880, 520, 18);
+  await page.waitForTimeout(6500);
+
+  // The action Navio prepared, and the decision that releases it.
+  //
+  // Wait for the run to actually hand it over: clicking through early lands on
+  // whatever was already waiting, and the take records the wrong decision. The
+  // queue itself is the signal — not a line of text that may not have scrolled
+  // into the frame yet.
+  await page
+    .waitForFunction(
+      (before) =>
+        fetch("/api/approvals")
+          .then((response) => response.json())
+          .then((data) => data.approvals.filter((a) => a.status === "pending").length > before)
+          .catch(() => false),
+      pendingBefore,
+      { timeout: 45_000, polling: 1000 },
+    )
+    .catch(() => undefined);
+  await page.waitForTimeout(700);
+
+  await click('a[href="/app/approvals"]');
+  await page.waitForTimeout(1600);
+  await glide(900, 420, 24);
+  await page.waitForTimeout(1400);
+
+  mark("approval");
+  // The sidebar link also reads "Approvals": target the decision control itself.
+  await click('button:has-text("Approve")');
+  await page.waitForTimeout(script.runMs);
+
+  // The receipt: what actually ran, not what was claimed. The decided card moves
+  // down the page, so follow it rather than assuming where it landed.
+  // A multi-step action runs its steps one after another, so give the receipt
+  // room to arrive rather than assuming a fixed duration covered it.
+  await glideToSelector("text=Executed against", { timeout: 60_000 });
+  mark("receipt");
+  await page.waitForTimeout(3400);
+
+  // End on the catalogue.
+  await click('a[href="/app/integrations"]');
+  await page.waitForTimeout(1800);
+  await glide(720, 620, 20);
+  await page.waitForTimeout(1400);
 }
 
-mark("answer");
-await glide(880, 520, 18);
-await page.waitForTimeout(6500);
-
-// The action Navio prepared, and the decision that releases it.
-//
-// Wait for the run to actually hand it over: clicking through early lands on
-// whatever was already waiting, and the take records the wrong decision. The
-// queue itself is the signal — not a line of text that may not have scrolled
-// into the frame yet.
-await page
-  .waitForFunction(
-    (before) =>
-      fetch("/api/approvals")
-        .then((response) => response.json())
-        .then((data) => data.approvals.filter((a) => a.status === "pending").length > before)
-        .catch(() => false),
-    pendingBefore,
-    { timeout: 45_000, polling: 1000 },
-  )
-  .catch(() => undefined);
-await page.waitForTimeout(700);
-
-await click('a[href="/app/approvals"]');
-await page.waitForTimeout(1600);
-await glide(900, 420, 24);
-await page.waitForTimeout(1400);
-
-mark("approval");
-// The sidebar link also reads "Approvals": target the decision control itself.
-await click('button:has-text("Approve")');
-await page.waitForTimeout(script.runMs);
-
-// The receipt: what actually ran, not what was claimed. The decided card moves
-// down the page, so follow it rather than assuming where it landed.
-// A multi-step action runs its steps one after another, so give the receipt
-// room to arrive rather than assuming a fixed duration covered it.
-await glideToSelector("text=Executed against", { timeout: 60_000 });
-mark("receipt");
-await page.waitForTimeout(3400);
-
-// End on the catalogue.
-await click('a[href="/app/integrations"]');
-await page.waitForTimeout(1800);
-await glide(720, 620, 20);
-await page.waitForTimeout(1400);
+await (script.tour ? tour() : conversation());
 
 await context.close();
 await browser.close();

@@ -42,12 +42,12 @@ const TAKES: Take[] = [
   },
   {
     id: "finance",
-    tab: "Close the month",
+    tab: "The month, already read",
     file: "preview-finance",
     caption:
-      "One question closes a month. Navio totals the revenue from the payment tool and the invoices that arrived by email, builds the expense table out of the bills, sets it against last month and reports the net profit — every line naming the tool it was read from, and the mail to the board waiting on a person.",
+      "Nothing is typed in this one. Navio reads the payment tool, the mailbox and the ledger on its own schedule, so the finance surface is already the month: position and runway, the decisions still waiting on a person, six months of revenue against expenses, both ledgers line by line with the tool each figure came from, who owes what and for how long, and every vendor commitment against what it is actually used for.",
     description:
-      "A run in the Navio workspace: Navio reads the payment tool and the mailbox, assembles a month's revenue and expenses with a six-month chart and month-on-month comparison, then holds the board email for approval.",
+      "A tour of Navio Finance: cash, net profit and runway; the decisions waiting; six months of revenue against expenses; the revenue and expense ledgers; unpaid invoices by age; vendor commitments against usage; and the list of tools every figure was read from.",
   },
   {
     id: "social",

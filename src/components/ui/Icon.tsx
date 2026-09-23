@@ -43,6 +43,7 @@ export type IconName =
   | "integrations"
   | "team"
   | "analytics"
+  | "finance"
   | "settings"
   | "plus"
   | "send"
@@ -139,6 +140,14 @@ const PATHS: Record<IconName, React.ReactNode> = {
       <path d="M4 19c0-2.8 2.2-4.6 5-4.6s5 1.8 5 4.6" />
       <path d="M16 6.5a2.6 2.6 0 0 1 0 5" />
       <path d="M17 14.6c2 .5 3 2 3 4.4" />
+    </>
+  ),
+  finance: (
+    <>
+      <rect x="3" y="6" width="18" height="12" rx="2.5" />
+      <circle cx="12" cy="12" r="2.6" />
+      <path d="M6.5 9.5v5" />
+      <path d="M17.5 9.5v5" />
     </>
   ),
   analytics: (

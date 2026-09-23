@@ -31,19 +31,32 @@ const marks = existsSync(join(RAW_DIR, "marks.json"))
   ? JSON.parse(readFileSync(join(RAW_DIR, "marks.json"), "utf8"))
   : [];
 
-const at = (label, fallback) => marks.find((mark) => mark.label === label)?.at ?? fallback;
-
 /**
  * Short pushes, each held briefly: the integrations Navio just read, the month's
  * figures when the run produced them, and the receipt that proves the approved
  * action actually ran. A run without a report simply has one push fewer.
  */
-const reportAt = marks.find((mark) => mark.label === "report")?.at;
-const PUSHES = [
-  { start: at("actions", 20) + 0.8, end: at("actions", 20) + 4.2, scale: 1.22, cx: 0.58, cy: 0.42 },
-  ...(reportAt ? [{ start: reportAt + 0.8, end: reportAt + 5.4, scale: 1.2, cx: 0.58, cy: 0.38 }] : []),
-  { start: at("receipt", 44) - 0.3, end: at("receipt", 44) + 3.0, scale: 1.26, cx: 0.58, cy: 0.72 },
+/**
+ * What each marked moment is worth zooming on. A take only has the marks its
+ * own run produced, so the list is filtered rather than assumed: a tour with no
+ * receipt simply has no receipt push, and a run with no report has no report
+ * push. Order follows the recording, which the focus expression relies on.
+ */
+const PUSH_SPECS = [
+  { label: "actions", lead: 0.8, hold: 3.4, scale: 1.22, cx: 0.58, cy: 0.42 },
+  { label: "position", lead: 0.6, hold: 3.6, scale: 1.18, cx: 0.55, cy: 0.3 },
+  { label: "report", lead: 0.8, hold: 4.6, scale: 1.2, cx: 0.58, cy: 0.38 },
+  { label: "charts", lead: 0.6, hold: 4.0, scale: 1.2, cx: 0.55, cy: 0.5 },
+  { label: "receivables", lead: 0.6, hold: 3.6, scale: 1.18, cx: 0.55, cy: 0.5 },
+  { label: "sources", lead: 0.6, hold: 3.6, scale: 1.2, cx: 0.62, cy: 0.55 },
+  { label: "receipt", lead: -0.3, hold: 3.3, scale: 1.26, cx: 0.58, cy: 0.72 },
 ];
+
+const PUSHES = PUSH_SPECS.flatMap((spec) => {
+  const found = marks.find((mark) => mark.label === spec.label)?.at;
+  if (found === undefined) return [];
+  return [{ start: found + spec.lead, end: found + spec.lead + spec.hold, scale: spec.scale, cx: spec.cx, cy: spec.cy }];
+});
 
 /** Ramp in over `ramp` seconds, hold, ramp out — expressed for zoompan. */
 function zoomExpression(ramp = 0.45) {
@@ -88,7 +101,8 @@ run(["-i", SOURCE, "-vf", filter, "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "42
 
 // The poster is the still a visitor sees before pressing play, so prefer the
 // frame that says most about the run: the report, when there is one.
-run(["-ss", String(reportAt ? reportAt + 3 : at("actions", 20) + 2), "-i", SOURCE, "-vframes", "1",
+const posterAt = marks.find((mark) => ["report", "position", "actions"].includes(mark.label))?.at;
+run(["-ss", String((posterAt ?? 20) + 2.5), "-i", SOURCE, "-vframes", "1",
   "-vf", `scale=${WIDTH}:-2`, "-c:v", "libwebp", "-quality", "82", join(OUT_DIR, `${NAME}-poster.webp`)]);
 
 console.log("wrote", NAME, "→", OUT_DIR);

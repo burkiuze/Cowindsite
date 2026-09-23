@@ -21,6 +21,7 @@ export type Permission =
   | "integrations:connect"
   | "integrations:manage"
   | "approvals:decide"
+  | "finance:read"
   | "members:manage"
   | "audit:read"
   | "workspace:manage";
@@ -37,6 +38,7 @@ export const ALL_PERMISSIONS: Permission[] = [
   "integrations:connect",
   "integrations:manage",
   "approvals:decide",
+  "finance:read",
   "members:manage",
   "audit:read",
   "workspace:manage",
@@ -55,6 +57,9 @@ const MANAGER_PERMISSIONS: Permission[] = [
   "agents:create",
   "flows:manage",
   "approvals:decide",
+  // The books are scoped like anything else: a workspace member does not see
+  // the ledger because they can use the workspace.
+  "finance:read",
   "audit:read",
 ];
 
@@ -125,6 +130,7 @@ export const PERMISSION_LABEL: Record<Permission, string> = {
   "integrations:use": "Use integrations",
   "integrations:connect": "Connect integrations",
   "integrations:manage": "Manage integrations",
+  "finance:read": "Read finance",
   "approvals:decide": "Approve actions",
   "members:manage": "Manage people",
   "audit:read": "View audit log",

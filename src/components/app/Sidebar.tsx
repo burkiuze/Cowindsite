@@ -40,6 +40,7 @@ export function Sidebar(props: SidebarProps) {
     { href: "/app/tasks", label: "Tasks", icon: "tasks", badge: props.runningTasks || undefined },
     { href: "/app/flows", label: "Flows", icon: "flows" },
     { href: "/app/approvals", label: "Approvals", icon: "approvals", badge: props.pendingApprovals || undefined },
+    { href: "/app/finance", label: "Finance", icon: "finance" },
   ];
 
   const workspace: NavItem[] = [
