@@ -479,36 +479,61 @@
 }
 
 
-/* ───────────── ticker ───────────── */
+/* ───────────── infrastructure marquee ───────────── */
 
-.kx-ticker {
-  overflow: hidden;
-  background: var(--frame);
+.kx-marquee {
+  padding: clamp(28px, 3vw, 44px) 0 clamp(30px, 3.2vw, 48px);
+  border-top: 1px solid var(--line);
+  text-align: center;
 }
 
-.kx-ticker-track {
+.kx-marquee-label {
+  margin: 0;
+  font-family: var(--f-wide);
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.kx-marquee-window {
+  margin-top: 26px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.kx-marquee-track {
   display: flex;
   width: max-content;
-  animation: kx-ticker 46s linear infinite;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: kx-ticker 48s linear infinite;
 }
 
-.kx-ticker-track span {
+.kx-marquee-window:hover .kx-marquee-track {
+  animation-play-state: paused;
+}
+
+.kx-marquee-track li {
   display: inline-flex;
   align-items: center;
-  padding: 13px 0;
-  font-family: var(--f-wide);
-  font-size: clamp(12px, 1vw, 16px);
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  color: #fff;
+  gap: 12px;
+  margin-right: clamp(48px, 5vw, 84px);
+  font-family: var(--f-body);
+  font-size: clamp(20px, 1.8vw, 28px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--ink-2);
   white-space: nowrap;
+  opacity: 0.85;
 }
 
-.kx-ticker-track span::after {
-  content: "✦";
-  margin: 0 28px;
-  font-size: 0.8em;
-  color: rgba(255, 255, 255, 0.6);
+.kx-marquee-track .kx-logo {
+  width: 1.1em;
+  height: 1.1em;
 }
 
 @keyframes kx-ticker {
@@ -518,7 +543,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .kx-ticker-track {
+  .kx-marquee-track {
     animation: none;
   }
 }
@@ -1004,70 +1029,6 @@
   mask-size: contain;
 }
 
-.kx-infra {
-  border-top: 1px solid var(--line-2);
-}
-
-.kx-infra-row {
-  display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr);
-  gap: clamp(18px, 3vw, 48px);
-  padding: clamp(22px, 2.6vw, 36px) 0;
-  border-bottom: 1px solid var(--line-2);
-}
-
-.kx-infra-head h3 {
-  margin: 0;
-  font-family: var(--f-wide);
-  font-size: 12px;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  color: var(--blue-ink);
-}
-
-.kx-infra-head p {
-  margin: 10px 0 0;
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--muted);
-}
-
-.kx-infra-logos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.kx-infra-logos li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 64px;
-  padding: 0 18px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--kpanel);
-  font-family: var(--f-display);
-  font-size: clamp(20px, 1.5vw, 26px);
-  font-weight: 400;
-  text-transform: uppercase;
-  color: #fff;
-}
-
-.kx-infra-logos .kx-logo {
-  width: 26px;
-  height: 26px;
-}
-
-@media (max-width: 760px) {
-  .kx-infra-row {
-    grid-template-columns: 1fr;
-  }
-}
 
 @media (max-width: 480px) {
   .kx-kicker {

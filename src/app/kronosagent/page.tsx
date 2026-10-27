@@ -62,23 +62,20 @@ const PROVIDERS: Brand[] = [
   { name: "Any OpenAI-compatible endpoint" },
 ];
 
-/** What Kronos Cloud and the site run on, row by row. */
-const INFRA: { row: string; note: string; items: Brand[] }[] = [
-  {
-    row: "Inference",
-    note: "Each Kronos Cloud model is pinned to one provider through OpenRouter, with no fallback to another.",
-    items: [{ name: "OpenRouter", logo: "openrouter" }, { name: "Open Inference" }, { name: "Nebius Token Factory" }, { name: "Crusoe" }, { name: "Wafer" }],
-  },
-  {
-    row: "Models",
-    note: "Open-weight models from the labs that made them.",
-    items: [{ name: "Z.ai", logo: "zai" }, { name: "MiniMax", logo: "minimax" }, { name: "NVIDIA", logo: "nvidia" }, { name: "DeepSeek", logo: "deepseek" }],
-  },
-  {
-    row: "Accounts & platform",
-    note: "Sign-in, the membership ledger and the site. Your code and files never pass through them.",
-    items: [{ name: "Clerk", logo: "clerk" }, { name: "Supabase", logo: "supabase" }, { name: "Vercel", logo: "vercel" }],
-  },
+/** What Kronos Cloud and the site run on: inference, the model labs, accounts and hosting. */
+const INFRA: Brand[] = [
+  { name: "OpenRouter", logo: "openrouter" },
+  { name: "Open Inference" },
+  { name: "Nebius Token Factory" },
+  { name: "Crusoe" },
+  { name: "Wafer" },
+  { name: "Z.ai", logo: "zai" },
+  { name: "MiniMax", logo: "minimax" },
+  { name: "NVIDIA", logo: "nvidia" },
+  { name: "DeepSeek", logo: "deepseek" },
+  { name: "Clerk", logo: "clerk" },
+  { name: "Supabase", logo: "supabase" },
+  { name: "Vercel", logo: "vercel" },
 ];
 
 function BrandMark({ b }: { b: Brand }) {
@@ -110,7 +107,6 @@ export default async function KronosPage() {
   // the visitor's own system comes first
   const order: ("windows" | "mac")[] = /Mac|iPhone|iPad/i.test(ua) && !/Windows/i.test(ua) ? ["mac", "windows"] : ["windows", "mac"];
   const models = cloudModels();
-  const ticker = ["Runs on your machine", "Your own API keys", "No telemetry", "OS sandbox", "Verifies its work", "Open source"];
   return (
     <>
       <section className="kx-hero" id="download">
@@ -143,13 +139,18 @@ export default async function KronosPage() {
         </p>
       </section>
 
-      <div className="kx-ticker" aria-hidden="true">
-        <div className="kx-ticker-track">
-          {[...ticker, ...ticker].map((t, i) => (
-            <span key={i}>{t}</span>
-          ))}
+      <section className="kx-marquee" aria-label="Our infrastructure">
+        <p className="kx-marquee-label">Our infrastructure</p>
+        <div className="kx-marquee-window">
+          <ul className="kx-marquee-track">
+            {[...INFRA, ...INFRA].map((b, i) => (
+              <li key={i} aria-hidden={i >= INFRA.length ? true : undefined}>
+                <BrandMark b={b} />
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+      </section>
 
       <section className="kx-section" id="why">
         <div className="kx-section-head">
@@ -281,37 +282,6 @@ export default async function KronosPage() {
               </li>
             ))}
           </ol>
-        </div>
-      </section>
-
-      <section className="kx-section" id="infrastructure">
-        <div className="kx-section-head">
-          <div>
-            <p className="kx-label">Our Infrastructure</p>
-            <h2 className="kx-display" style={{ marginTop: 16 }}>
-              What Kronos
-              <br />
-              Runs On
-            </h2>
-          </div>
-          <p className="kx-lede">The services behind Kronos Cloud and your account. With your own keys, Kronos talks to your provider directly and none of these are involved.</p>
-        </div>
-        <div className="kx-infra">
-          {INFRA.map((r) => (
-            <div key={r.row} className="kx-infra-row">
-              <div className="kx-infra-head">
-                <h3>{r.row}</h3>
-                <p>{r.note}</p>
-              </div>
-              <ul className="kx-infra-logos">
-                {r.items.map((b) => (
-                  <li key={b.name}>
-                    <BrandMark b={b} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
         </div>
       </section>
 
