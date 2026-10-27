@@ -48,14 +48,61 @@ const PILLARS = [
 const PROVIDERS = ["OpenAI", "Anthropic", "Google Gemini", "OpenRouter", "Groq", "DeepSeek", "Mistral", "xAI", "Together", "Fireworks", "Ollama", "LM Studio", "Any OpenAI-compatible endpoint"];
 const INSTALL = "curl -fsSL https://kronos-agent.vercel.app/install.sh | bash";
 
+/** A clock face for Kronos: sixty ticks, twelve numerals and a slow second hand, drawn behind the hero. */
+function Dial() {
+  const ticks = Array.from({ length: 60 }, (_, i) => {
+    const a = (i * Math.PI) / 30;
+    const major = i % 5 === 0;
+    const r1 = major ? 430 : 446;
+    return (
+      <line
+        key={i}
+        x1={500 + r1 * Math.sin(a)}
+        y1={500 - r1 * Math.cos(a)}
+        x2={500 + 460 * Math.sin(a)}
+        y2={500 - 460 * Math.cos(a)}
+        strokeWidth={major ? 2 : 1}
+      />
+    );
+  });
+  const numerals = ["XII", "I", "II", "III", "IIII", "V", "VI", "VII", "VIII", "IX", "X", "XI"].map((n, i) => {
+    const a = (i * Math.PI) / 6;
+    return (
+      <text key={n} x={500 + 392 * Math.sin(a)} y={500 - 392 * Math.cos(a)} textAnchor="middle" dominantBaseline="central">
+        {n}
+      </text>
+    );
+  });
+  return (
+    <svg className="kx-dial" viewBox="0 0 1000 1000">
+      <g className="face">
+        <circle cx="500" cy="500" r="470" />
+        <circle cx="500" cy="500" r="340" strokeDasharray="2 10" />
+        <circle cx="500" cy="500" r="200" />
+        <g className="ticks">{ticks}</g>
+        <g className="numerals">{numerals}</g>
+      </g>
+      <line className="hand" x1="500" y1="560" x2="500" y2="70" />
+      <circle className="hub" cx="500" cy="500" r="5" />
+    </svg>
+  );
+}
+
 export default function KronosPage() {
   const models = cloudModels();
   const ticker = ["Runs on your machine", "Your own API keys", "No telemetry", "OS sandbox", "Verifies its work", "Open source"];
   return (
     <>
       <section className="kx-hero">
-        <div>
-          <p className="kx-label">
+        <div className="kx-hero-bg" aria-hidden="true">
+          <Dial />
+        </div>
+        <div className="kx-hero-body">
+          <p className="kx-pill">
+            <span className="dot" />
+            Open source <span className="sep">·</span> No telemetry<span className="opt"> <span className="sep">·</span> Works offline</span>
+          </p>
+          <p className="kx-label" style={{ marginTop: 26 }}>
             Kronos Agent <span className="dim">/ Local-first</span>
           </p>
           <h1 className="kx-hero-title">
@@ -76,6 +123,10 @@ export default function KronosPage() {
             <a href="#keys" className="kx-btn ghost">
               Use your own keys
             </a>
+          </div>
+          <div className="kx-cmd kx-hero-cmd">
+            <span className="p">$</span>
+            <code>{INSTALL}</code>
           </div>
           <dl className="kx-stats">
             <div>
