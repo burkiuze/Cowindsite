@@ -8,7 +8,7 @@ import { NotConfigured } from "@/components/kronos/NotConfigured";
 export const metadata = { title: "Connect Kronos", robots: { index: false } };
 export const dynamic = "force-dynamic";
 
-type Params = { redirect_uri?: string; state?: string; code_challenge?: string; client?: string };
+type Params = { redirect_uri?: string; state?: string; code_challenge?: string; client?: string; mode?: string };
 
 function valid(p: Params): p is Required<Pick<Params, "redirect_uri" | "state" | "code_challenge">> & Params {
   return Boolean(
@@ -51,7 +51,8 @@ export default async function ConnectPage({ searchParams }: { searchParams: Prom
   const me = await siteAccount();
   if (!me) {
     const back = `${SITE_PATH}/connect?${new URLSearchParams(p as Record<string, string>).toString()}`;
-    redirect(`${SITE_PATH}/sign-in?redirect_url=${encodeURIComponent(back)}`);
+    // "Create account" in Kronos lands on sign-up; either page links to the other
+    redirect(`${SITE_PATH}/${p.mode === "sign-up" ? "sign-up" : "sign-in"}?redirect_url=${encodeURIComponent(back)}`);
   }
   const host = new URL(p.redirect_uri).host;
   const local = isLoopbackRedirect(p.redirect_uri);
