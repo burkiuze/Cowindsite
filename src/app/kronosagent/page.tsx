@@ -94,10 +94,6 @@ export default function KronosPage() {
         </div>
         <figure className="kx-hero-art" style={{ margin: 0 }}>
           <Image src="/kronos/img/hero-wide.webp" alt="Engraving of many-armed Kronos, Father Time, holding an hourglass while gathering rays of light" fill priority sizes="(max-width: 900px) 100vw, 48vw" />
-          <figcaption>
-            <code>~/.kronos — on your disk</code>
-            <span>Local</span>
-          </figcaption>
         </figure>
       </section>
 
