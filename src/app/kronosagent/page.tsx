@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { cloudModels, PLANS, SITE_PATH } from "@/lib/kronos/catalog";
 
-export const metadata = { title: { absolute: "Kronos Cloud — models for Kronos Agent, no keys" } };
+export const metadata = { title: { absolute: "Kronos Agent — local, private, yours" } };
 
 const NUMERALS = ["I", "II", "III", "IV", "V"];
 const PLAN_ART: Record<string, { src: string; alt: string }> = {
@@ -11,55 +11,92 @@ const PLAN_ART: Record<string, { src: string; alt: string }> = {
   max: { src: "art-02-messenger", alt: "Winged figure diving into a spiralling checkerboard" },
   max5: { src: "art-05-seer", alt: "Bearded seer behind a broken mask, a beam of light from his eye" },
 };
+
+const PILLARS = [
+  {
+    title: "Local",
+    art: { src: "art-03-knight", alt: "Armoured knight in profile with a closed visor" },
+    lead: "It lives on your machine.",
+    points: [
+      "Runs in your terminal, the desktop app or on your own server.",
+      "Sessions, memory and skills are plain files in ~/.kronos — yours to read, back up or delete.",
+      "Works with local models through Ollama or LM Studio, even offline.",
+    ],
+  },
+  {
+    title: "Private",
+    art: { src: "art-04-eye", alt: "Engraved eye with a spiral galaxy for an iris" },
+    lead: "Nothing leaves unless you send it.",
+    points: [
+      "No telemetry — it is off by default.",
+      "Your API keys stay in ~/.kronos/.env; requests go straight from your machine to the provider you chose.",
+      "An OS sandbox and command approvals keep the agent inside the folders you allow.",
+    ],
+  },
+  {
+    title: "Quality",
+    art: { src: "art-05-seer", alt: "Bearded seer behind a broken mask, a beam of light from his eye" },
+    lead: "Done means checked.",
+    points: [
+      "Runs your tests, linter and type checks before it says it is finished.",
+      "Reviews its own changes and fixes what the review finds.",
+      "Notices when a test was weakened instead of the code fixed, and says so.",
+    ],
+  },
+];
+
+const PROVIDERS = ["OpenAI", "Anthropic", "Google Gemini", "OpenRouter", "Groq", "DeepSeek", "Mistral", "xAI", "Together", "Fireworks", "Ollama", "LM Studio", "Any OpenAI-compatible endpoint"];
 const INSTALL = "curl -fsSL https://kronos-agent.vercel.app/install.sh | bash";
 
-export default function KronosCloudPage() {
+export default function KronosPage() {
   const models = cloudModels();
-  const ticker = [...models.map((m) => m.name), "No API keys", "5-hour & weekly allowance", "Promo codes"];
+  const ticker = ["Runs on your machine", "Your own API keys", "No telemetry", "OS sandbox", "Verifies its work", "Open source"];
   return (
     <>
       <section className="kx-hero">
         <div>
           <p className="kx-label">
-            Kronos Cloud <span className="dim">/ 2026</span>
+            Kronos Agent <span className="dim">/ Local-first</span>
           </p>
           <h1 className="kx-hero-title">
-            Cloud Models.
+            Local.
             <br />
-            <span className="blue">No Keys.</span>
+            Private.
+            <br />
+            <span className="blue">Yours.</span>
           </h1>
           <p className="kx-lede">
-            Sign in once and Kronos runs on fast open models served by dedicated providers — <em>no API keys to buy, paste or rotate.</em> Your own keys
-            keep working, always free.
+            An AI agent that works on your own computer, with your own keys. <em>Your code, files and memory stay on your disk</em> — and it checks its work
+            before it tells you it is done.
           </p>
           <div className="kx-hero-cta">
-            <Link href={`${SITE_PATH}/sign-up`} className="kx-btn blue">
-              Create account
-            </Link>
-            <a href="#plans" className="kx-btn ghost">
-              See plans
+            <a href="#start" className="kx-btn blue">
+              Install Kronos
+            </a>
+            <a href="#keys" className="kx-btn ghost">
+              Use your own keys
             </a>
           </div>
           <dl className="kx-stats">
             <div>
-              <dt>Models</dt>
-              <dd>{models.length}</dd>
+              <dt>Runs on</dt>
+              <dd>Your machine</dd>
             </div>
             <div>
-              <dt>Plans</dt>
-              <dd>{PLANS.length}</dd>
+              <dt>Your data</dt>
+              <dd>Stays local</dd>
             </div>
             <div>
-              <dt>Resets</dt>
-              <dd>5h · Weekly</dd>
+              <dt>Account</dt>
+              <dd>Optional</dd>
             </div>
           </dl>
         </div>
         <figure className="kx-hero-art" style={{ margin: 0 }}>
           <Image src="/kronos/img/hero-wide.webp" alt="Engraving of many-armed Kronos, Father Time, holding an hourglass while gathering rays of light" fill priority sizes="(max-width: 900px) 100vw, 48vw" />
           <figcaption>
-            <code>kronos -m cloud:glm-5.3-flash</code>
-            <span>Members</span>
+            <code>~/.kronos — on your disk</code>
+            <span>Local</span>
           </figcaption>
         </figure>
       </section>
@@ -72,21 +109,116 @@ export default function KronosCloudPage() {
         </div>
       </div>
 
+      <section className="kx-section" id="why">
+        <div className="kx-section-head">
+          <div>
+            <p className="kx-label">Three Promises</p>
+            <h2 className="kx-display" style={{ marginTop: 16 }}>
+              Built To Be
+              <br />
+              Trusted
+            </h2>
+          </div>
+          <p className="kx-lede">An agent reads your code and runs commands. It should do that on your terms, on your machine, and do it well.</p>
+        </div>
+        <div className="kx-plans" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+          {PILLARS.map((p, i) => (
+            <article key={p.title} className="kx-plan">
+              <div className="kx-plan-art">
+                <Image src={`/kronos/img/${p.art.src}-480.webp`} alt={p.art.alt} fill sizes="(max-width: 860px) 100vw, 33vw" />
+              </div>
+              <div className="kx-plan-body">
+                <div className="row">
+                  <h3>{p.title}</h3>
+                  <span className="num">{NUMERALS[i]}</span>
+                </div>
+                <p>{p.lead}</p>
+                <ul className="kx-points">
+                  {p.points.map((pt) => (
+                    <li key={pt}>{pt}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="kx-section" id="keys">
+        <div className="kx-section-head">
+          <div>
+            <p className="kx-label">Bring Your Own Keys</p>
+            <h2 className="kx-display" style={{ marginTop: 16 }}>
+              Your Keys.
+              <br />
+              No Middleman.
+            </h2>
+          </div>
+          <p className="kx-lede">
+            Paste a key in Settings → Providers &amp; API keys, or run <code>kronos setup</code>. Kronos checks it live, keeps it on your machine, and talks to the
+            provider directly. Free, and no account needed.
+          </p>
+        </div>
+        <ul className="kx-providers">
+          {PROVIDERS.map((p) => (
+            <li key={p}>{p}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="kx-section" id="start">
+        <div className="kx-section-head">
+          <div>
+            <p className="kx-label">Three Steps</p>
+            <h2 className="kx-display" style={{ marginTop: 16 }}>
+              From Install
+              <br />
+              To Answer
+            </h2>
+          </div>
+        </div>
+        <div className="kx-steps">
+          <div className="kx-step">
+            <span className="num">I</span>
+            <h3>Install Kronos</h3>
+            <p>One line in a terminal on macOS, Linux and WSL, or the desktop app.</p>
+          </div>
+          <div className="kx-step">
+            <span className="num">II</span>
+            <h3>Connect a model</h3>
+            <p>
+              Your own API key or a local model — <code>kronos setup</code>. On first start, choose “Continue without an account”.
+            </p>
+          </div>
+          <div className="kx-step">
+            <span className="num">III</span>
+            <h3>Start working</h3>
+            <p>
+              <code>kronos</code> in a terminal, or <code>kronos web</code> for the desktop interface.
+            </p>
+          </div>
+        </div>
+        <div className="kx-cmd">
+          <span className="p">$</span>
+          <code>{INSTALL}</code>
+        </div>
+      </section>
+
       <section className="kx-section" id="models">
         <div className="kx-section-head">
           <div>
-            <p className="kx-label">The Four Models</p>
+            <p className="kx-label">Optional · Kronos Cloud</p>
             <h2 className="kx-display" style={{ marginTop: 16 }}>
-              Pinned To
+              No Keys?
               <br />
-              Their Makers
+              Use Ours.
             </h2>
           </div>
-          <p className="kx-lede">Every request goes to the provider named here — never silently to another. Pick one in Kronos with the model picker or <code>kronos -m</code>.</p>
+          <p className="kx-lede">For people who would rather not manage API keys: four open models, each pinned to one inference provider, with a membership.</p>
         </div>
         <div className="kx-models">
           <div className="kx-models-art">
-            <Image src="/kronos/img/art-04-eye.webp" alt="Engraved eye with a spiral galaxy for an iris" fill sizes="(max-width: 900px) 100vw, 34vw" />
+            <Image src="/kronos/img/art-02-messenger.webp" alt="Winged figure diving into a spiralling checkerboard" fill sizes="(max-width: 900px) 100vw, 34vw" />
           </div>
           <ol className="kx-ledger">
             {models.map((m, i) => (
@@ -116,12 +248,11 @@ export default function KronosCloudPage() {
               Allowance
             </h2>
           </div>
-          <p className="kx-lede">Every plan opens all four models. Usage is counted per 5-hour session and per week, and both reset on their own.</p>
+          <p className="kx-lede">Every plan opens all four Kronos Cloud models. Usage resets every 5 hours and every week. Your own keys stay free either way.</p>
         </div>
         <div className="kx-plans">
           {PLANS.map((p, i) => {
             const art = PLAN_ART[p.id]!;
-            const width = Math.round((p.multiplier / 5) * 100);
             return (
               <article key={p.id} className={`kx-plan ${p.id === "max" ? "featured" : ""}`}>
                 <div className="kx-plan-art">
@@ -136,7 +267,7 @@ export default function KronosCloudPage() {
                   <p>{p.blurb}</p>
                   <div className="kx-meter" aria-hidden="true">
                     <div className="kx-meter-bar">
-                      <i style={{ width: `${Math.max(width, 6)}%` }} />
+                      <i style={{ width: `${Math.max(Math.round((p.multiplier / 5) * 100), 6)}%` }} />
                     </div>
                     <span>Allowance</span>
                   </div>
@@ -149,44 +280,6 @@ export default function KronosCloudPage() {
           Have a promo code? Redeem it in Kronos under Settings → Membership, with <code>kronos redeem CODE</code>, or on your{" "}
           <Link href={`${SITE_PATH}/account`}>account page</Link>.
         </p>
-      </section>
-
-      <section className="kx-section" id="start">
-        <div className="kx-section-head">
-          <div>
-            <p className="kx-label">Three Steps</p>
-            <h2 className="kx-display" style={{ marginTop: 16 }}>
-              From Install
-              <br />
-              To Answer
-            </h2>
-          </div>
-        </div>
-        <div className="kx-steps">
-          <div className="kx-step">
-            <span className="num">I</span>
-            <h3>Install Kronos</h3>
-            <p>The desktop app, or one line in a terminal on macOS, Linux and WSL.</p>
-          </div>
-          <div className="kx-step">
-            <span className="num">II</span>
-            <h3>Sign in</h3>
-            <p>
-              Kronos asks on first start — or run <code>kronos login</code>. Continue without an account if you only use your own keys.
-            </p>
-          </div>
-          <div className="kx-step">
-            <span className="num">III</span>
-            <h3>Pick a model</h3>
-            <p>
-              With a membership, the Kronos Cloud models unlock in the model picker. Choose one and start working.
-            </p>
-          </div>
-        </div>
-        <div className="kx-cmd">
-          <span className="p">$</span>
-          <code>{INSTALL}</code>
-        </div>
       </section>
     </>
   );

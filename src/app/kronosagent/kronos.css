@@ -889,3 +889,54 @@
   font-size: 0.9em;
   vertical-align: 0;
 }
+
+.kx-points {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.kx-points li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.kx-points li::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  font-size: 10px;
+  top: 3px;
+  color: var(--blue-ink);
+}
+
+.kx-providers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kx-providers li {
+  padding: 10px 16px;
+  border: 1px solid var(--line-2);
+  border-radius: 4px;
+  background: var(--kpanel);
+  font-family: var(--f-display);
+  font-size: clamp(20px, 1.6vw, 28px);
+  font-weight: 300;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.kx-providers li:last-child {
+  border-color: var(--frame);
+  color: var(--blue-ink);
+}

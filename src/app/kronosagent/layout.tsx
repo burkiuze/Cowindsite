@@ -60,13 +60,13 @@ async function KronosNav() {
       <div className="kx-bar">
         <Link href={SITE_PATH} className="kx-wordmark">
           <Image src="/kronos/kronos-128.png" alt="" width={30} height={30} />
-          Kronos Agent <small>Cloud</small>
+          Kronos Agent
         </Link>
         <nav className="kx-nav" aria-label="Kronos">
-          <Link href={`${SITE_PATH}#models`}>Models</Link>
-          <Link href={`${SITE_PATH}#plans`}>Plans</Link>
-          <Link href={`${SITE_PATH}#start`}>Start</Link>
-          <a href="https://kronos-agent.vercel.app">Agent</a>
+          <Link href={`${SITE_PATH}#why`}>Why</Link>
+          <Link href={`${SITE_PATH}#keys`}>Your keys</Link>
+          <Link href={`${SITE_PATH}#start`}>Install</Link>
+          <Link href={`${SITE_PATH}#models`}>Cloud</Link>
         </nav>
         <div className="kx-bar-end">
           {me ? (
