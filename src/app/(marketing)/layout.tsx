@@ -36,6 +36,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                   { href: "/finance", label: "Finance" },
                   { href: "/integrations", label: "Integrations" },
                   { href: "/access", label: "Request access" },
+                  { href: "/kronosagent", label: "Kronos Agent" },
                 ]}
               />
               <FooterColumn

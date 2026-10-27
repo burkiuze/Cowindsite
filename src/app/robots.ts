@@ -17,7 +17,7 @@ function siteUrl(): string {
 export default function robots(): MetadataRoute.Robots {
   const base = siteUrl();
   return {
-    rules: [{ userAgent: "*", allow: "/", disallow: ["/app", "/app/", "/api/"] }],
+    rules: [{ userAgent: "*", allow: "/", disallow: ["/app", "/app/", "/api/", "/babo", "/kronosagent/connect", "/kronosagent/account"] }],
     sitemap: `${base}/sitemap.xml`,
   };
 }

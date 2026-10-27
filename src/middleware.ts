@@ -1,4 +1,5 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
 /**
  * Public site only.
@@ -37,7 +38,30 @@ function clean(value: string | undefined): string | undefined {
   return value && value.trim().length > 0 ? value.trim() : undefined;
 }
 
-export function middleware(request: NextRequest) {
+/**
+ * Kronos Agent pages and the website side of its API run behind Clerk, which
+ * has to see the request first so `auth()` works in them. The app-facing API
+ * (bearer tokens) and every Navio route stay outside it. Without Clerk keys —
+ * a preview deployment, local development — the pages say sign-in is not set
+ * up instead of failing.
+ */
+const KRONOS_CLERK_PATHS = ["/kronosagent", "/api/kronos/site"];
+
+const clerk = clerkMiddleware();
+
+function clerkReady(): boolean {
+  return Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY);
+}
+
+export function middleware(request: NextRequest, event: NextFetchEvent) {
+  const { pathname } = request.nextUrl;
+  if (KRONOS_CLERK_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+    return clerkReady() ? clerk(request, event) : NextResponse.next();
+  }
+  return navio(request);
+}
+
+function navio(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
 
   const isWorkspacePage = pathname === "/app" || pathname.startsWith("/app/");
@@ -80,5 +104,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/app/:path*", "/api/:path*"],
+  matcher: ["/app/:path*", "/api/:path*", "/kronosagent", "/kronosagent/:path*"],
 };
