@@ -45,7 +45,50 @@ const PILLARS = [
   },
 ];
 
-const PROVIDERS = ["OpenAI", "Anthropic", "Google Gemini", "OpenRouter", "Groq", "DeepSeek", "Mistral", "xAI", "Together", "Fireworks", "Ollama", "LM Studio", "Any OpenAI-compatible endpoint"];
+type Brand = { name: string; logo?: string };
+const PROVIDERS: Brand[] = [
+  { name: "OpenAI", logo: "openai" },
+  { name: "Anthropic", logo: "anthropic" },
+  { name: "Google Gemini", logo: "gemini" },
+  { name: "OpenRouter", logo: "openrouter" },
+  { name: "Groq", logo: "groq" },
+  { name: "DeepSeek", logo: "deepseek" },
+  { name: "Mistral", logo: "mistral" },
+  { name: "xAI", logo: "xai" },
+  { name: "Together", logo: "together" },
+  { name: "Fireworks", logo: "fireworks" },
+  { name: "Ollama", logo: "ollama" },
+  { name: "LM Studio", logo: "lmstudio" },
+  { name: "Any OpenAI-compatible endpoint" },
+];
+
+/** What Kronos Cloud and the site run on, row by row. */
+const INFRA: { row: string; note: string; items: Brand[] }[] = [
+  {
+    row: "Inference",
+    note: "Each Kronos Cloud model is pinned to one provider through OpenRouter, with no fallback to another.",
+    items: [{ name: "OpenRouter", logo: "openrouter" }, { name: "Open Inference" }, { name: "Nebius Token Factory" }, { name: "Crusoe" }, { name: "Wafer" }],
+  },
+  {
+    row: "Models",
+    note: "Open-weight models from the labs that made them.",
+    items: [{ name: "Z.ai", logo: "zai" }, { name: "MiniMax", logo: "minimax" }, { name: "NVIDIA", logo: "nvidia" }, { name: "DeepSeek", logo: "deepseek" }],
+  },
+  {
+    row: "Accounts & platform",
+    note: "Sign-in, the membership ledger and the site. Your code and files never pass through them.",
+    items: [{ name: "Clerk", logo: "clerk" }, { name: "Supabase", logo: "supabase" }, { name: "Vercel", logo: "vercel" }],
+  },
+];
+
+function BrandMark({ b }: { b: Brand }) {
+  return (
+    <>
+      {b.logo ? <span className="kx-logo" style={{ maskImage: `url(/kronos/logos/${b.logo}.svg)`, WebkitMaskImage: `url(/kronos/logos/${b.logo}.svg)` }} aria-hidden="true" /> : null}
+      <span>{b.name}</span>
+    </>
+  );
+}
 const INSTALL = "curl -fsSL https://kronos-agent.vercel.app/install.sh | bash";
 
 function OsIcon({ os }: { os: "windows" | "mac" }) {
@@ -71,43 +114,33 @@ export default async function KronosPage() {
   return (
     <>
       <section className="kx-hero" id="download">
+        <div className="kx-hero-glow" aria-hidden="true" />
+        <p className="kx-kicker">Kronos Agent · Open source · No telemetry</p>
         <h1 className="kx-hero-title">
-          Local.
-          <br />
-          Private.
+          Local. Private.
           <br />
           <span className="blue">Yours.</span>
         </h1>
-        <div className="kx-hero-stage">
-          <Image
-            src="/kronos/img/hero-wide.webp"
-            alt="Engraving of many-armed Kronos, Father Time, holding an hourglass while gathering rays of light"
-            width={1672}
-            height={941}
-            priority
-            sizes="(max-width: 1400px) 100vw, 1400px"
-          />
+        <p className="kx-hero-lede">
+          Kronos is an AI agent that works on your own computer: it reads your code, runs the commands you allow and checks its work before it says it is done.
+          Nothing leaves your disk unless you send it.
+        </p>
+        <div className="kx-downloads">
+          {order.map((os) => (
+            <a key={os} href={DOWNLOADS[os].file} className={`kx-pill-btn ${os === order[0] ? "solid" : "ghost"}`}>
+              <OsIcon os={os} />
+              Download for {DOWNLOADS[os].label}
+            </a>
+          ))}
         </div>
-        <div className="kx-hero-body">
-          <p className="kx-lede">
-            An AI agent that works on your own computer, with your own keys. <em>Your code, files and memory stay on your disk</em> — and it checks its work
-            before it tells you it is done.
-          </p>
-          <div className="kx-downloads">
-            {order.map((os) => (
-              <a key={os} href={DOWNLOADS[os].file} className={`kx-btn kx-dl ${os === order[0] ? "blue" : "ghost"}`}>
-                <OsIcon os={os} />
-                <span>
-                  Download for {DOWNLOADS[os].label}
-                  <small>{DOWNLOADS[os].note}</small>
-                </span>
-              </a>
-            ))}
-          </div>
-          <p className="kx-hero-alt">
-            Linux or a server? <code>{INSTALL}</code>
-          </p>
-        </div>
+        <ul className="kx-checks">
+          <li>Runs on your machine</li>
+          <li>Your own API keys</li>
+          <li>Checks its own work</li>
+        </ul>
+        <p className="kx-hero-alt">
+          Linux or a server? <code>{INSTALL}</code>
+        </p>
       </section>
 
       <div className="kx-ticker" aria-hidden="true">
@@ -170,7 +203,9 @@ export default async function KronosPage() {
         </div>
         <ul className="kx-providers">
           {PROVIDERS.map((p) => (
-            <li key={p}>{p}</li>
+            <li key={p.name}>
+              <BrandMark b={p} />
+            </li>
           ))}
         </ul>
       </section>
@@ -246,6 +281,37 @@ export default async function KronosPage() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      <section className="kx-section" id="infrastructure">
+        <div className="kx-section-head">
+          <div>
+            <p className="kx-label">Our Infrastructure</p>
+            <h2 className="kx-display" style={{ marginTop: 16 }}>
+              What Kronos
+              <br />
+              Runs On
+            </h2>
+          </div>
+          <p className="kx-lede">The services behind Kronos Cloud and your account. With your own keys, Kronos talks to your provider directly and none of these are involved.</p>
+        </div>
+        <div className="kx-infra">
+          {INFRA.map((r) => (
+            <div key={r.row} className="kx-infra-row">
+              <div className="kx-infra-head">
+                <h3>{r.row}</h3>
+                <p>{r.note}</p>
+              </div>
+              <ul className="kx-infra-logos">
+                {r.items.map((b) => (
+                  <li key={b.name}>
+                    <BrandMark b={b} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </section>
 
