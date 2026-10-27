@@ -2,107 +2,192 @@ import Image from "next/image";
 import Link from "next/link";
 import { cloudModels, PLANS, SITE_PATH } from "@/lib/kronos/catalog";
 
-export const metadata = { title: { absolute: "Kronos Agent — your agent, any model" } };
+export const metadata = { title: { absolute: "Kronos Cloud — models for Kronos Agent, no keys" } };
 
-const FEATURES = [
-  { title: "Works where you work", body: "Terminal, desktop app, browser and your chat apps — one agent, one memory, one set of skills." },
-  { title: "Codes and checks its work", body: "Plans, edits, runs your tests, reviews its own changes and reports what it verified." },
-  { title: "Safe by default", body: "An OS sandbox, command approvals and injection defenses keep it inside the lines you draw." },
-  { title: "Your keys or ours", body: "Connect your own OpenAI, Anthropic, Gemini, OpenRouter or local models — or use Kronos Cloud." },
-];
+const NUMERALS = ["I", "II", "III", "IV", "V"];
+const PLAN_ART: Record<string, { src: string; alt: string }> = {
+  lite: { src: "art-01-ascent", alt: "Astronaut at the top of a stone staircase before a radiant moon" },
+  pro: { src: "art-03-knight", alt: "Armoured knight in profile with a closed visor" },
+  max: { src: "art-02-messenger", alt: "Winged figure diving into a spiralling checkerboard" },
+  max5: { src: "art-05-seer", alt: "Bearded seer behind a broken mask, a beam of light from his eye" },
+};
+const INSTALL = "curl -fsSL https://kronos-agent.vercel.app/install.sh | bash";
 
-const INSTALL = "curl -fsSL https://raw.githubusercontent.com/burkiuze/KronosAgent/main/scripts/install.sh | bash";
-
-export default function KronosHome() {
+export default function KronosCloudPage() {
   const models = cloudModels();
+  const ticker = [...models.map((m) => m.name), "No API keys", "5-hour & weekly allowance", "Promo codes"];
   return (
-    <div>
-      <section className="mx-auto w-full max-w-6xl px-6 pt-20 pb-16 text-center">
-        <Image src="/kronos/kronos-512.png" alt="Kronos" width={88} height={88} className="mx-auto rounded-2xl" priority />
-        <h1 className="mx-auto mt-8 max-w-3xl text-[40px] leading-[1.08] font-semibold tracking-tight sm:text-[54px]">One agent for your terminal, desktop and every chat app</h1>
-        <p className="mx-auto mt-5 max-w-2xl text-[16px] leading-relaxed text-[var(--color-ink-muted)]">
-          Kronos codes, researches, automates and remembers — on your machine. Bring your own API keys for free, or sign in and use Kronos Cloud models with a membership.
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3 text-[14px]">
-          <Link href={`${SITE_PATH}/sign-up`} className="rounded-lg bg-[var(--color-porcelain)] px-5 py-2.5 font-medium text-[var(--color-on-light)] hover:opacity-90">
-            Create a free account
-          </Link>
-          <a href="#install" className="rounded-lg border border-[var(--color-hairline)] px-5 py-2.5 hover:bg-[var(--color-raised)]">
-            Install Kronos
-          </a>
-        </div>
-      </section>
-
-      <section className="mx-auto grid w-full max-w-6xl gap-4 px-6 pb-20 sm:grid-cols-2 lg:grid-cols-4">
-        {FEATURES.map((f) => (
-          <div key={f.title} className="panel px-5 py-5">
-            <h2 className="text-[15px] font-semibold">{f.title}</h2>
-            <p className="mt-2 text-[13.5px] leading-relaxed text-[var(--color-ink-muted)]">{f.body}</p>
+    <>
+      <section className="kx-hero">
+        <div>
+          <p className="kx-label">
+            Kronos Cloud <span className="dim">/ 2026</span>
+          </p>
+          <h1 className="kx-hero-title">
+            Cloud Models.
+            <br />
+            <span className="blue">No Keys.</span>
+          </h1>
+          <p className="kx-lede">
+            Sign in once and Kronos runs on fast open models served by dedicated providers — <em>no API keys to buy, paste or rotate.</em> Your own keys
+            keep working, always free.
+          </p>
+          <div className="kx-hero-cta">
+            <Link href={`${SITE_PATH}/sign-up`} className="kx-btn blue">
+              Create account
+            </Link>
+            <a href="#plans" className="kx-btn ghost">
+              See plans
+            </a>
           </div>
-        ))}
-      </section>
-
-      <section id="models" className="mx-auto w-full max-w-6xl scroll-mt-20 px-6 pb-20">
-        <h2 className="text-[28px] font-semibold tracking-tight">Kronos Cloud models</h2>
-        <p className="mt-2 max-w-2xl text-[14.5px] text-[var(--color-ink-muted)]">
-          Fast, capable open models served by dedicated inference providers. Available in Kronos with any membership — no API keys to manage.
-        </p>
-        <div className="mt-6 overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-hairline)]">
-          <table className="w-full text-left text-[13.5px]">
-            <thead className="bg-[var(--color-panel)] text-[12px] tracking-wide text-[var(--color-ink-faint)] uppercase">
-              <tr>
-                <th className="px-5 py-3 font-medium">Model</th>
-                <th className="px-5 py-3 font-medium">Provider</th>
-                <th className="hidden px-5 py-3 font-medium sm:table-cell">Good at</th>
-              </tr>
-            </thead>
-            <tbody>
-              {models.map((m) => (
-                <tr key={m.id} className="border-t border-[var(--color-hairline)]">
-                  <td className="px-5 py-3.5 font-medium">
-                    {m.name}
-                    {m.vision ? <span className="ml-2 rounded border border-[var(--color-hairline)] px-1.5 py-0.5 text-[11px] text-[var(--color-ink-muted)]">vision</span> : null}
-                  </td>
-                  <td className="px-5 py-3.5 text-[var(--color-ink-muted)]">{m.providerName}</td>
-                  <td className="hidden px-5 py-3.5 text-[var(--color-ink-muted)] sm:table-cell">{m.blurb}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section id="plans" className="mx-auto w-full max-w-6xl scroll-mt-20 px-6 pb-20">
-        <h2 className="text-[28px] font-semibold tracking-tight">Memberships</h2>
-        <p className="mt-2 max-w-2xl text-[14.5px] text-[var(--color-ink-muted)]">
-          Every plan includes all Kronos Cloud models. Usage resets every 5 hours and every week. Using your own API keys is always free.
-        </p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {PLANS.map((p) => (
-            <div key={p.id} className={`panel flex flex-col px-5 py-5 ${p.id === "max" ? "ring-1 ring-[var(--color-stream-cyan)]/50" : ""}`}>
-              <h3 className="text-[18px] font-semibold">{p.name}</h3>
-              <p className="mt-1 text-[13px] text-[var(--color-stream-cyan)]">{p.multiplier === 1 ? "Standard usage" : p.multiplier < 1 ? "Lighter usage" : `${p.multiplier}× Pro usage`}</p>
-              <p className="mt-3 flex-1 text-[13.5px] leading-relaxed text-[var(--color-ink-muted)]">{p.blurb}</p>
+          <dl className="kx-stats">
+            <div>
+              <dt>Models</dt>
+              <dd>{models.length}</dd>
             </div>
+            <div>
+              <dt>Plans</dt>
+              <dd>{PLANS.length}</dd>
+            </div>
+            <div>
+              <dt>Resets</dt>
+              <dd>5h · Weekly</dd>
+            </div>
+          </dl>
+        </div>
+        <figure className="kx-hero-art" style={{ margin: 0 }}>
+          <Image src="/kronos/img/hero-wide.webp" alt="Engraving of many-armed Kronos, Father Time, holding an hourglass while gathering rays of light" fill priority sizes="(max-width: 900px) 100vw, 48vw" />
+          <figcaption>
+            <code>kronos -m cloud:glm-5.3-flash</code>
+            <span>Members</span>
+          </figcaption>
+        </figure>
+      </section>
+
+      <div className="kx-ticker" aria-hidden="true">
+        <div className="kx-ticker-track">
+          {[...ticker, ...ticker].map((t, i) => (
+            <span key={i}>{t}</span>
           ))}
         </div>
-        <p className="mt-5 text-[13.5px] text-[var(--color-ink-muted)]">
-          Have a promo code? Redeem it in Kronos under <span className="text-[var(--color-ink)]">Settings → Membership</span>, or on your{" "}
-          <Link href={`${SITE_PATH}/account`} className="underline underline-offset-2">
-            account page
-          </Link>
-          .
+      </div>
+
+      <section className="kx-section" id="models">
+        <div className="kx-section-head">
+          <div>
+            <p className="kx-label">The Four Models</p>
+            <h2 className="kx-display" style={{ marginTop: 16 }}>
+              Pinned To
+              <br />
+              Their Makers
+            </h2>
+          </div>
+          <p className="kx-lede">Every request goes to the provider named here — never silently to another. Pick one in Kronos with the model picker or <code>kronos -m</code>.</p>
+        </div>
+        <div className="kx-models">
+          <div className="kx-models-art">
+            <Image src="/kronos/img/art-04-eye.webp" alt="Engraved eye with a spiral galaxy for an iris" fill sizes="(max-width: 900px) 100vw, 34vw" />
+          </div>
+          <ol className="kx-ledger">
+            {models.map((m, i) => (
+              <li key={m.id}>
+                <span className="num">{NUMERALS[i]}</span>
+                <span className="name">
+                  {m.name}
+                  {m.vision ? <span className="kx-chip">Vision</span> : null}
+                </span>
+                <span className="by">{m.providerName}</span>
+                <span className="what">
+                  {m.blurb} <span className="ref">cloud:{m.id}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="kx-section" id="plans">
+        <div className="kx-section-head">
+          <div>
+            <p className="kx-label">Memberships</p>
+            <h2 className="kx-display" style={{ marginTop: 16 }}>
+              Choose Your
+              <br />
+              Allowance
+            </h2>
+          </div>
+          <p className="kx-lede">Every plan opens all four models. Usage is counted per 5-hour session and per week, and both reset on their own.</p>
+        </div>
+        <div className="kx-plans">
+          {PLANS.map((p, i) => {
+            const art = PLAN_ART[p.id]!;
+            const width = Math.round((p.multiplier / 5) * 100);
+            return (
+              <article key={p.id} className={`kx-plan ${p.id === "max" ? "featured" : ""}`}>
+                <div className="kx-plan-art">
+                  <Image src={`/kronos/img/${art.src}-480.webp`} alt={art.alt} fill sizes="(max-width: 560px) 100vw, (max-width: 1000px) 50vw, 25vw" />
+                </div>
+                <div className="kx-plan-body">
+                  <div className="row">
+                    <h3>{p.name}</h3>
+                    <span className="num">{NUMERALS[i]}</span>
+                  </div>
+                  <span className="mult">{p.multiplier === 1 ? "Standard usage" : p.multiplier < 1 ? "Half of Pro" : `${p.multiplier}× Pro usage`}</span>
+                  <p>{p.blurb}</p>
+                  <div className="kx-meter" aria-hidden="true">
+                    <div className="kx-meter-bar">
+                      <i style={{ width: `${Math.max(width, 6)}%` }} />
+                    </div>
+                    <span>Allowance</span>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+        <p className="kx-note">
+          Have a promo code? Redeem it in Kronos under Settings → Membership, with <code>kronos redeem CODE</code>, or on your{" "}
+          <Link href={`${SITE_PATH}/account`}>account page</Link>.
         </p>
       </section>
 
-      <section id="install" className="mx-auto w-full max-w-6xl scroll-mt-20 px-6 pb-24">
-        <h2 className="text-[28px] font-semibold tracking-tight">Install</h2>
-        <p className="mt-2 text-[14.5px] text-[var(--color-ink-muted)]">macOS, Linux or WSL with Node.js 20.19+ and git:</p>
-        <pre className="mt-4 overflow-x-auto rounded-xl border border-[var(--color-hairline)] bg-[var(--color-panel)] px-4 py-3.5 font-mono text-[13px]">{INSTALL}</pre>
-        <p className="mt-4 text-[14px] text-[var(--color-ink-muted)]">
-          Then run <code className="font-mono text-[var(--color-ink)]">kronos web</code>. On first start Kronos asks you to sign in, create an account, or continue without one.
-        </p>
+      <section className="kx-section" id="start">
+        <div className="kx-section-head">
+          <div>
+            <p className="kx-label">Three Steps</p>
+            <h2 className="kx-display" style={{ marginTop: 16 }}>
+              From Install
+              <br />
+              To Answer
+            </h2>
+          </div>
+        </div>
+        <div className="kx-steps">
+          <div className="kx-step">
+            <span className="num">I</span>
+            <h3>Install Kronos</h3>
+            <p>The desktop app, or one line in a terminal on macOS, Linux and WSL.</p>
+          </div>
+          <div className="kx-step">
+            <span className="num">II</span>
+            <h3>Sign in</h3>
+            <p>
+              Kronos asks on first start — or run <code>kronos login</code>. Continue without an account if you only use your own keys.
+            </p>
+          </div>
+          <div className="kx-step">
+            <span className="num">III</span>
+            <h3>Pick a model</h3>
+            <p>
+              With a membership, the Kronos Cloud models unlock in the model picker. Choose one and start working.
+            </p>
+          </div>
+        </div>
+        <div className="kx-cmd">
+          <span className="p">$</span>
+          <code>{INSTALL}</code>
+        </div>
       </section>
-    </div>
+    </>
   );
 }

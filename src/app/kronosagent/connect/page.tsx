@@ -61,7 +61,7 @@ export default async function ConnectPage({ searchParams }: { searchParams: Prom
     <div className="mx-auto max-w-md px-6 py-20">
       <div className="panel px-6 py-7 text-center">
         <Image src="/kronos/kronos-128.png" alt="" width={56} height={56} className="mx-auto rounded-xl" />
-        <h1 className="mt-5 text-[21px] font-semibold">Connect {client}</h1>
+        <h1 className="kx-page-title mt-5" style={{ fontSize: 44 }}>Connect {client}</h1>
         <p className="mt-2 text-[14px] text-[var(--color-ink-muted)]">
           Signed in as <span className="text-[var(--color-ink)]">{me.email}</span>
         </p>
@@ -77,7 +77,7 @@ export default async function ConnectPage({ searchParams }: { searchParams: Prom
           <input type="hidden" name="redirect_uri" value={p.redirect_uri} />
           <input type="hidden" name="state" value={p.state} />
           <input type="hidden" name="code_challenge" value={p.code_challenge} />
-          <button type="submit" className="rounded-lg bg-[var(--color-porcelain)] px-4 py-2.5 text-[14px] font-medium text-[var(--color-on-light)] hover:opacity-90">
+          <button type="submit" className="kx-btn blue">
             Connect
           </button>
           <a href={withQuery(p.redirect_uri, { error: "access_denied", state: p.state })} className="rounded-lg px-4 py-2.5 text-[13.5px] text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]">

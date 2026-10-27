@@ -25,11 +25,12 @@ export default async function AccountPage() {
     <div className="mx-auto w-full max-w-3xl px-6 py-14">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-[28px] font-semibold tracking-tight">Your account</h1>
+          <p className="kx-label">Kronos Cloud</p>
+          <h1 className="kx-page-title" style={{ marginTop: 10 }}>Your Account</h1>
           <p className="mt-1 text-[14px] text-[var(--color-ink-muted)]">{me.email}</p>
         </div>
         <SignOutButton redirectUrl={SITE_PATH}>
-          <button className="rounded-lg border border-[var(--color-hairline)] px-3 py-1.5 text-[13px] hover:bg-[var(--color-raised)]">Sign out</button>
+          <button className="kx-btn ghost">Sign out</button>
         </SignOutButton>
       </div>
 
@@ -37,7 +38,7 @@ export default async function AccountPage() {
         <h2 className="text-[13px] font-medium tracking-wide text-[var(--color-ink-faint)] uppercase">Membership</h2>
         {view.plan ? (
           <>
-            <p className="mt-2 text-[22px] font-semibold">{view.plan.name}</p>
+            <p className="kx-title mt-2 text-[40px] leading-none">{view.plan.name}</p>
             <p className="text-[13.5px] text-[var(--color-ink-muted)]">{view.planExpiresAt ? `Active until ${fmtDate(view.planExpiresAt)}` : "Active"}</p>
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               <Meter label="This 5-hour session" pct={view.usage.fiveHour.percent} resets={view.usage.fiveHour.resetsAt} />

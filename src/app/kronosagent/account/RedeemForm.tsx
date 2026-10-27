@@ -16,7 +16,7 @@ export function RedeemForm() {
           spellCheck={false}
           className="min-w-0 flex-1 rounded-lg border border-[var(--color-hairline)] bg-[var(--color-raised)] px-3 py-2 font-mono text-[13.5px] uppercase outline-none focus:border-[var(--color-stream-cyan)]"
         />
-        <button type="submit" disabled={pending} className="rounded-lg bg-[var(--color-porcelain)] px-4 py-2 text-[13.5px] font-medium text-[var(--color-on-light)] hover:opacity-90 disabled:opacity-60">
+        <button type="submit" disabled={pending} className="kx-btn blue disabled:opacity-60">
           {pending ? "Redeeming…" : "Redeem"}
         </button>
       </div>

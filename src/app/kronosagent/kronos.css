@@ -1,0 +1,891 @@
+/* ───────────────────────── Kronos Agent on heynavio.com ─────────────────────────
+   The Kronos identity (kronos-agent.vercel.app): night-blue ground, the electric
+   blue frame, Big Shoulders for display, Lexend Giga for labels, Instrument Serif
+   for ledes, engraved art. Everything is scoped under .kx so Navio is untouched.
+   Fonts are self-hosted under the SIL OFL (public/kronos/fonts/licenses). */
+
+@font-face {
+  font-family: "Big Shoulders Display";
+  src: url("/kronos/fonts/big-shoulders-display.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lexend Giga";
+  src: url("/kronos/fonts/lexend-giga-300.woff2") format("woff2");
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lexend Giga";
+  src: url("/kronos/fonts/lexend-giga-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lexend";
+  src: url("/kronos/fonts/lexend-300.woff2") format("woff2");
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lexend";
+  src: url("/kronos/fonts/lexend-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/kronos/fonts/instrument-serif-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/kronos/fonts/instrument-serif-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/kronos/fonts/jetbrains-mono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+.kx {
+  --bg: #0b0e1f;
+  --bg-2: #111530;
+  --kpanel: #070917;
+  --frame: #2626ea;
+  --ink: #f1f1f1;
+  --ink-2: #d6d6ea;
+  --muted: #9fa1c0;
+  --dim: #6a6c90;
+  --line: rgba(214, 214, 255, 0.12);
+  --line-2: rgba(214, 214, 255, 0.24);
+  --blue: #1414e6;
+  --blue-ink: #8f8fff;
+  --btn: #171a33;
+  --btn-2: #45465c;
+  --pad: clamp(18px, 5vw, 96px);
+  --frame-w: 6px;
+  --f-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --f-wide: "Lexend Giga", Arial, sans-serif;
+  --f-body: "Lexend", ui-sans-serif, system-ui, sans-serif;
+  --f-serif: "Instrument Serif", Georgia, serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  /* the account, connect and sign-in pages are built from the site's tokens: give them Kronos values */
+  --color-void: var(--bg);
+  --color-surface: var(--bg);
+  --color-panel: var(--kpanel);
+  --color-raised: var(--btn);
+  --color-hairline: var(--line-2);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--muted);
+  --color-ink-faint: var(--dim);
+  --color-porcelain: var(--ink);
+  --color-on-light: #0b0e1f;
+  --color-stream-cyan: var(--blue-ink);
+  --color-stream-blue: var(--frame);
+  --radius-panel: 4px;
+
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--frame-w);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.kx ::selection {
+  background: var(--frame);
+  color: #fff;
+}
+
+.kx .panel {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--kpanel);
+}
+
+.kx h1,
+.kx h2,
+.kx h3 {
+  font-weight: 400;
+}
+
+.kx-frame {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  border: var(--frame-w) solid var(--frame);
+  border-image: linear-gradient(90deg, #8c8cff 0%, var(--frame) 14%, var(--frame) 86%, #b8b8ff 100%) 1;
+}
+
+.kx-frame-corner {
+  position: fixed;
+  top: var(--frame-w);
+  right: var(--frame-w);
+  z-index: 91;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  background: #f4f4ff;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+/* ───────────── type ───────────── */
+
+.kx-label {
+  margin: 0;
+  font-family: var(--f-wide);
+  font-size: clamp(11px, 0.78vw, 13px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.kx-label .dim {
+  color: var(--dim);
+}
+
+.kx-display {
+  margin: 0;
+  font-family: var(--f-display);
+  font-size: clamp(48px, 6.4vw, 120px);
+  font-weight: 250;
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.kx-title {
+  font-family: var(--f-display);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  color: #fff;
+}
+
+.kx-lede {
+  margin: 20px 0 0;
+  max-width: 560px;
+  font-family: var(--f-serif);
+  font-size: clamp(21px, 1.7vw, 28px);
+  line-height: 1.2;
+  color: var(--ink-2);
+}
+
+.kx-lede em {
+  color: #fff;
+}
+
+.kx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 9px 18px;
+  border: 0;
+  border-radius: 4px;
+  font-family: var(--f-display);
+  font-size: clamp(17px, 1.2vw, 21px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: #fff;
+  background: var(--btn);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.kx-btn:hover {
+  background: #262a4d;
+}
+
+.kx-btn.blue {
+  background: var(--frame);
+}
+
+.kx-btn.blue:hover {
+  background: #3a3aff;
+}
+
+.kx-btn.ghost {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line-2);
+}
+
+.kx-btn.ghost:hover {
+  background: var(--btn);
+}
+
+/* ───────────── header ───────────── */
+
+.kx-header {
+  position: relative;
+  z-index: 30;
+  border-bottom: 1px solid var(--line);
+}
+
+.kx-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+  padding: clamp(16px, 1.6vw, 26px) var(--pad);
+}
+
+.kx-wordmark {
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--f-display);
+  font-size: clamp(24px, 1.9vw, 34px);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.kx-wordmark img {
+  border-radius: 3px;
+}
+
+.kx-wordmark small {
+  font-family: var(--f-wide);
+  font-size: 10px;
+  letter-spacing: -0.02em;
+  color: var(--blue-ink);
+  align-self: flex-start;
+}
+
+.kx-nav {
+  display: flex;
+  gap: clamp(20px, 2.6vw, 48px);
+}
+
+.kx-nav a {
+  font-family: var(--f-wide);
+  font-size: clamp(11px, 0.78vw, 13px);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  transition: color 0.2s;
+}
+
+.kx-nav a:hover {
+  color: #fff;
+}
+
+.kx-bar-end {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kx-bar-end .kx-btn {
+  font-size: 17px;
+  padding: 8px 14px;
+}
+
+.kx-signin {
+  font-family: var(--f-wide);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--ink-2);
+}
+
+.kx-signin:hover {
+  color: #fff;
+}
+
+@media (max-width: 860px) {
+  .kx-bar {
+    grid-template-columns: 1fr auto;
+  }
+  .kx-nav {
+    display: none;
+  }
+  .kx-signin {
+    display: none;
+  }
+}
+
+/* ───────────── hero ───────────── */
+
+.kx-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 72px);
+  align-items: stretch;
+  padding: clamp(40px, 5vw, 96px) var(--pad);
+}
+
+.kx-hero-title {
+  margin: 22px 0 0;
+  font-family: var(--f-display);
+  font-size: clamp(66px, 9vw, 190px);
+  font-weight: 250;
+  line-height: 0.86;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.kx-hero-title .blue {
+  color: var(--blue-ink);
+}
+
+.kx-hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.kx-stats {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  gap: 8px clamp(28px, 3vw, 56px);
+  margin: 40px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.kx-stats dt {
+  font-family: var(--f-wide);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--dim);
+}
+
+.kx-stats dd {
+  margin: 4px 0 0;
+  font-family: var(--f-display);
+  font-size: clamp(26px, 2vw, 36px);
+  font-weight: 400;
+  line-height: 1;
+  color: #fff;
+}
+
+.kx-hero-art {
+  position: relative;
+  min-height: 420px;
+  overflow: hidden;
+  border: 1px solid var(--line-2);
+  border-radius: 4px;
+  background: var(--kpanel);
+}
+
+.kx-hero-art img {
+  object-fit: cover;
+}
+
+.kx-hero-art figcaption {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-2);
+  border-radius: 4px;
+  background: rgba(7, 9, 23, 0.82);
+  backdrop-filter: blur(6px);
+}
+
+.kx-hero-art figcaption code {
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  color: #fff;
+}
+
+.kx-hero-art figcaption span {
+  font-family: var(--f-wide);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  color: var(--blue-ink);
+  align-self: center;
+}
+
+@media (max-width: 900px) {
+  .kx-hero {
+    grid-template-columns: 1fr;
+  }
+  .kx-hero-art {
+    min-height: 320px;
+  }
+}
+
+/* ───────────── ticker ───────────── */
+
+.kx-ticker {
+  overflow: hidden;
+  background: var(--frame);
+}
+
+.kx-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: kx-ticker 46s linear infinite;
+}
+
+.kx-ticker-track span {
+  display: inline-flex;
+  align-items: center;
+  padding: 13px 0;
+  font-family: var(--f-wide);
+  font-size: clamp(12px, 1vw, 16px);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.kx-ticker-track span::after {
+  content: "✦";
+  margin: 0 28px;
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@keyframes kx-ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kx-ticker-track {
+    animation: none;
+  }
+}
+
+/* ───────────── sections ───────────── */
+
+.kx-section {
+  padding: clamp(72px, 8vw, 150px) var(--pad);
+  border-top: 1px solid var(--line);
+}
+
+.kx-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 64px;
+  margin-bottom: clamp(36px, 4vw, 72px);
+}
+
+.kx-section-head .kx-lede {
+  max-width: 440px;
+}
+
+/* models: an engraved eye beside a numbered ledger */
+
+.kx-models {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+  gap: clamp(24px, 4vw, 72px);
+}
+
+.kx-models-art {
+  position: relative;
+  aspect-ratio: 1;
+  align-self: start;
+  position: sticky;
+  top: 24px;
+  overflow: hidden;
+  border: 1px solid var(--line-2);
+  border-radius: 4px;
+}
+
+.kx-ledger {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-2);
+}
+
+.kx-ledger li {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 6px 20px;
+  align-items: baseline;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line-2);
+}
+
+.kx-ledger .num {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-size: 26px;
+  color: var(--blue-ink);
+}
+
+.kx-ledger .name {
+  font-family: var(--f-display);
+  font-size: clamp(30px, 2.8vw, 52px);
+  font-weight: 300;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.kx-ledger .by {
+  font-family: var(--f-wide);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--muted);
+  text-align: right;
+}
+
+.kx-ledger .what {
+  grid-column: 2 / -1;
+  font-family: var(--f-serif);
+  font-size: 20px;
+  line-height: 1.25;
+  color: var(--ink-2);
+}
+
+.kx-ledger .ref {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.kx-chip {
+  margin-left: 10px;
+  padding: 2px 7px;
+  border: 1px solid var(--blue-ink);
+  border-radius: 3px;
+  font-family: var(--f-wide);
+  font-size: 10px;
+  vertical-align: middle;
+  color: var(--blue-ink);
+}
+
+@media (max-width: 900px) {
+  .kx-models {
+    grid-template-columns: 1fr;
+  }
+  .kx-models-art {
+    position: relative;
+    top: 0;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* plans: four engraved cards */
+
+.kx-plans {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.kx-plan {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line-2);
+  border-radius: 4px;
+  background: var(--kpanel);
+}
+
+.kx-plan.featured {
+  border-color: var(--frame);
+  box-shadow: 0 0 0 1px var(--frame);
+}
+
+.kx-plan-art {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-bottom: 1px solid var(--line);
+}
+
+.kx-plan-art img {
+  object-fit: cover;
+  filter: saturate(0.85);
+}
+
+.kx-plan-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 18px 20px;
+}
+
+.kx-plan-body .row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.kx-plan-body h3 {
+  margin: 0;
+  font-family: var(--f-display);
+  font-size: clamp(34px, 2.8vw, 48px);
+  font-weight: 300;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.kx-plan-body .num {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--blue-ink);
+}
+
+.kx-plan-body .mult {
+  font-family: var(--f-wide);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--blue-ink);
+}
+
+.kx-plan-body p {
+  margin: 0;
+  font-family: var(--f-serif);
+  font-size: 19px;
+  line-height: 1.25;
+  color: var(--ink-2);
+}
+
+.kx-meter {
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.kx-meter-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--btn);
+  overflow: hidden;
+}
+
+.kx-meter-bar i {
+  display: block;
+  height: 100%;
+  background: var(--frame);
+}
+
+.kx-meter span {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--f-wide);
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.kx-note {
+  margin-top: 22px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.kx-note a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 1000px) {
+  .kx-plans {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .kx-plans {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* steps */
+
+.kx-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid var(--line-2);
+  border-radius: 4px;
+}
+
+.kx-step {
+  padding: 26px 24px 28px;
+}
+
+.kx-step + .kx-step {
+  border-left: 1px solid var(--line-2);
+}
+
+.kx-step .num {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-size: 34px;
+  line-height: 1;
+  color: var(--blue-ink);
+}
+
+.kx-step h3 {
+  margin: 16px 0 8px;
+  font-family: var(--f-display);
+  font-size: 30px;
+  font-weight: 300;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.kx-step p {
+  margin: 0;
+  font-size: 14.5px;
+  color: var(--muted);
+}
+
+.kx-step code {
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  color: #fff;
+}
+
+@media (max-width: 860px) {
+  .kx-steps {
+    grid-template-columns: 1fr;
+  }
+  .kx-step + .kx-step {
+    border-left: 0;
+    border-top: 1px solid var(--line-2);
+  }
+}
+
+.kx-cmd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  padding: 12px 14px;
+  border: 1px solid var(--line-2);
+  border-radius: 4px;
+  background: var(--kpanel);
+  overflow-x: auto;
+}
+
+.kx-cmd .p {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  color: var(--blue-ink);
+}
+
+.kx-cmd code {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* ───────────── footer ───────────── */
+
+.kx-footer {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  margin-top: auto;
+}
+
+.kx-footer-bg {
+  object-fit: cover;
+  opacity: 0.38;
+}
+
+.kx-footer-inner {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 280px;
+  padding: 56px var(--pad) 28px;
+  background: linear-gradient(180deg, rgba(11, 14, 31, 0.2), rgba(11, 14, 31, 0.92));
+}
+
+.kx-footer-word {
+  font-family: var(--f-display);
+  font-size: clamp(54px, 9vw, 160px);
+  font-weight: 250;
+  line-height: 0.85;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.kx-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 26px;
+}
+
+.kx-footer-links a,
+.kx-footer-links span {
+  font-family: var(--f-wide);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--ink-2);
+}
+
+.kx-footer-links a:hover {
+  color: #fff;
+}
+
+/* inner pages (account, connect, sign-in) */
+
+.kx-page-title {
+  margin: 0;
+  font-family: var(--f-display);
+  font-size: clamp(44px, 4.6vw, 76px);
+  font-weight: 250;
+  line-height: 0.92;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.kx-lede code,
+.kx-note code {
+  padding: 0.05em 0.35em;
+  border: 1px solid var(--line-2);
+  border-radius: 3px;
+  font-family: var(--f-mono);
+  font-size: 0.62em;
+  vertical-align: 0.18em;
+  color: var(--ink);
+}
+
+.kx-note code {
+  font-size: 0.9em;
+  vertical-align: 0;
+}

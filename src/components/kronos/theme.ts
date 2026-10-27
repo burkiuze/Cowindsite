@@ -1,18 +1,18 @@
-/** Clerk's sign-in and account widgets in the site's dark palette. */
+/** Clerk's sign-in and account widgets in the Kronos palette (kronos-agent.vercel.app). */
 export const clerkAppearance = {
   variables: {
-    colorPrimary: "#22cff5",
-    colorPrimaryForeground: "#04121a",
-    colorBackground: "#0f1012",
-    colorForeground: "#f4f5f7",
-    colorMutedForeground: "#9a9ca3",
-    colorMuted: "#16171a",
-    colorInput: "#16171a",
-    colorInputForeground: "#f4f5f7",
-    colorBorder: "#2a2b30",
-    colorNeutral: "#f4f5f7",
+    colorPrimary: "#2626ea",
+    colorPrimaryForeground: "#ffffff",
+    colorBackground: "#070917",
+    colorForeground: "#f1f1f1",
+    colorMutedForeground: "#9fa1c0",
+    colorMuted: "#171a33",
+    colorInput: "#111530",
+    colorInputForeground: "#f1f1f1",
+    colorBorder: "rgba(214, 214, 255, 0.24)",
+    colorNeutral: "#f1f1f1",
     colorDanger: "#f0567f",
-    borderRadius: "10px",
-    fontFamily: "var(--font-inter), ui-sans-serif, system-ui, sans-serif",
+    borderRadius: "4px",
+    fontFamily: '"Lexend", ui-sans-serif, system-ui, sans-serif',
   },
 } as const;
