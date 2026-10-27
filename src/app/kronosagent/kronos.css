@@ -329,10 +329,13 @@
 
 .kx-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: clamp(28px, 4vw, 72px);
-  align-items: stretch;
-  padding: clamp(40px, 5vw, 96px) var(--pad);
+  justify-items: center;
+  padding: clamp(64px, 9vw, 160px) var(--pad);
+  text-align: center;
+}
+
+.kx-hero .kx-lede {
+  margin-inline: auto;
 }
 
 .kx-hero-title {
@@ -352,6 +355,7 @@
 .kx-hero-cta {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
   margin-top: 32px;
 }
@@ -359,7 +363,7 @@
 .kx-stats {
   display: grid;
   grid-template-columns: repeat(3, auto);
-  justify-content: start;
+  justify-content: center;
   gap: 8px clamp(28px, 3vw, 56px);
   margin: 40px 0 0;
   padding-top: 18px;
@@ -381,57 +385,6 @@
   font-weight: 400;
   line-height: 1;
   color: #fff;
-}
-
-.kx-hero-art {
-  position: relative;
-  min-height: 420px;
-  overflow: hidden;
-  border: 1px solid var(--line-2);
-  border-radius: 4px;
-  background: var(--kpanel);
-}
-
-.kx-hero-art img {
-  object-fit: cover;
-}
-
-.kx-hero-art figcaption {
-  position: absolute;
-  left: 14px;
-  bottom: 14px;
-  right: 14px;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 12px;
-  border: 1px solid var(--line-2);
-  border-radius: 4px;
-  background: rgba(7, 9, 23, 0.82);
-  backdrop-filter: blur(6px);
-}
-
-.kx-hero-art figcaption code {
-  font-family: var(--f-mono);
-  font-size: 12.5px;
-  color: #fff;
-}
-
-.kx-hero-art figcaption span {
-  font-family: var(--f-wide);
-  font-size: 10.5px;
-  text-transform: uppercase;
-  color: var(--blue-ink);
-  align-self: center;
-}
-
-@media (max-width: 900px) {
-  .kx-hero {
-    grid-template-columns: 1fr;
-  }
-  .kx-hero-art {
-    min-height: 320px;
-  }
 }
 
 /* ───────────── ticker ───────────── */
