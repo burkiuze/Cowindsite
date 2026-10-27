@@ -45,7 +45,8 @@ const PILLARS = [
   },
 ];
 
-type Brand = { name: string; logo?: string };
+/** `logo` names a file in /kronos/logos (an .svg unless it says otherwise); `wordmark` logos already spell the name. */
+type Brand = { name: string; logo?: string; wordmark?: { file: string; ratio: number; rest?: string } };
 const PROVIDERS: Brand[] = [
   { name: "OpenAI", logo: "openai" },
   { name: "Anthropic", logo: "anthropic" },
@@ -66,9 +67,9 @@ const PROVIDERS: Brand[] = [
 const INFRA: Brand[] = [
   { name: "OpenRouter", logo: "openrouter" },
   { name: "Open Inference" },
-  { name: "Nebius Token Factory" },
-  { name: "Crusoe" },
-  { name: "Wafer" },
+  { name: "Nebius Token Factory", wordmark: { file: "nebius.png", ratio: 606 / 91, rest: "Token Factory" } },
+  { name: "Crusoe", logo: "crusoe.png" },
+  { name: "Wafer", logo: "wafer.png" },
   { name: "Z.ai", logo: "zai" },
   { name: "MiniMax", logo: "minimax" },
   { name: "NVIDIA", logo: "nvidia" },
@@ -79,9 +80,20 @@ const INFRA: Brand[] = [
 ];
 
 function BrandMark({ b }: { b: Brand }) {
+  const mask = (file: string) => {
+    const url = `url(/kronos/logos/${file.includes(".") ? file : `${file}.svg`})`;
+    return { maskImage: url, WebkitMaskImage: url };
+  };
+  if (b.wordmark)
+    return (
+      <>
+        <span className="kx-logo kx-wordmark-logo" style={{ ...mask(b.wordmark.file), aspectRatio: b.wordmark.ratio }} role="img" aria-label={b.name} />
+        {b.wordmark.rest ? <span aria-hidden="true">{b.wordmark.rest}</span> : null}
+      </>
+    );
   return (
     <>
-      {b.logo ? <span className="kx-logo" style={{ maskImage: `url(/kronos/logos/${b.logo}.svg)`, WebkitMaskImage: `url(/kronos/logos/${b.logo}.svg)` }} aria-hidden="true" /> : null}
+      {b.logo ? <span className="kx-logo" style={mask(b.logo)} aria-hidden="true" /> : null}
       <span>{b.name}</span>
     </>
   );

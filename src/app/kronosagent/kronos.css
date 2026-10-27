@@ -536,6 +536,11 @@
   height: 1.1em;
 }
 
+.kx-marquee-track .kx-wordmark-logo {
+  width: auto;
+  height: 0.78em;
+}
+
 @keyframes kx-ticker {
   to {
     transform: translateX(-50%);
