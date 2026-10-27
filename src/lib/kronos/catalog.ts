@@ -133,3 +133,10 @@ export function cloudModel(id: string): CloudModel | undefined {
 }
 
 export const SITE_PATH = "/kronosagent";
+
+/** Installers from the latest Kronos release (published by the KronosAgent release workflow). */
+const RELEASES = "https://github.com/burkiuze/KronosAgent/releases/latest/download";
+export const DOWNLOADS = {
+  windows: { label: "Windows", file: `${RELEASES}/Kronos-Setup.exe`, note: "Windows 10 and 11 · 64-bit" },
+  mac: { label: "macOS", file: `${RELEASES}/Kronos-mac.dmg`, note: "Apple silicon and Intel" },
+} as const;

@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
-import { cloudModels, PLANS, SITE_PATH } from "@/lib/kronos/catalog";
+import { headers } from "next/headers";
+import { cloudModels, DOWNLOADS, PLANS } from "@/lib/kronos/catalog";
 
 export const metadata = { title: { absolute: "Kronos Agent — local, private, yours" } };
 
@@ -48,100 +48,65 @@ const PILLARS = [
 const PROVIDERS = ["OpenAI", "Anthropic", "Google Gemini", "OpenRouter", "Groq", "DeepSeek", "Mistral", "xAI", "Together", "Fireworks", "Ollama", "LM Studio", "Any OpenAI-compatible endpoint"];
 const INSTALL = "curl -fsSL https://kronos-agent.vercel.app/install.sh | bash";
 
-/** A clock face for Kronos: sixty ticks, twelve numerals and a slow second hand, drawn behind the hero. */
-function Dial() {
-  const ticks = Array.from({ length: 60 }, (_, i) => {
-    const a = (i * Math.PI) / 30;
-    const major = i % 5 === 0;
-    const r1 = major ? 430 : 446;
+function OsIcon({ os }: { os: "windows" | "mac" }) {
+  if (os === "windows")
     return (
-      <line
-        key={i}
-        x1={500 + r1 * Math.sin(a)}
-        y1={500 - r1 * Math.cos(a)}
-        x2={500 + 460 * Math.sin(a)}
-        y2={500 - 460 * Math.cos(a)}
-        strokeWidth={major ? 2 : 1}
-      />
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor">
+        <path d="M3 5.1 10.4 4v7.2H3V5.1Zm0 13.8 7.4 1.1v-7.1H3v6Zm8.3 1.2L21 21.5v-8.6h-9.7v7.2Zm0-16.2v7.3H21V2.5l-9.7 1.4Z" />
+      </svg>
     );
-  });
-  const numerals = ["XII", "I", "II", "III", "IIII", "V", "VI", "VII", "VIII", "IX", "X", "XI"].map((n, i) => {
-    const a = (i * Math.PI) / 6;
-    return (
-      <text key={n} x={500 + 392 * Math.sin(a)} y={500 - 392 * Math.cos(a)} textAnchor="middle" dominantBaseline="central">
-        {n}
-      </text>
-    );
-  });
   return (
-    <svg className="kx-dial" viewBox="0 0 1000 1000">
-      <g className="face">
-        <circle cx="500" cy="500" r="470" />
-        <circle cx="500" cy="500" r="340" strokeDasharray="2 10" />
-        <circle cx="500" cy="500" r="200" />
-        <g className="ticks">{ticks}</g>
-        <g className="numerals">{numerals}</g>
-      </g>
-      <line className="hand" x1="500" y1="560" x2="500" y2="70" />
-      <circle className="hub" cx="500" cy="500" r="5" />
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor">
+      <path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.1ZM13.9 4.9c.7-.9 1.2-2.1 1.1-3.3-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.2 1.1.1 2.3-.6 3-1.5Z" />
     </svg>
   );
 }
 
-export default function KronosPage() {
+export default async function KronosPage() {
+  const ua = (await headers()).get("user-agent") ?? "";
+  // the visitor's own system comes first
+  const order: ("windows" | "mac")[] = /Mac|iPhone|iPad/i.test(ua) && !/Windows/i.test(ua) ? ["mac", "windows"] : ["windows", "mac"];
   const models = cloudModels();
   const ticker = ["Runs on your machine", "Your own API keys", "No telemetry", "OS sandbox", "Verifies its work", "Open source"];
   return (
     <>
-      <section className="kx-hero">
-        <div className="kx-hero-bg" aria-hidden="true">
-          <Dial />
+      <section className="kx-hero" id="download">
+        <h1 className="kx-hero-title">
+          Local.
+          <br />
+          Private.
+          <br />
+          <span className="blue">Yours.</span>
+        </h1>
+        <div className="kx-hero-stage">
+          <Image
+            src="/kronos/img/hero-wide.webp"
+            alt="Engraving of many-armed Kronos, Father Time, holding an hourglass while gathering rays of light"
+            width={1672}
+            height={941}
+            priority
+            sizes="(max-width: 1400px) 100vw, 1400px"
+          />
         </div>
         <div className="kx-hero-body">
-          <p className="kx-pill">
-            <span className="dot" />
-            Open source <span className="sep">·</span> No telemetry<span className="opt"> <span className="sep">·</span> Works offline</span>
-          </p>
-          <p className="kx-label" style={{ marginTop: 26 }}>
-            Kronos Agent <span className="dim">/ Local-first</span>
-          </p>
-          <h1 className="kx-hero-title">
-            Local.
-            <br />
-            Private.
-            <br />
-            <span className="blue">Yours.</span>
-          </h1>
           <p className="kx-lede">
             An AI agent that works on your own computer, with your own keys. <em>Your code, files and memory stay on your disk</em> — and it checks its work
             before it tells you it is done.
           </p>
-          <div className="kx-hero-cta">
-            <a href="#start" className="kx-btn blue">
-              Install Kronos
-            </a>
-            <a href="#keys" className="kx-btn ghost">
-              Use your own keys
-            </a>
+          <div className="kx-downloads">
+            {order.map((os) => (
+              <a key={os} href={DOWNLOADS[os].file} className={`kx-btn kx-dl ${os === order[0] ? "blue" : "ghost"}`}>
+                <OsIcon os={os} />
+                <span>
+                  Download for {DOWNLOADS[os].label}
+                  <small>{DOWNLOADS[os].note}</small>
+                </span>
+              </a>
+            ))}
           </div>
-          <div className="kx-cmd kx-hero-cmd">
-            <span className="p">$</span>
-            <code>{INSTALL}</code>
-          </div>
-          <dl className="kx-stats">
-            <div>
-              <dt>Runs on</dt>
-              <dd>Your machine</dd>
-            </div>
-            <div>
-              <dt>Your data</dt>
-              <dd>Stays local</dd>
-            </div>
-            <div>
-              <dt>Account</dt>
-              <dd>Optional</dd>
-            </div>
-          </dl>
+          <p className="kx-hero-alt">
+            Linux or a server? <code>{INSTALL}</code>
+          </p>
         </div>
       </section>
 
@@ -224,21 +189,23 @@ export default function KronosPage() {
         <div className="kx-steps">
           <div className="kx-step">
             <span className="num">I</span>
-            <h3>Install Kronos</h3>
-            <p>One line in a terminal on macOS, Linux and WSL, or the desktop app.</p>
+            <h3>Download Kronos</h3>
+            <p>
+              The app for <a href={DOWNLOADS.windows.file}>Windows</a> or <a href={DOWNLOADS.mac.file}>macOS</a>. On Linux, one line in a terminal.
+            </p>
           </div>
           <div className="kx-step">
             <span className="num">II</span>
             <h3>Connect a model</h3>
             <p>
-              Your own API key or a local model — <code>kronos setup</code>. On first start, choose “Continue without an account”.
+              Paste your own API key or pick a local model. Sign in from the app only if you want Kronos Cloud.
             </p>
           </div>
           <div className="kx-step">
             <span className="num">III</span>
             <h3>Start working</h3>
             <p>
-              <code>kronos</code> in a terminal, or <code>kronos web</code> for the desktop interface.
+              Open a folder and ask. In a terminal, <code>kronos</code> does the same.
             </p>
           </div>
         </div>
@@ -321,8 +288,7 @@ export default function KronosPage() {
           })}
         </div>
         <p className="kx-note">
-          Have a promo code? Redeem it in Kronos under Settings → Membership, with <code>kronos redeem CODE</code>, or on your{" "}
-          <Link href={`${SITE_PATH}/account`}>account page</Link>.
+          Memberships and promo codes live in the app: Settings → Membership, or <code>kronos redeem CODE</code> in a terminal.
         </p>
       </section>
     </>

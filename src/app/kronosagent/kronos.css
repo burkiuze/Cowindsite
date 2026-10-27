@@ -329,12 +329,29 @@
 
 .kx-hero {
   position: relative;
-  isolation: isolate;
-  overflow: hidden;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   justify-items: center;
-  padding: clamp(56px, 8vw, 140px) var(--pad) clamp(64px, 8vw, 140px);
+  overflow: hidden;
+  padding: clamp(28px, 4vw, 64px) var(--pad) clamp(56px, 7vw, 112px);
   text-align: center;
+}
+
+/* the engraving sits under the title and melts into the ground at its edges */
+.kx-hero-stage {
+  position: relative;
+  z-index: 0;
+  width: calc(100% + 2 * var(--pad));
+  max-width: 1400px;
+  margin-top: clamp(-90px, -5.5vw, -24px);
+  -webkit-mask-image: radial-gradient(75% 85% at 50% 45%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(75% 85% at 50% 45%, #000 55%, transparent 100%);
+}
+
+.kx-hero-stage img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .kx-hero-body {
@@ -342,179 +359,79 @@
   z-index: 1;
   display: grid;
   justify-items: center;
-}
-
-/* a blue glow, a fading grid and the dial, all behind the words */
-.kx-hero-bg {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(60% 55% at 50% 42%, rgba(38, 38, 234, 0.34), transparent 70%),
-    radial-gradient(30% 30% at 50% 40%, rgba(143, 143, 255, 0.14), transparent 70%);
-}
-
-.kx-hero-bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 64px 64px;
-  background-position: center;
-  mask-image: radial-gradient(60% 60% at 50% 45%, #000 20%, transparent 75%);
-  opacity: 0.55;
-}
-
-.kx-dial {
-  position: absolute;
-  left: 50%;
-  top: 46%;
-  width: min(980px, 128vw);
-  height: auto;
-  transform: translate(-50%, -50%);
-  overflow: visible;
-}
-
-.kx-dial .face {
-  fill: none;
-  stroke: rgba(143, 143, 255, 0.22);
-  transform-origin: 500px 500px;
-  animation: kx-turn 480s linear infinite;
-}
-
-.kx-dial .numerals {
-  fill: rgba(143, 143, 255, 0.3);
-  stroke: none;
-  font-family: var(--f-display);
-  font-size: 30px;
-  letter-spacing: 0.04em;
-}
-
-.kx-dial .hand {
-  stroke: rgba(143, 143, 255, 0.32);
-  stroke-width: 1.5;
-  transform-origin: 500px 500px;
-  animation: kx-turn 60s steps(60) infinite;
-}
-
-.kx-dial .hub {
-  fill: var(--blue-ink);
-}
-
-@keyframes kx-turn {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.kx-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  padding: 7px 14px;
-  border: 1px solid var(--line-2);
-  border-radius: 999px;
-  background: rgba(7, 9, 23, 0.7);
-  backdrop-filter: blur(6px);
-  font-family: var(--f-wide);
-  font-size: 10.5px;
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  color: var(--ink-2);
-  white-space: nowrap;
-}
-
-@media (max-width: 480px) {
-  .kx-pill .opt {
-    display: none;
-  }
-}
-
-.kx-pill .dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #5ef0a0;
-  box-shadow: 0 0 0 0 rgba(94, 240, 160, 0.6);
-  animation: kx-pulse 2.4s ease-out infinite;
-}
-
-.kx-pill .sep {
-  color: var(--dim);
-}
-
-@keyframes kx-pulse {
-  70% {
-    box-shadow: 0 0 0 8px rgba(94, 240, 160, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(94, 240, 160, 0);
-  }
-}
-
-.kx-hero-cmd {
-  max-width: 100%;
-  margin-top: 22px;
-  background: rgba(7, 9, 23, 0.82);
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  margin-top: clamp(-80px, -5vw, -20px);
 }
 
 .kx-hero .kx-lede {
   margin-inline: auto;
 }
 
-.kx-hero-title {
+.kx-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.kx-dl {
+  gap: 12px;
+  padding: 12px 22px 12px 18px;
+  text-align: left;
+}
+
+.kx-dl span {
+  display: grid;
+}
+
+.kx-dl small {
+  margin-top: 3px;
+  font-family: var(--f-wide);
+  font-size: 9.5px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.kx-hero-alt {
   margin: 22px 0 0;
+  max-width: 100%;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.kx-hero-alt code {
+  display: block;
+  margin: 8px auto 0;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 6px 10px;
+  border: 1px solid var(--line-2);
+  border-radius: 3px;
+  background: var(--kpanel);
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.kx-hero-title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
   font-family: var(--f-display);
   font-size: clamp(66px, 9vw, 190px);
   font-weight: 250;
   line-height: 0.86;
   text-transform: uppercase;
-  text-shadow: 0 0 60px rgba(38, 38, 234, 0.45);
+  text-shadow: 0 6px 40px rgba(11, 14, 31, 0.9);
   color: #fff;
 }
 
 .kx-hero-title .blue {
   color: var(--blue-ink);
-}
-
-.kx-hero-cta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 32px;
-}
-
-.kx-stats {
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  justify-content: center;
-  gap: 8px clamp(28px, 3vw, 56px);
-  margin: 40px 0 0;
-  padding-top: 18px;
-  border-top: 1px solid var(--line);
-}
-
-.kx-stats dt {
-  font-family: var(--f-wide);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  color: var(--dim);
-}
-
-.kx-stats dd {
-  margin: 4px 0 0;
-  font-family: var(--f-display);
-  font-size: clamp(26px, 2vw, 36px);
-  font-weight: 400;
-  line-height: 1;
-  color: #fff;
 }
 
 /* ───────────── ticker ───────────── */
@@ -556,10 +473,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .kx-ticker-track,
-  .kx-dial .face,
-  .kx-dial .hand,
-  .kx-pill .dot {
+  .kx-ticker-track {
     animation: none;
   }
 }

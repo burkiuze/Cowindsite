@@ -3,11 +3,11 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { clerkAppearance } from "@/components/kronos/theme";
-import { clerkConfigured, siteAccount } from "@/lib/kronos/session";
+import { clerkConfigured } from "@/lib/kronos/session";
 import { SITE_PATH } from "@/lib/kronos/catalog";
 import "./kronos.css";
 
-// the header shows who is signed in, so every page here renders per request
+// the hero puts the visitor's own system first, and the app's sign-in pages are per request
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
@@ -21,8 +21,9 @@ export const metadata: Metadata = {
 /**
  * Kronos Agent lives under heynavio.com/kronosagent in its own identity — the
  * night-blue ground, the blue frame and the engraved art of kronos-agent.vercel.app.
- * Clerk wraps it only when keys are configured, so the public page still renders
- * on a deployment where sign-in is not set up yet.
+ * People sign in from the app, not the site: the sign-in and connect pages here are
+ * what the app opens, so they are not linked from the page. Clerk wraps them only
+ * when keys are configured.
  */
 export default async function KronosLayout({ children }: { children: React.ReactNode }) {
   const shell = (
@@ -53,8 +54,7 @@ export default async function KronosLayout({ children }: { children: React.React
   );
 }
 
-async function KronosNav() {
-  const me = await siteAccount().catch(() => null);
+function KronosNav() {
   return (
     <header className="kx-header">
       <div className="kx-bar">
@@ -65,24 +65,13 @@ async function KronosNav() {
         <nav className="kx-nav" aria-label="Kronos">
           <Link href={`${SITE_PATH}#why`}>Why</Link>
           <Link href={`${SITE_PATH}#keys`}>Your keys</Link>
-          <Link href={`${SITE_PATH}#start`}>Install</Link>
+          <Link href={`${SITE_PATH}#start`}>Get started</Link>
           <Link href={`${SITE_PATH}#models`}>Cloud</Link>
         </nav>
         <div className="kx-bar-end">
-          {me ? (
-            <Link href={`${SITE_PATH}/account`} className="kx-btn">
-              {me.account.plan ? `${me.account.plan === "max5" ? "Max 5" : me.account.plan[0]!.toUpperCase() + me.account.plan.slice(1)} · ` : ""}Account
-            </Link>
-          ) : (
-            <>
-              <Link href={`${SITE_PATH}/sign-in`} className="kx-signin">
-                Sign in
-              </Link>
-              <Link href={`${SITE_PATH}/sign-up`} className="kx-btn blue">
-                Create account
-              </Link>
-            </>
-          )}
+          <Link href={`${SITE_PATH}#download`} className="kx-btn blue">
+            Download
+          </Link>
         </div>
       </div>
     </header>
