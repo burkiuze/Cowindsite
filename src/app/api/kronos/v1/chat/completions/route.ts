@@ -8,8 +8,11 @@ export const maxDuration = 300;
 
 const OPENROUTER = "https://openrouter.ai/api/v1/chat/completions";
 
-/** Client fields that could route a request to another model or provider than the one paid for. */
-const STRIPPED = ["models", "route", "provider", "plugins", "transforms", "user", "preset"];
+/**
+ * Client fields that could route a request to another model or provider than the one paid for, or
+ * multiply its cost past the allowance check (`n` asks for several completions at once).
+ */
+const STRIPPED = ["models", "route", "provider", "plugins", "transforms", "user", "preset", "n"];
 
 interface Usage {
   prompt_tokens?: number;

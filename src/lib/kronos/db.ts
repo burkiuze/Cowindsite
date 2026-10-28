@@ -111,4 +111,5 @@ export const REDEEM_ERRORS: Record<string, string> = {
   used_up: "This code has been used the maximum number of times.",
   already_redeemed: "You have already used this code.",
   no_account: "Sign in again and retry.",
+  higher_plan: "Your current membership is higher than this code's plan. Use it after your membership ends.",
 };
