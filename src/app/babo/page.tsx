@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { db, dbConfigured } from "@/lib/kronos/db";
 import { ADMIN_COOKIE, adminSessionOk } from "@/lib/kronos/crypto";
-import { PLANS, planById } from "@/lib/kronos/catalog";
+import { globalDayLimitMicro, PLANS, planById, planLimits } from "@/lib/kronos/catalog";
 import { accountView } from "@/lib/kronos/view";
 import { LoginForm, ModelChecker, PromoForm } from "./forms";
 import { logoutAction, setPlanAction, togglePromoAction } from "./actions";
@@ -30,7 +30,7 @@ export default async function OperatorPage({ searchParams }: { searchParams: Pro
 
   const { q, page } = await searchParams;
   const pageNo = Math.max(Number(page) || 1, 1);
-  const [stats, promos, accounts] = await Promise.all([db.admin.stats(), db.admin.listPromos(), db.admin.listAccounts(q?.trim() || null, 50, (pageNo - 1) * 50)]);
+  const [stats, promos, accounts, dayMicro] = await Promise.all([db.admin.stats(), db.admin.listPromos(), db.admin.listAccounts(q?.trim() || null, 50, (pageNo - 1) * 50), db.globalSpend()]);
   const members = Object.values(stats.members ?? {}).reduce((a, b) => a + b, 0);
 
   return (
@@ -42,11 +42,16 @@ export default async function OperatorPage({ searchParams }: { searchParams: Pro
         </form>
       </div>
 
-      <section className="mt-6 grid gap-4 sm:grid-cols-4">
+      <section className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <Stat label="Accounts" value={String(stats.accounts)} />
         <Stat label="Active members" value={String(members)} detail={PLANS.map((p) => `${p.name} ${stats.members?.[p.id] ?? 0}`).join(" · ")} />
         <Stat label="Requests (7 days)" value={stats.requests_7d.toLocaleString("en-US")} />
         <Stat label="Upstream cost (7 days)" value={usd(stats.spent_7d_micro)} />
+        <Stat
+          label="Last 24 hours"
+          value={`${usd(dayMicro)} of ${usd(globalDayLimitMicro())}`}
+          detail={`Daily cap for the whole service (KRONOS_GLOBAL_DAY_USD). Pro: ${usd(planLimits("pro").fiveHourMicro)} per 5 hours, ${usd(planLimits("pro").weekMicro)} per week (KRONOS_PRO_5H_USD, KRONOS_PRO_WEEK_USD).`}
+        />
       </section>
 
       <section className="panel mt-6 px-6 py-6">

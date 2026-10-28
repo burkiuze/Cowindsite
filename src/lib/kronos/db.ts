@@ -52,6 +52,7 @@ export const db = {
   issueToken: (userId: string, tokenHash: string, label: string) =>
     rpc<string>("kronos_issue_token", { p_user_id: userId, p_token_hash: tokenHash, p_label: label }),
   auth: (tokenHash: string) => rpc<Account | null>("kronos_auth", { p_token_hash: tokenHash }),
+  globalSpend: () => rpc<number>("kronos_global_spend", {}),
   listTokens: (userId: string) =>
     rpc<Array<{ id: string; label: string | null; created_at: string; last_used_at: string | null }>>("kronos_list_tokens", { p_user_id: userId }),
   revokeToken: (userId: string, tokenId: string) => rpc<boolean>("kronos_revoke_token", { p_user_id: userId, p_token_id: tokenId }),

@@ -34,14 +34,22 @@ function envNumber(name: string, fallback: number): number {
   return Number.isFinite(v) && v > 0 ? v : fallback;
 }
 
-/** Budgets in millionths of a US dollar of upstream cost. */
+/**
+ * Budgets in millionths of a US dollar of upstream cost. Pro gets $1 per 5-hour session and $5 per
+ * week by default (about $20 of upstream cost a month at most); the other plans scale from it.
+ */
 export function planLimits(plan: PlanId): { fiveHourMicro: number; weekMicro: number } {
   const p = planById(plan);
   const m = p?.multiplier ?? 0;
   return {
-    fiveHourMicro: Math.round(envNumber("KRONOS_PRO_5H_USD", 2) * m * 1_000_000),
-    weekMicro: Math.round(envNumber("KRONOS_PRO_WEEK_USD", 15) * m * 1_000_000),
+    fiveHourMicro: Math.round(envNumber("KRONOS_PRO_5H_USD", 1) * m * 1_000_000),
+    weekMicro: Math.round(envNumber("KRONOS_PRO_WEEK_USD", 5) * m * 1_000_000),
   };
+}
+
+/** Upstream cost the whole service may spend in 24 hours before Kronos Cloud pauses for everyone. */
+export function globalDayLimitMicro(): number {
+  return Math.round(envNumber("KRONOS_GLOBAL_DAY_USD", 50) * 1_000_000);
 }
 
 export interface CloudModel {

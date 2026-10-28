@@ -1,4 +1,4 @@
-import { cloudModel, planLimits, type CloudModel, type PlanId } from "@/lib/kronos/catalog";
+import { cloudModel, globalDayLimitMicro, planLimits, type CloudModel, type PlanId } from "@/lib/kronos/catalog";
 import { db, DbError, type Account } from "@/lib/kronos/db";
 import { bearerAccount } from "@/lib/kronos/session";
 import { jsonError } from "@/lib/kronos/view";
@@ -68,6 +68,15 @@ export async function POST(request: Request) {
   const limited = overLimit(account);
   if (limited) {
     return jsonError(429, "usage_limit", `You have used your ${limited.window} Kronos Cloud allowance. It resets at ${limited.resetsAt}.`, { resets_at: limited.resetsAt });
+  }
+
+  try {
+    if ((await db.globalSpend()) >= globalDayLimitMicro()) {
+      console.error("kronos global daily limit reached");
+      return jsonError(503, "capacity", "Kronos Cloud has reached its daily capacity. Try again later, or use your own API keys meanwhile.");
+    }
+  } catch (e) {
+    return jsonError(503, "unavailable", e instanceof DbError ? e.message : "Kronos Cloud is unavailable.");
   }
 
   let body: Record<string, unknown>;
